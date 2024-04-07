@@ -1,0 +1,65 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cmake",
+            "label": "[CMake] Build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "build",
+            "targets": [
+                "all"
+            ],
+            "preset": "${command:cmake.activeBuildPresetName}",
+            "problemMatcher": [
+                {
+                    "base": "$gcc"
+                }
+            ],
+            "presentation": {
+                "revealProblems": "onProblem",
+                "clear": true,
+                "panel": "shared"
+            },
+            "options": {
+                "environment": {
+                    "CLICOLOR_FORCE": "1"
+                }
+            }
+        },
+        {
+            "label": "[CMake] Clean rebuild",
+            "group": "build",
+            "dependsOn": [
+                "[CMake] Configure",
+                "[CMake] Clean",
+                "[CMake] Build"
+            ],
+            "dependsOrder": "sequence",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "type": "cmake",
+            "label": "[CMake] Clean",
+            "command": "clean",
+            "preset": "${command:cmake.activeBuildPresetName}",
+            "problemMatcher": []
+        },
+        {
+            "type": "cmake",
+            "label": "[CMake] Configure",
+            "command": "configure",
+            "preset": "${command:cmake.activeConfigurePresetName}",
+            "problemMatcher": []
+        }
+    ]
+}

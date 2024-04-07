@@ -1,0 +1,6 @@
+- scoop
+- toolchain LLVM (po clang-format, clang-tidy, clangd)
+- gcc
+- ninja
+- cmake
+- docker desktop do devcontainera

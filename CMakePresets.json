@@ -1,0 +1,101 @@
+{
+    "version": 5,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 24,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Base main build config",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "hidden": true
+        },
+        {
+            "name": "main-release",
+            "inherits": "default",
+            "displayName": "Main Release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "ENABLE_TESTS": {
+                    "type": "BOOL",
+                    "value": "OFF"
+                }
+            }
+        },
+        {
+            "name": "main-debug",
+            "inherits": "default",
+            "displayName": "Main Debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "ENABLE_TESTS": {
+                    "type": "BOOL",
+                    "value": "OFF"
+                }
+            }
+        },
+        {
+            "name": "test-release",
+            "inherits": "default",
+            "displayName": "Tests Release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "ENABLE_TESTS": {
+                    "type": "BOOL",
+                    "value": "ON"
+                }
+            }
+        },
+        {
+            "name": "test-debug",
+            "inherits": "default",
+            "displayName": "Tests Debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "ENABLE_TESTS": {
+                    "type": "BOOL",
+                    "value": "ON"
+                }
+            }
+        },
+        {
+            "name": "test-coverage",
+            "inherits": "default",
+            "displayName": "Tests Debug with Coverage",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "ENABLE_TESTS": {
+                    "type": "BOOL",
+                    "value": "ON"
+                },
+                "ENABLE_COVERAGE": {
+                    "type": "BOOL",
+                    "value": "ON"
+                }
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "default",
+            "configurePreset": "default"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "default",
+            "configurePreset": "default",
+            "output": {
+                "outputOnFailure": true,
+                "shortProgress": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": false
+            }
+        }
+    ]
+}

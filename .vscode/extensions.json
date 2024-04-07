@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "ms-vscode.cpptools-extension-pack",
+        "cheshirekow.cmake-format",
+        "cschlosser.doxdocgen",
+        "streetsidesoftware.code-spell-checker",
+        "eamodio.gitlens",
+        "Gruntfuggly.todo-tree",
+        "tomoki1207.pdf"
+    ]
+}
