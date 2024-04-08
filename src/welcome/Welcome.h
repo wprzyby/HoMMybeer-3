@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef INCLUDE_WELCOME_H_
-#define INCLUDE_WELCOME_H_
+#ifndef SRC_WELCOME_WELCOME_H_
+#define SRC_WELCOME_WELCOME_H_
 
 void welcome();
 
