@@ -20,12 +20,20 @@ enum class MapSize { S, M, L, XL };
 
 class Map {
  private:
+  int width_;
   std::vector<std::vector<Field>> field_array_;
 
  public:
   Map(MapSize size);
   Map(){};
   ~Map();
+  class CoordinatesOutOfMap : public std::exception {
+    int x_;
+    int y_;
+
+   public:
+    CoordinatesOutOfMap(int x, int y) : x_(x), y_(y){};
+  };
   Field* getField(int x, int y);
 };
 

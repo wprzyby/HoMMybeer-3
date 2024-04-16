@@ -10,6 +10,7 @@
  */
 
 #include <Game.h>
+#include <Map.h>
 #include <Session.h>
 #include <gtest/gtest.h>
 
@@ -31,5 +32,6 @@ TEST(gameInitTests, basicGameInitialization) {
   EXPECT_NO_THROW(Field* f = session->game->map_pointer->getField(0, 0));
   EXPECT_NO_THROW(Field* f = session->game->map_pointer->getField(200, 200));
   EXPECT_NO_THROW(Field* f = session->game->map_pointer->getField(499, 499));
-  EXPECT_ANY_THROW(Field* f = session->game->map_pointer->getField(500, 500));
+  EXPECT_THROW(Field* f = session->game->map_pointer->getField(500, 500),
+               Map::CoordinatesOutOfMap);
 }
