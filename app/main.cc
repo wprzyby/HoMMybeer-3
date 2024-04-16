@@ -9,8 +9,8 @@
  *
  */
 
-#include <Welcome.h>
 #include <Session.h>
+#include <Welcome.h>
 
 int main() {
   welcome();
