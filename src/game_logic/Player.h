@@ -18,16 +18,17 @@
 #include <memory>
 #include <optional>
 #include <vector>
+
 class Player {
  private:
   bool is_ai_;
   std::vector<Hero> players_heros_;
 
  public:
-  Player(bool ai, std::shared_ptr<Map> map);
+  Player(bool ai);
   ~Player();
-  std::optional<Hero*> getHero(int idx);  // TODO: overload with ex name
-  void addHero(std::string name, Field* spawn_field);
+  const Hero* getHero(int idx);  // TODO: overload with ex name
+  void addHero(std::string name, FieldCoords spawn_field_coords);
 };
 
 #endif

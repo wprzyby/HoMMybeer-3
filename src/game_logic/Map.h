@@ -28,7 +28,8 @@ class Map {
   Map(MapSize size);
   Map(){};
   ~Map();
-  std::optional<Field*> getField(int x, int y);
+  Field* const getField (
+      FieldCoords coords);  // method for getting visual field parameters
   const int getWidth() { return width_; };
 };
 

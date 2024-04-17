@@ -11,6 +11,8 @@
 
 #include <Map.h>
 
+#include <memory>
+
 using namespace std;
 
 Map::Map(MapSize size) {
@@ -25,7 +27,9 @@ Map::Map(MapSize size) {
 
 Map::~Map() {}
 
-optional<Field*> Map::getField(int x, int y) {
+Field* const Map::getField(FieldCoords coords) {
+  int x = coords.first;
+  int y = coords.second;
   if (x >= width_ || x < 0 || y >= width_ || y < 0) {
     return {};
   }

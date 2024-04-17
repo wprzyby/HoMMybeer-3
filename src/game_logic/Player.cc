@@ -16,23 +16,23 @@
 
 using namespace std;
 
-Player::Player(bool ai, std::shared_ptr<Map> map) {
+Player::Player(bool ai) {
   is_ai_ = ai;
-  int x = map->getWidth() / 2;  // TODO: starting positions of heros
-  players_heros_ = vector<Hero>{Hero(
-      "Andrew the mediocre",
-      map->getField(x, x).value_or(nullptr))};  // TODO: add handling bad field
+  int x = 10;  // TODO: starting positions of heros
+  players_heros_ =
+      vector<Hero>{Hero("Andrew the mediocre",
+                        FieldCoords{x, x})};  // TODO: add handling bad field
 }
 
 Player::~Player() {}
 
-void Player::addHero(std::string name, Field* spawn_field) {
-  players_heros_.push_back(Hero(name, spawn_field));
+void Player::addHero(std::string name, FieldCoords spawn_field_coords) {
+  players_heros_.push_back(Hero(name, spawn_field_coords));
 }
 
-optional<Hero*> Player::getHero(int idx) {
+const Hero* Player::getHero(int idx) {
   if (idx >= players_heros_.size()) {
-    return {};
+    return nullptr;
   }
   return &players_heros_[idx];
 }

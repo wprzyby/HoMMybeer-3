@@ -15,19 +15,28 @@
 #include <Field.h>
 
 #include <memory>
+#include <optional>
 #include <string>
+#include <utility>
+#include <vector>
+
+typedef std::vector<FieldCoords> Path;
 
 class Hero {
  private:
   std::string name_;
-  std::shared_ptr<Field> field_at_;
+  FieldCoords hero_coords_;
+  Path move_path_;
+  void step();
 
  public:
-  Hero(std::string name, Field* spawn_field)
-      : name_(name), field_at_(std::make_shared<Field>(*spawn_field)){};
+  Hero(std::string name, FieldCoords spawn_field_coords)
+      : name_(name), hero_coords_(spawn_field_coords), move_path_({}){};
   ~Hero();
   const std::string getHeroName() { return name_; };
-  const std::pair<int, int> getHeroCoords();
+  const FieldCoords getHeroCoords() { return hero_coords_; };
+  std::optional<Path> setMoveGoal(FieldCoords goal);
+  void move();
 };
 
 #endif

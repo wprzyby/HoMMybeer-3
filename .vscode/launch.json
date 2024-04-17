@@ -23,7 +23,7 @@
             ],
             "externalConsole": true,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:\\Users\\piotr\\scoop\\apps\\gdb\\14.1\\bin\\gdb.exe", // TODO: change to your debugger path
+            "miDebuggerPath": "gdb.exe", // TODO: change to your debugger path
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

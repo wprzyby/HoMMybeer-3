@@ -15,6 +15,8 @@
 
 #include <utility>
 
+typedef std::pair<int, int> FieldCoords;
+
 enum class TerrainType { SNOW, GRASS, STONE, DIRT, STRUCTURE };
 
 class Field {
@@ -33,6 +35,7 @@ class Field {
         coords_(std::pair<int, int>{x, y}){};
   ~Field();
   const std::pair<int, int> getFieldCoords() { return coords_; };
+  const bool isWalkable() { return walk_through_; };
 };
 
 #endif

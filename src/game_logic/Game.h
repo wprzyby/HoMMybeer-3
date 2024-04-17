@@ -30,7 +30,7 @@ class Game {
  public:
   std::shared_ptr<Map> getMap();
   Game(MapSize map_size, Difficulty difficulty, int ai_enemies);
-  std::optional<Player*> getPlayer(int idx);
+  const Player* getPlayer(int idx);
   ~Game();
 };
 
