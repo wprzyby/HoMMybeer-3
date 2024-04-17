@@ -1,7 +1,7 @@
 /**
  * @file Map.h
  * @author Piotr Kluba
- * @brief
+ * @brief Functionality generating and managing the gamemap
  * @version 0.1
  * @date 2024-04-16
  *
@@ -14,9 +14,10 @@
 
 #include <Field.h>
 
+#include <optional>
 #include <vector>
 
-enum class MapSize { S, M, L, XL };
+enum class MapSize { S = 500, M = 800, L = 1200, XL = 2000 };
 
 class Map {
  private:
@@ -27,14 +28,7 @@ class Map {
   Map(MapSize size);
   Map(){};
   ~Map();
-  class CoordinatesOutOfMap : public std::exception {
-    int x_;
-    int y_;
-
-   public:
-    CoordinatesOutOfMap(int x, int y) : x_(x), y_(y){};
-  };
-  Field* getField(int x, int y);
+  std::optional<Field*> getField(int x, int y);
 };
 
 #endif

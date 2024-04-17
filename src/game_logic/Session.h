@@ -1,7 +1,8 @@
 /**
  * @file Session.h
  * @author Piotr Kluba
- * @brief
+ * @brief The base class responsible for managing the state of a current app
+ * instance
  * @version 0.1
  * @date 2024-04-15
  *

@@ -1,7 +1,8 @@
 /**
  * @file Field.h
  * @author Piotr Kluba
- * @brief
+ * @brief Functionality responsible for storing properties and managing single
+ * fields in the gamemap
  * @version 0.1
  * @date 2024-04-16
  *

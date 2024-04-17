@@ -1,7 +1,7 @@
 /**
  * @file Game.h
  * @author Piotr Kluba
- * @brief
+ * @brief Base game class responsible for managing the state of the current game
  * @version 0.1
  * @date 2024-04-15
  *
@@ -22,12 +22,12 @@ enum class Difficulty { EASY, NORMAL, HARD };
 
 class Game {
  private:
-  Map map_;
+  std::shared_ptr<Map> map_pointer_;
   Difficulty difficulty_;
   std::vector<Player> players_in_game_;
 
  public:
-  std::shared_ptr<Map> map_pointer;
+  std::shared_ptr<Map> getMap();
   Game(MapSize map_size, Difficulty difficulty, int ai_enemies);
   ~Game();
 };

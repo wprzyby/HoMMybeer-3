@@ -29,9 +29,11 @@ TEST(gameInitTests, basicGameInitialization) {
   Session* session = Session::getInstance();
   session->newGame(MapSize::S, 3, Difficulty::EASY);
   EXPECT_NE(session->game, nullptr);
-  EXPECT_NO_THROW(Field* f = session->game->map_pointer->getField(0, 0));
-  EXPECT_NO_THROW(Field* f = session->game->map_pointer->getField(200, 200));
-  EXPECT_NO_THROW(Field* f = session->game->map_pointer->getField(499, 499));
-  EXPECT_THROW(Field* f = session->game->map_pointer->getField(500, 500),
-               Map::CoordinatesOutOfMap);
+  EXPECT_NE(session->game->getMap()->getField(0, 0).value_or(nullptr), nullptr);
+  EXPECT_NE(session->game->getMap()->getField(200, 200).value_or(nullptr),
+            nullptr);
+  EXPECT_NE(session->game->getMap()->getField(499, 499).value_or(nullptr),
+            nullptr);
+  EXPECT_EQ(session->game->getMap()->getField(500, 500).value_or(nullptr),
+            nullptr);
 }
