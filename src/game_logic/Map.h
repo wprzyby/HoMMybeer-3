@@ -29,6 +29,7 @@ class Map {
   Map(){};
   ~Map();
   std::optional<Field*> getField(int x, int y);
+  const int getWidth() { return width_; };
 };
 
 #endif

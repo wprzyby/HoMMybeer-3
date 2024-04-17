@@ -16,6 +16,11 @@ using namespace std;
 Map::Map(MapSize size) {
   width_ = static_cast<int>(size);
   field_array_ = vector<vector<Field>>(width_, vector<Field>(width_));
+  for (int r = 0; r < width_; r++) {
+    for (int c = 0; c < width_; c++) {
+      field_array_[r][c] = Field(c, r);
+    }
+  }
 }
 
 Map::~Map() {}

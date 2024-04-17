@@ -13,6 +13,8 @@
 #ifndef SRC_GAME_LOGIC_FIELD_H_
 #define SRC_GAME_LOGIC_FIELD_H_
 
+#include <utility>
+
 enum class TerrainType { SNOW, GRASS, STONE, DIRT, STRUCTURE };
 
 class Field {
@@ -20,14 +22,17 @@ class Field {
   bool grail_here_;
   bool walk_through_;
   TerrainType terrain_type_;
+  std::pair<int, int> coords_;
 
  public:
-  Field(TerrainType terrain_type = TerrainType::GRASS, bool grail = false,
-        bool walk_through = true)
+  Field(int x = 0, int y = 0, TerrainType terrain_type = TerrainType::GRASS,
+        bool grail = false, bool walk_through = true)
       : grail_here_(grail),
         walk_through_(walk_through),
-        terrain_type_(terrain_type){};
+        terrain_type_(terrain_type),
+        coords_(std::pair<int, int>{x, y}){};
   ~Field();
+  const std::pair<int, int> getFieldCoords() { return coords_; };
 };
 
 #endif

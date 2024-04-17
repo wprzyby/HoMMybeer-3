@@ -16,6 +16,7 @@
 #include <Player.h>
 
 #include <memory>
+#include <optional>
 #include <vector>
 
 enum class Difficulty { EASY, NORMAL, HARD };
@@ -29,6 +30,7 @@ class Game {
  public:
   std::shared_ptr<Map> getMap();
   Game(MapSize map_size, Difficulty difficulty, int ai_enemies);
+  std::optional<Player*> getPlayer(int idx);
   ~Game();
 };
 

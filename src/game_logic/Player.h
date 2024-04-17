@@ -13,13 +13,21 @@
 #ifndef SRC_GAME_LOGIC_PLAYER_H_
 #define SRC_GAME_LOGIC_PLAYER_H_
 
+#include <Hero.h>
+
+#include <memory>
+#include <optional>
+#include <vector>
 class Player {
  private:
   bool is_ai_;
+  std::vector<Hero> players_heros_;
 
  public:
-  Player(/* args */);
+  Player(bool ai, std::shared_ptr<Map> map);
   ~Player();
+  std::optional<Hero*> getHero(int idx);  // TODO: overload with ex name
+  void addHero(std::string name, Field* spawn_field);
 };
 
 #endif
