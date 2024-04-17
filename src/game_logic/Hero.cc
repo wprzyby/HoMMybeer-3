@@ -27,6 +27,14 @@ optional<Path> Hero::setMoveGoal(FieldCoords goal) {
   return opt_path;
 }
 
-void Hero::move() {}
+void Hero::move() {
+  while (energy_ > 0 && !(move_path_.empty())) {
+    step(move_path_.back());
+    move_path_.pop_back();
+  }
+}
 
-void Hero::step() {}
+void Hero::step(FieldCoords step_to) {
+  // checking if field is adjacent and if is possible to move to
+  hero_coords_ = step_to;
+}

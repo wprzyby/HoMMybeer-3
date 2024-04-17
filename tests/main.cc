@@ -63,3 +63,15 @@ TEST(gameInitTests, heroInit) {
   EXPECT_EQ(h.getHeroCoords(), goal_coords);
   EXPECT_EQ(h.getHeroName(), "Christian");
 }
+
+TEST(heroMovesTests, basicStep) {
+  Session* session = Session::getInstance();
+  session->newGame(MapSize::S, 3, Difficulty::EASY);
+  FieldCoords start_coords = {20, 20};
+  Hero h = Hero("Christian", start_coords);
+  FieldCoords goal_coords = {21, 21};
+  Path p = h.setMoveGoal(goal_coords).value();
+  EXPECT_EQ(p.back(), goal_coords);
+  h.move();
+  EXPECT_EQ(h.getHeroCoords(), goal_coords);
+}

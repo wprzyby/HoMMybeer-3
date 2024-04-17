@@ -27,11 +27,15 @@ class Hero {
   std::string name_;
   FieldCoords hero_coords_;
   Path move_path_;
-  void step();
+  float energy_;
+  void step(FieldCoords step_to);
 
  public:
   Hero(std::string name, FieldCoords spawn_field_coords)
-      : name_(name), hero_coords_(spawn_field_coords), move_path_({}){};
+      : name_(name),
+        hero_coords_(spawn_field_coords),
+        move_path_({}),
+        energy_(10000){};
   ~Hero();
   const std::string getHeroName() { return name_; };
   const FieldCoords getHeroCoords() { return hero_coords_; };
