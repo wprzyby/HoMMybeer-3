@@ -10,6 +10,12 @@ fetch_git_lib(
         main
 )
 
+fetch_git_lib(
+        SFML
+        https://github.com/SFML/SFML.git
+        2.6.0
+)
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 20)
@@ -31,7 +37,7 @@ if(NOT ENABLE_TESTS)
     add_executable(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/app/main.cc)
     
-    target_link_libraries(${PROJECT_NAME} PUBLIC welcome game_logic)
+    target_link_libraries(${PROJECT_NAME} PUBLIC welcome game_logic game_engine sfml-graphics)
 else()
     enable_testing()
     add_subdirectory(tests)

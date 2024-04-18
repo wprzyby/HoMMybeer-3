@@ -17,7 +17,7 @@
 
 using FieldCoords = std::pair<int, int>;
 
-enum class TerrainType : int { SNOW = 0, GRASS, STONE, DIRT, STRUCTURE };
+enum class TerrainType : int { SNOW = 0, GRASS, STONE, DIRT };
 
 class Field {
  private:
@@ -37,6 +37,7 @@ class Field {
   ~Field() = default;
   std::pair<int, int> getFieldCoords() const { return coords_; };
   bool isWalkable() const { return walk_through_; };
+  TerrainType getTerrainType() const { return terrain_type_; }
 };
 
 #endif

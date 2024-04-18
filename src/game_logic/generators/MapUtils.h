@@ -10,7 +10,7 @@
 
 #include <Map.h>
 
-enum class MapSize { S = 500, M = 800, L = 1200, XL = 2000 };
+enum class MapSize { S = 10, M = 20, L = 50, XL = 100 };
 
 struct MapInfo {
   Map map;

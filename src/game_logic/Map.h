@@ -33,6 +33,7 @@ class Map {
   ~Map() = default;
   Field* const getField(
       FieldCoords coords);  // method for getting visual field parameters
+  FieldArray_t getFieldArray() { return field_array_; }
   const int getWidth() { return width_; };
 };
 
