@@ -43,8 +43,8 @@ Session* Session::getInstance() {
   return session_;
 }
 
-void Session::newGame(MapSize size, int number_of_enemies,
+void Session::newGame(Map game_map, std::vector<Player> players,
                       Difficulty difficulty) {
-  game = make_unique<Game>(Game(size, difficulty, number_of_enemies));
+  game = make_unique<Game>(players, game_map);
   session_state_ = SessionState::IN_GAME;
 }
