@@ -31,7 +31,7 @@ class Game {
  public:
   Game(std::vector<Player> players, Map map)
       : players_in_game_(players), game_map_(map), curr_player_idx(0) {}
-  const Map* getMap() { return &game_map_; }
+  Map* const getMap() { return &game_map_; }
   Player* const getPlayer(int idx);
   Player* const getCurrentPlayer() {
     return &players_in_game_[curr_player_idx];

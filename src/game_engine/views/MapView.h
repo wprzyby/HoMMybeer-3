@@ -1,3 +1,10 @@
+/**
+ * @file MapView.h
+ * @author Wojciech Przybylski
+ * @brief Drawable Map view management class
+ * @copyright Copyright (c) 2024
+ */
+
 #ifndef SRC_GAME_ENGINE_VIEWS_MAP_VIEW_H_
 #define SRC_GAME_ENGINE_VIEWS_MAP_VIEW_H_
 

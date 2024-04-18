@@ -1,3 +1,10 @@
+/**
+ * @file MapUtils.cc
+ * @author Wojciech Przybylski
+ * @brief Method definitions for map utils
+ * @copyright Copyright (c) 2024
+ */
+
 #include <MapUtils.h>
 
 #include <algorithm>

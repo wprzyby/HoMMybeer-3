@@ -1,3 +1,10 @@
+/**
+ * @file MapView.cc
+ * @author Wojciech Przybylski
+ * @brief Method definitions for MapView class
+ * @copyright Copyright (c) 2024
+ */
+
 #include "MapView.h"
 
 bool MapView::loadTileset(const std::string& tileset_path,

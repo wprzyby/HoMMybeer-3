@@ -1,10 +1,7 @@
 /**
  * @file main.cc
  * @author Wojciech Przybylski
- * @brief
- * @version 0.1
- * @date 2024-04-07
- *
+ * @brief Main game loop
  * @copyright Wojciech Przybylski (c) 2024
  *
  */
@@ -12,21 +9,25 @@
 #include <Game.h>
 #include <MapUtils.h>
 #include <MapView.h>
+#include <Session.h>
 #include <Welcome.h>
 
 #include <SFML/Graphics.hpp>
 
 constexpr static int kWindowWidth = 800;
 constexpr static int kWindowHeight = 600;
+constexpr static int kTileTypesCount = 4;
+const static sf::Vector2u kMapTileSize{256, 192};
 
 int main() {
+  Session* session = Session::getInstance();
   MapInfo map_info = generateGrassMap(MapSize::S, 1);
   std::vector<Player> players{
       Player(false, Faction::CASTLE, map_info.starting_locations[0])};
-  Game game(players, map_info.map);
+  session->newGame(map_info.map, players, Difficulty::EASY);
   MapView map_view(kWindowWidth, kWindowHeight);
-  map_view.loadTileset("./assets/MapTiles.png", sf::Vector2u(256, 192), 4);
-  map_view.loadFieldArray(map_info.map.getFieldArray());
+  map_view.loadTileset("./assets/MapTiles.png", kMapTileSize, kTileTypesCount);
+  map_view.loadFieldArray(session->game->getMap()->getFieldArray());
 
   // create the window
   sf::RenderWindow window(sf::VideoMode(kWindowWidth, kWindowHeight),
@@ -45,6 +46,7 @@ int main() {
     // clear the window with black color
     window.clear(sf::Color::Black);
 
+    // draw map
     window.draw(map_view);
 
     // end the current frame
