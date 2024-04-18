@@ -9,9 +9,11 @@
  *
  */
 
+#include <Session.h>
 #include <Welcome.h>
 
 int main() {
   welcome();
+  Session* game_session = Session::getInstance();
   return 0;
 }
