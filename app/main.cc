@@ -9,11 +9,15 @@
  *
  */
 
-#include <Session.h>
+#include <Game.h>
+#include <MapUtils.h>
 #include <Welcome.h>
 
 int main() {
   welcome();
-  Session* game_session = Session::getInstance();
+  MapInfo map_info = generateGrassMap(MapSize::S, 1);
+  std::vector<Player> players{
+      Player(false, Faction::CASTLE, map_info.starting_locations[0])};
+  Game game(players, map_info.map);
   return 0;
 }

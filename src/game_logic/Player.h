@@ -19,15 +19,20 @@
 #include <optional>
 #include <vector>
 
+enum class Faction { CASTLE, INFERNO, FORTRESS };
+
 class Player {
  private:
   bool is_ai_;
   std::vector<Hero> players_heros_;
+  int selected_hero_idx_;
+  Faction faction_;
 
  public:
-  Player(bool ai);
+  Player(bool is_ai, Faction faction, FieldCoords starting_location);
   ~Player();
-  const Hero* getHero(int idx);  // TODO: overload with ex name
+  Hero* const getHero(int idx);  // TODO: overload with ex name
+  Hero* const getCurrentHero() { return &players_heros_[selected_hero_idx_]; }
   void addHero(std::string name, FieldCoords spawn_field_coords);
 };
 
