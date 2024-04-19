@@ -19,6 +19,8 @@ The project is built using _CMake_ and - by default - the _Ninja_ generator. The
 
 You can install the required programs mentioned above from the terminal or via the provided scripts in the _scripts_ directory (powershell scripts for Windows and a bash script for Ubuntu).
 
+Note that when running on Ubuntu, several additional libraries required by SFML need to be installed. 
+
 ### Building from inside Visual Studio Code
 
 The development environment is setup to be used in VS Code so the building process is also simplified when using it. With the _CMake Tools_ extension installed, you can open the command palette (standard shortcut: _ctrl+shift+P_) and find "_CMake: Select Configure Preset_". After pressing _Enter_, you will be prompted to choose a preset. A recommended option for simply trying out the app would be the _Main release_ preset. After the configuration is complete, you can use the default build task with _ctrl+shift+B_ to build the main target.
@@ -37,11 +39,18 @@ cmake --build ./build/main-release
 ```
 (you can also swap the preset for any from: main-debug, test-release, test-debug)
 
-### Running
+### Running (Unix-based)
+
+To run the built application, simply run:
+```bash
+./build/<chosen_preset_name>/bin/HoMMybeer3
+```
+
+### Running (Windows)
 
 Unfortunately, as of now, copying the dynamic libraries provided by SFML to the directory from which the executable is being run is necessary. We are working on fixing that issue. The library files can be found in _build/<chosen_preset_name>/\_deps/sfml-build/lib_. After they have been copied to the top level directory, we can run the application with 
 ```bash
-./build/<chosen_preset_name>/bin/HoMMybeer3
+build\<chosen_preset_name>\bin\HoMMybeer3.exe
 ```
 
 ## Setting up the development environment (Windows and VS Code)
