@@ -1,2 +1,2 @@
 scoop update
-scoop install llvm gcc ninja cmake
+scoop install llvm gcc ninja cmake git
