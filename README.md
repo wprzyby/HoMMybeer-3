@@ -49,7 +49,7 @@ To run the built application, simply run:
 ### Running (Windows)
 
 Unfortunately, as of now, copying the dynamic libraries provided by SFML to the directory from which the executable is being run is necessary. We are working on fixing that issue. The library files can be found in _build/<chosen_preset_name>/\_deps/sfml-build/lib_. After they have been copied to the top level directory, we can run the application with 
-```bash
+```powershell
 build\<chosen_preset_name>\bin\HoMMybeer3.exe
 ```
 
