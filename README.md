@@ -12,7 +12,7 @@ The project is currently in the prototyping phase. We are in the process of crea
 
 ### Automated script (Ubuntu)
 
-For building and running the demo in the release version on Ubuntu, simply run the provided _build-and-run-demo.sh_ script to complete all the necessary installations, building steps and running. For building different configurations, see the instructions below.
+For building and running the demo in the release version on Ubuntu, run the _install-requirements.sh_ script found in the _scripts_ directory and then run the provided _build-and-run-demo.sh_ script. For building different configurations and further information about the dependencies and used utilities, see the instructions below.
 
 ### Installing requirements
 The project is built using _CMake_ and - by default - the _Ninja_ generator. The generator can be changed by adjusting the CMake presets found in _CMakePresets.json_, though other generators were not tested. The C++ compiler of choice during development was the GNU compiler and so that is also what we would recommend.
