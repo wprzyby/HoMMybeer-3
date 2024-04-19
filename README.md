@@ -53,6 +53,13 @@ Unfortunately, as of now, copying the dynamic libraries provided by SFML to the 
 build\<chosen_preset_name>\bin\HoMMybeer3.exe
 ```
 
+### Running tests
+
+To run the tests you simply have to select test-release or test-debug configure preset, build the project and run the tests with:
+```bash
+./build/test-release/bin/tests
+```
+
 ## Setting up the development environment (Windows and VS Code)
 
 - When opening the project in VS Code, you will be asked whether to install the recommended extensions. Press 'Yes'.
