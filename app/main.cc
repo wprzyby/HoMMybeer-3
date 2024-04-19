@@ -38,7 +38,7 @@ int main() {
 
   // create the window
   sf::RenderWindow window(sf::VideoMode(kWindowWidth, kWindowHeight),
-                          "My window");
+                          "HoMMyBeer 3");
 
   // run the program as long as the window is open
   while (window.isOpen()) {

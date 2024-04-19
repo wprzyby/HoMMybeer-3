@@ -15,9 +15,9 @@
 #include <Game.h>
 #include <Map.h>
 
-#include <String>
-#include <Vector>
 #include <memory>
+#include <string>
+#include <vector>
 
 enum class SessionState {
   IN_GAME,
