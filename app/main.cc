@@ -12,7 +12,6 @@
 #include <MapUtils.h>
 #include <MapView.h>
 #include <Session.h>
-#include <Welcome.h>
 
 #include <SFML/Graphics.hpp>
 #include <cmath>

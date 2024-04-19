@@ -37,7 +37,7 @@ if(NOT ENABLE_TESTS)
     add_executable(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/app/main.cc)
     
-    target_link_libraries(${PROJECT_NAME} PUBLIC welcome game_logic game_engine sfml-graphics)
+    target_link_libraries(${PROJECT_NAME} PUBLIC game_logic game_engine sfml-graphics)
 else()
     enable_testing()
     add_subdirectory(tests)
