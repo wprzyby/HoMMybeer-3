@@ -19,7 +19,15 @@ The project is built using _CMake_ and - by default - the _Ninja_ generator. The
 
 You can install the required programs mentioned above from the terminal or via the provided scripts in the _scripts_ directory (powershell scripts for Windows and a bash script for Ubuntu).
 
-Note that when running on Ubuntu, several additional libraries required by SFML need to be installed. 
+Note that when running on Ubuntu, several additional libraries required by SFML need to be installed. These will be installed with the provided scripts and include:
+- xorg-dev
+- libgl1-mesa-dev
+- libudev-dev
+- libalut-dev
+- libvorbis-dev
+- libflac-dev
+
+SFML and GoogleTest will be automatically fetched via git when running CMake configuration.
 
 ### Building from inside Visual Studio Code
 
@@ -50,7 +58,7 @@ To run the built application, simply run:
 
 Unfortunately, as of now, copying the dynamic libraries provided by SFML to the directory from which the executable is being run is necessary. We are working on fixing that issue. The library files can be found in _build/<chosen_preset_name>/\_deps/sfml-build/lib_. After they have been copied to the top level directory, we can run the application with 
 ```powershell
-build\<chosen_preset_name>\bin\HoMMybeer3.exe
+.\build\<chosen_preset_name>\bin\HoMMybeer3.exe
 ```
 
 ### Running tests
