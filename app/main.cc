@@ -6,13 +6,16 @@
  *
  */
 
+#include <Field.h>
 #include <Game.h>
+#include <HeroView.h>
 #include <MapUtils.h>
 #include <MapView.h>
 #include <Session.h>
 #include <Welcome.h>
 
 #include <SFML/Graphics.hpp>
+#include <cmath>
 
 constexpr static int kWindowWidth = 800;
 constexpr static int kWindowHeight = 600;
@@ -29,6 +32,10 @@ int main() {
   map_view.loadTileset("./assets/MapTiles.png", kMapTileSize, kTileTypesCount);
   map_view.loadFieldArray(session->game->getMap()->getFieldArray());
 
+  HeroView hero_view(kWindowWidth, kWindowHeight);
+  hero_view.loadTileSet("./assets/Heroes.png");
+  hero_view.setHero(*(session->game->getCurrentPlayer()->getHero(0)));
+
   // create the window
   sf::RenderWindow window(sf::VideoMode(kWindowWidth, kWindowHeight),
                           "My window");
@@ -41,6 +48,19 @@ int main() {
     while (window.pollEvent(event)) {
       // "close requested" event: we close the window
       if (event.type == sf::Event::Closed) window.close();
+      if (event.type == sf::Event::MouseButtonPressed) {
+        if (event.mouseButton.button == sf::Mouse::Left) {
+          int x_clicked = event.mouseButton.x;
+          int y_clicked = event.mouseButton.y;
+          Session* sess = Session::getInstance();
+          int map_width = sess->game->getMap()->getWidth();
+          sess->game->moveCurrPlayer(
+              FieldCoords{std::floor(x_clicked * map_width / kWindowWidth),
+                          std::floor(y_clicked * map_width / kWindowHeight)});
+          hero_view.setHero(
+              *(sess->game->getCurrentPlayer()->getCurrentHero()));
+        }
+      }
     }
 
     // clear the window with black color
@@ -48,6 +68,7 @@ int main() {
 
     // draw map
     window.draw(map_view);
+    window.draw(hero_view);
 
     // end the current frame
     window.display();
