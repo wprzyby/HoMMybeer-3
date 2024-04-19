@@ -20,7 +20,7 @@
 #include <utility>
 #include <vector>
 
-typedef std::vector<FieldCoords> Path;
+using Path = std::vector<FieldCoords>;
 
 class Hero {
  private:
@@ -36,11 +36,11 @@ class Hero {
         hero_coords_(spawn_field_coords),
         move_path_({}),
         energy_(10000){};
-  ~Hero();
-  const std::string getHeroName() { return name_; };
-  const FieldCoords getHeroCoords() { return hero_coords_; };
-  std::optional<Path> setMoveGoal(FieldCoords goal);
-  void move();
+  ~Hero() = default;
+  std::string getHeroName() const { return name_; };
+  FieldCoords getHeroCoords() const { return hero_coords_; };
+  // std::optional<Path> setMoveGoal(FieldCoords goal);
+  void moveTo(FieldCoords coords);
 };
 
 #endif

@@ -1,8 +1,10 @@
-add_library(game_logic STATIC Session.cc 
+add_library(game_logic STATIC
                               Game.cc  
                               Map.cc 
                               Player.cc 
                               Field.cc
-                              Hero.cc)
+                              Hero.cc
+                              generators/MapUtils.cc
+                              Session.cc)
 
-target_include_directories(game_logic PUBLIC .)
+target_include_directories(game_logic PUBLIC . generators)

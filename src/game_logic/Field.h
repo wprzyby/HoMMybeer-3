@@ -15,9 +15,9 @@
 
 #include <utility>
 
-typedef std::pair<int, int> FieldCoords;
+using FieldCoords = std::pair<int, int>;
 
-enum class TerrainType { SNOW, GRASS, STONE, DIRT, STRUCTURE };
+enum class TerrainType : int { SNOW = 0, GRASS, STONE, DIRT };
 
 class Field {
  private:
@@ -27,15 +27,17 @@ class Field {
   std::pair<int, int> coords_;
 
  public:
-  Field(int x = 0, int y = 0, TerrainType terrain_type = TerrainType::GRASS,
-        bool grail = false, bool walk_through = true)
+  explicit Field(int x = 0, int y = 0,
+                 TerrainType terrain_type = TerrainType::GRASS,
+                 bool grail = false, bool walk_through = true)
       : grail_here_(grail),
         walk_through_(walk_through),
         terrain_type_(terrain_type),
         coords_(std::pair<int, int>{x, y}){};
-  ~Field();
-  const std::pair<int, int> getFieldCoords() { return coords_; };
-  const bool isWalkable() { return walk_through_; };
+  ~Field() = default;
+  std::pair<int, int> getFieldCoords() const { return coords_; };
+  bool isWalkable() const { return walk_through_; };
+  TerrainType getTerrainType() const { return terrain_type_; }
 };
 
 #endif

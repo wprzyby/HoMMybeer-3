@@ -12,6 +12,7 @@
 #include <Field.h>
 #include <Game.h>
 #include <Map.h>
+#include <MapUtils.h>
 #include <Session.h>
 #include <gtest/gtest.h>
 
@@ -28,50 +29,17 @@ TEST(sessionTests, initializesWithNoGame) {
   EXPECT_EQ(session->game, nullptr);
 }
 
-TEST(gameInitTests, basicMapInitialization) {
-  Session* session = Session::getInstance();
-  session->newGame(MapSize::S, 3, Difficulty::EASY);
-  EXPECT_NE(session->game, nullptr);
-  EXPECT_NE(session->game->getMap()->getField(FieldCoords{0, 0}), nullptr);
-  EXPECT_NE(session->game->getMap()->getField(FieldCoords{200, 200}), nullptr);
-  EXPECT_NE(session->game->getMap()->getField(FieldCoords{499, 499}), nullptr);
-  EXPECT_EQ(session->game->getMap()->getField(FieldCoords{500, 500}), nullptr);
+TEST(mapUtilsTest, generateGrassMap) {
+  MapInfo map_info = generateGrassMap(MapSize::S, 3);
+  EXPECT_EQ(map_info.map.getWidth(), 500);
+  EXPECT_EQ(map_info.num_of_players, 3);
+  EXPECT_EQ(map_info.starting_locations.size(), 3);
+  EXPECT_EQ(map_info.map.getField(FieldCoords{20, 20})->isWalkable(), true);
 }
 
-TEST(gameInitTests, basicPlayerArrayInitialization) {
-  Session* session = Session::getInstance();
-  session->newGame(MapSize::S, 3, Difficulty::EASY);
-  EXPECT_NE(session->game->getPlayer(0), nullptr);
-  EXPECT_NE(session->game->getPlayer(1), nullptr);
-  EXPECT_NE(session->game->getPlayer(3), nullptr);
-  EXPECT_EQ(session->game->getPlayer(4), nullptr);
-}
-
-TEST(gameInitTests, playerInit) {
-  Session* session = Session::getInstance();
-  session->newGame(MapSize::S, 3, Difficulty::EASY);
-  Player p = Player(false);
-  EXPECT_NE(p.getHero(0), nullptr);
-  EXPECT_EQ(p.getHero(1), nullptr);
-}
-
-TEST(gameInitTests, heroInit) {
-  Session* session = Session::getInstance();
-  session->newGame(MapSize::S, 3, Difficulty::EASY);
-  Hero h = Hero("Christian", FieldCoords{20, 20});
-  FieldCoords goal_coords = {20, 20};
-  EXPECT_EQ(h.getHeroCoords(), goal_coords);
-  EXPECT_EQ(h.getHeroName(), "Christian");
-}
-
-TEST(heroMovesTests, basicStep) {
-  Session* session = Session::getInstance();
-  session->newGame(MapSize::S, 3, Difficulty::EASY);
-  FieldCoords start_coords = {20, 20};
-  Hero h = Hero("Christian", start_coords);
-  FieldCoords goal_coords = {21, 21};
-  Path p = h.setMoveGoal(goal_coords).value();
-  EXPECT_EQ(p.back(), goal_coords);
-  h.move();
-  EXPECT_EQ(h.getHeroCoords(), goal_coords);
+TEST(mapTests, basicMapFunctionality) {
+  MapInfo map_i = generateGrassMap(MapSize::S, 3);
+  Map map = map_i.map;
+  EXPECT_NE(map.getField(FieldCoords{0, 0}), nullptr);
+  EXPECT_EQ(map.getField(FieldCoords{500, 500}), nullptr);
 }

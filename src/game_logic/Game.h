@@ -23,15 +23,21 @@ enum class Difficulty { EASY, NORMAL, HARD };
 
 class Game {
  private:
-  std::shared_ptr<Map> map_pointer_;
-  Difficulty difficulty_;
   std::vector<Player> players_in_game_;
+  Map game_map_;
+  Difficulty difficulty_;
+  int curr_player_idx;
 
  public:
-  std::shared_ptr<Map> getMap();
-  Game(MapSize map_size, Difficulty difficulty, int ai_enemies);
-  const Player* getPlayer(int idx);
-  ~Game();
+  Game(std::vector<Player> players, Map map)
+      : players_in_game_(players), game_map_(map), curr_player_idx(0) {}
+  Map* const getMap() { return &game_map_; }
+  Player* const getPlayer(int idx);
+  Player* const getCurrentPlayer() {
+    return &players_in_game_[curr_player_idx];
+  }
+  ~Game() = default;
+  bool moveCurrPlayer(FieldCoords coords);
 };
 
 #endif
