@@ -1,0 +1,22 @@
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "cSpell.customDictionaries": {
+        "custom-dictionary": {
+            "name": "custom-dictionary",
+            "path": "${workspaceFolder}/.vscode/cspell-custom-dictionary.txt",
+            "addWords": true,
+            "scope": "workspace"
+        },
+        "custom": true
+    },
+    "clangd.arguments": [
+        "--pretty",
+        "--log=verbose",
+        "--compile-commands-dir=${workspaceFolder}/build/test-debug",   // change when changing presets
+        "--query-driver=C:\\Users\\User\\scoop\\apps\\gcc\\13.2.0\\bin\\g++.exe"    // change path accordingly
+    ],
+    "clangd.fallbackFlags": [
+        "-std=c++23"
+    ],
+    "clangd.detectExtensionConflicts": true,
+}
