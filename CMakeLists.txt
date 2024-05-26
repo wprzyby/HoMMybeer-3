@@ -32,12 +32,47 @@ endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
+set(WARNINGS
+    -Werror
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Wcast-align
+    -Wcast-qual
+    -Wdisabled-optimization
+    -Wduplicated-branches
+    -Wduplicated-cond
+    -Wformat=2
+    -Wlogical-op
+    -Wmissing-include-dirs
+    -Wpointer-arith
+    -Wshadow=compatible-local
+    -Wswitch-enum
+    -Wvla
+    -Wsuggest-attribute=const
+    -Wdouble-promotion
+    -Wconversion
+    -Wundef
+    -Wno-volatile
+    -Wsuggest-override
+    -Woverloaded-virtual
+)
+
+set(DEBUG_FLAGS
+    -Og -g3 -ggdb
+    CACHE INTERNAL ""
+)
+set(RELEASE_FLAGS
+    -Os -g0
+    CACHE INTERNAL ""
+)
 
 if(NOT ENABLE_TESTS)
     add_executable(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/app/main.cc)
     
     target_link_libraries(${PROJECT_NAME} PUBLIC game_logic game_engine sfml-graphics)
+    target_compile_options(${PROJECT_NAME} PRIVATE ${WARNINGS} $<$<CONFIG:Debug>:${DEBUG_FLAGS}> $<$<CONFIG:Release>:${RELEASE_FLAGS}>)
 else()
     enable_testing()
     add_subdirectory(tests)
