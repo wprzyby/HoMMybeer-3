@@ -4,18 +4,6 @@ project(HoMMybeer3)
 
 include(cmake/FetchGitLib.cmake)
 
-fetch_git_lib(
-        GoogleTest
-        https://github.com/google/googletest/
-        main
-)
-
-fetch_git_lib(
-        SFML
-        https://github.com/SFML/SFML.git
-        2.6.0
-)
-
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 20)
@@ -69,18 +57,28 @@ set(RELEASE_FLAGS
 )
 
 if(NOT ENABLE_TESTS)
+    fetch_git_lib(
+            SFML
+            https://github.com/SFML/SFML.git
+            2.6.0
+    )
     add_executable(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/app/main.cc)
-    
+    add_subdirectory(src/game_logic)
+    add_subdirectory(src/game_engine)
     target_link_libraries(${PROJECT_NAME} PUBLIC game_logic game_engine sfml-graphics)
     target_compile_options(${PROJECT_NAME} PRIVATE ${WARNINGS} $<$<CONFIG:Debug>:${DEBUG_FLAGS}> $<$<CONFIG:Release>:${RELEASE_FLAGS}>)
 else()
+    fetch_git_lib(
+            GoogleTest
+            https://github.com/google/googletest/
+            main
+    )
     enable_testing()
+    add_subdirectory(src/game_logic)
     add_subdirectory(tests)
     if(ENABLE_COVERAGE)
         # TODO: setup test coverage with CMake
     endif()
     
 endif()
-
-add_subdirectory(src)

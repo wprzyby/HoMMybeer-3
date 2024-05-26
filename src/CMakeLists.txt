@@ -1,2 +1,0 @@
-add_subdirectory(game_logic)
-add_subdirectory(game_engine)
