@@ -36,7 +36,7 @@ void Player::addHero(std::string name, FieldCoords spawn_field_coords) {
   players_heros_.push_back(Hero(name, spawn_field_coords));
 }
 
-Hero* const Player::getHero(int idx) {
+Hero* Player::getHero(int idx) {
   if (idx >= players_heros_.size()) {
     return nullptr;
   }

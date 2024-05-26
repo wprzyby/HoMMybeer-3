@@ -31,8 +31,8 @@ class Player {
  public:
   Player(bool is_ai, Faction faction, FieldCoords starting_location);
   ~Player();
-  Hero* const getHero(int idx);  // TODO: overload with ex name
-  Hero* const getCurrentHero() { return &players_heros_[selected_hero_idx_]; }
+  Hero* getHero(int idx);  // TODO: overload with ex name
+  Hero* getCurrentHero() { return &players_heros_[selected_hero_idx_]; }
   void addHero(std::string name, FieldCoords spawn_field_coords);
 };
 

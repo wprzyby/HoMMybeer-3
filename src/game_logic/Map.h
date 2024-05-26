@@ -22,19 +22,21 @@ using FieldCoords = std::pair<int, int>;
 
 class Map {
  private:
-  int width_;
+  unsigned int width_;
   FieldArray_t field_array_;
   std::vector<FieldCoords> starting_locations_;
 
  public:
   explicit Map(FieldArray_t fields) : field_array_(fields) {
-    width_ = fields.size();
+    width_ = fields.size() &
+             0xFFFFFFFF;  // due to conversion warning; we don't expect the size
+                          // to be more than the range of uint
   }
   ~Map() = default;
-  Field* const getField(
+  const Field* getField(
       FieldCoords coords);  // method for getting visual field parameters
   FieldArray_t getFieldArray() { return field_array_; }
-  const int getWidth() { return width_; };
+  unsigned int getWidth() { return width_; };
 };
 
 #endif

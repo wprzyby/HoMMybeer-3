@@ -47,7 +47,7 @@ class Session {
   ~Session();
   static Session* getInstance();
   const std::vector<Save> getSavedGames();
-  const SessionState getSessionState();
+  SessionState getSessionState();
   void setSessionState(SessionState new_state) { session_state_ = new_state; };
   void newGame(Map game_map, std::vector<Player> players,
                Difficulty difficulty);

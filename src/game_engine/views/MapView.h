@@ -27,7 +27,7 @@ class MapView : public sf::Drawable, public sf::Transformable {
   void loadFieldArray(FieldArray_t field_array);
 
  private:
-  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
   sf::Texture tileset_;
   int num_of_tiles_;
   sf::Vector2u tile_size_;

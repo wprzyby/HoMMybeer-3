@@ -15,7 +15,7 @@
 
 using namespace std;
 
-Player* const Game::getPlayer(int idx) {
+Player* Game::getPlayer(int idx) {
   if (players_in_game_.size() <= idx) {
     return nullptr;
   }

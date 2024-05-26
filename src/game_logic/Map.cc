@@ -15,7 +15,7 @@
 
 using namespace std;
 
-Field* const Map::getField(FieldCoords coords) {
+const Field* Map::getField(FieldCoords coords) {
   int x = coords.first;
   int y = coords.second;
   if (x >= width_ || x < 0 || y >= width_ || y < 0) {

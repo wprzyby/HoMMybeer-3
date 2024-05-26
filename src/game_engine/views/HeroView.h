@@ -33,7 +33,7 @@ class HeroView : public sf::Drawable, public sf::Transformable {
         window_height_(window_height),
         map_width_(Session::getInstance()->game->getMap()->getWidth()) {}
   ~HeroView() = default;
-  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
   bool loadTileSet(const std::string& tileset_path);
   void setHero(const Hero& hero);
 };
