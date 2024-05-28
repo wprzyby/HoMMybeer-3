@@ -22,7 +22,9 @@
                 "ENABLE_TESTS": {
                     "type": "BOOL",
                     "value": "OFF"
-                }
+                },
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
             }
         },
         {
@@ -34,8 +36,11 @@
                 "ENABLE_TESTS": {
                     "type": "BOOL",
                     "value": "OFF"
-                }
+                },
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
             }
+            
         },
         {
             "name": "test-release",
@@ -46,7 +51,9 @@
                 "ENABLE_TESTS": {
                     "type": "BOOL",
                     "value": "ON"
-                }
+                },
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
             }
         },
         {
@@ -58,7 +65,9 @@
                 "ENABLE_TESTS": {
                     "type": "BOOL",
                     "value": "ON"
-                }
+                },
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
             }
         },
         {
