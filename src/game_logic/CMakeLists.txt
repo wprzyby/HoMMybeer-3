@@ -5,6 +5,8 @@ add_library(game_logic STATIC
                               Field.cc
                               Hero.cc
                               generators/MapUtils.cc
-                              Session.cc)
+                              Session.cc
+                              MapObject.cc
+                              Config.cc)
 
-target_include_directories(game_logic PUBLIC . generators)
+target_include_directories(game_logic PUBLIC . generators ${CMAKE_SOURCE_DIR}/lib/nlohmann)

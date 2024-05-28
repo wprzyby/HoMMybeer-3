@@ -12,12 +12,14 @@
 #ifndef SRC_GAME_LOGIC_SESSION_H_
 #define SRC_GAME_LOGIC_SESSION_H_
 
+#include <Config.h>
 #include <Game.h>
 #include <Map.h>
 
 #include <memory>
 #include <string>
 #include <vector>
+
 
 enum class SessionState {
   IN_GAME,

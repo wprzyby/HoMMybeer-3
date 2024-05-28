@@ -12,10 +12,12 @@
 #ifndef SRC_GAME_LOGIC_MAP_H_
 #define SRC_GAME_LOGIC_MAP_H_
 
+#include <Config.h>
 #include <Field.h>
 
 #include <optional>
 #include <vector>
+
 
 using FieldArray_t = std::vector<std::vector<Field>>;
 using FieldCoords = std::pair<int, int>;
@@ -25,6 +27,7 @@ class Map {
   unsigned int width_;
   FieldArray_t field_array_;
   std::vector<FieldCoords> starting_locations_;
+  Field* fieldToModify(FieldCoords coords) const;
 
  public:
   explicit Map(FieldArray_t fields) : field_array_(fields) {
@@ -34,9 +37,16 @@ class Map {
   }
   ~Map() = default;
   const Field* getField(
-      FieldCoords coords);  // method for getting visual field parameters
+      FieldCoords coords) const;  // method for getting visual field parameters
   FieldArray_t getFieldArray() { return field_array_; }
-  unsigned int getWidth() { return width_; };
+  unsigned int getWidth() const { return width_; };
+  bool deleteObjectFrom(FieldCoords coords_to_delete) const {
+    return fieldToModify(coords_to_delete)->deleteObject();
+  }
+  bool setObjectTo(FieldCoords coords_to_delete,
+                   std::shared_ptr<MapObject> obj) const {
+    return fieldToModify(coords_to_delete)->setObject(obj);
+  }
 };
 
 #endif

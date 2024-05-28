@@ -96,7 +96,7 @@
     "testPresets": [
         {
             "name": "default",
-            "configurePreset": "default",
+            "configurePreset": "test-debug",
             "output": {
                 "outputOnFailure": true,
                 "shortProgress": true

@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.22)
 project(HoMMybeer3)
 
 include(cmake/FetchGitLib.cmake)
+include(FetchContent)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_EXTENSIONS OFF)

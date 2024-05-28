@@ -15,11 +15,20 @@
 
 using namespace std;
 
-const Field* Map::getField(FieldCoords coords) {
+const Field* Map::getField(FieldCoords coords) const {
   int x = coords.first;
   int y = coords.second;
   if (x >= width_ || x < 0 || y >= width_ || y < 0) {
     return {};
   }
   return &field_array_[x][y];
+}
+
+Field* Map::fieldToModify(FieldCoords coords) const {
+  int x = coords.first;
+  int y = coords.second;
+  if (x >= width_ || x < 0 || y >= width_ || y < 0) {
+    return {};
+  }
+  return const_cast<Field*>(&(field_array_.data()[x][y]));
 }

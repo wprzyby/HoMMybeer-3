@@ -11,3 +11,26 @@
  */
 
 #include <Field.h>
+using namespace std;
+
+FieldCoords operator+(const FieldCoords& l, const FieldCoords& r) {
+  return {l.first + r.first, l.second + r.second};
+}
+
+bool Field::setObject(shared_ptr<MapObject> object) {
+  if (object_ != nullptr) {
+    return false;
+  }
+  object_ = object;
+  walk_through_ = false;
+  return true;
+}
+
+bool Field::deleteObject() {
+  if (object_ == nullptr) {
+    return false;
+  }
+  object_ = nullptr;
+  walk_through_ = true;
+  return true;
+}

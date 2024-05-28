@@ -13,18 +13,24 @@
 #ifndef SRC_GAME_LOGIC_FIELD_H_
 #define SRC_GAME_LOGIC_FIELD_H_
 
+#include <Config.h>
+#include <MapObject.h>
+
+#include <memory>
 #include <utility>
+
 
 using FieldCoords = std::pair<int, int>;
 
-enum class TerrainType : int { SNOW = 0, GRASS, STONE, DIRT };
+FieldCoords operator+(const FieldCoords& l, const FieldCoords& r);
 
 class Field {
  private:
   bool grail_here_;
   bool walk_through_;
   TerrainType terrain_type_;
-  std::pair<int, int> coords_;
+  FieldCoords coords_;
+  std::shared_ptr<MapObject> object_;
 
  public:
   explicit Field(int x = 0, int y = 0,
@@ -33,11 +39,15 @@ class Field {
       : grail_here_(grail),
         walk_through_(walk_through),
         terrain_type_(terrain_type),
-        coords_(std::pair<int, int>{x, y}){};
+        coords_(FieldCoords{x, y}),
+        object_(nullptr){};
   ~Field() = default;
-  std::pair<int, int> getFieldCoords() const { return coords_; };
+  FieldCoords getFieldCoords() const { return coords_; };
   bool isWalkable() const { return walk_through_; };
   TerrainType getTerrainType() const { return terrain_type_; }
+  const std::shared_ptr<MapObject> getObject() const { return object_; }
+  bool setObject(std::shared_ptr<MapObject> object);
+  bool deleteObject();
 };
 
 #endif

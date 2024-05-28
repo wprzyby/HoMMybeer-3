@@ -10,6 +10,7 @@
  *
  */
 
+#include <Config.h>
 #include <Map.h>
 #include <Player.h>
 
@@ -18,16 +19,15 @@
 
 using namespace std;
 
-const static std::map<Faction, std::string> kDefaultHeroNames{
-    {Faction::CASTLE, "Andrew the Mediocre"},
-    {Faction::FORTRESS, "Peter the Fearful"},
-    {Faction::INFERNO, "Stefan the Devil"},
-};
-
-Player::Player(bool is_ai, Faction faction, FieldCoords starting_location)
-    : is_ai_(is_ai), faction_(faction), selected_hero_idx_(0) {
-  players_heros_ =
-      vector<Hero>{Hero(kDefaultHeroNames.at(faction), starting_location)};
+Player::Player(bool is_ai, Faction faction, FieldCoords starting_location,
+               Inventory starting_inventory, Incomes starting_income)
+    : is_ai_(is_ai),
+      faction_(faction),
+      selected_hero_idx_(0),
+      inventory_(starting_inventory),
+      income_(starting_income) {
+  players_heros_ = vector<Hero>{
+      Hero(Config::kDefaultHeroNames.at(faction), starting_location)};
 }
 
 Player::~Player() {}
@@ -41,4 +41,20 @@ Hero* Player::getHero(int idx) {
     return nullptr;
   }
   return &players_heros_[idx];
+}
+
+bool Player::updateResourceQuantity(ResourceType resource_type, int delta) {
+  if (inventory_[resource_type] + delta < 0) {
+    return false;
+  }
+  inventory_[resource_type] = inventory_[resource_type] + delta;
+  return true;
+}
+
+bool Player::changeIncome(ResourceType resource_type, int delta) {
+  if (income_[resource_type] + delta < 0) {
+    return false;
+  }
+  income_[resource_type] = income_[resource_type] + delta;
+  return true;
 }
