@@ -32,7 +32,8 @@ Player::Player(bool is_ai, Faction faction, FieldCoords starting_location,
 
 Player::~Player() {}
 
-void Player::addHero(std::string name, FieldCoords spawn_field_coords) {
+void Player::addHero(std::string name, FieldCoords spawn_field_coords,
+                     int starting_energy) {
   players_heros_.push_back(Hero(name, spawn_field_coords));
 }
 
@@ -57,4 +58,12 @@ bool Player::changeIncome(ResourceType resource_type, int delta) {
   }
   income_[resource_type] = income_[resource_type] + delta;
   return true;
+}
+
+void Player::nextHero() {
+  if (selected_hero_idx_ == players_heros_.size() - 1) {
+    selected_hero_idx_ = 0;
+  } else {
+    selected_hero_idx_++;
+  }
 }

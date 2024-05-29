@@ -53,8 +53,8 @@ class Session {
   SessionState getSessionState();
   void setSessionState(SessionState new_state) { session_state_ = new_state; };
   void newGame(Map game_map, std::vector<Player> players,
-               Difficulty difficulty, std::vector<std::shared_ptr<MapObject>> starting_objects = {});
-  std::unique_ptr<Game> game;
+               Difficulty difficulty = Difficulty::NORMAL, std::vector<std::shared_ptr<MapObjectParented>> starting_objects = {});
+  Game game;
 };
 
 #endif

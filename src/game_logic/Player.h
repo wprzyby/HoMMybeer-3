@@ -42,7 +42,7 @@ class Player {
   ~Player();
   Hero* getHero(int idx);  // TODO: overload with ex name
   Hero* getCurrentHero() { return &players_heros_[selected_hero_idx_]; }
-  void addHero(std::string name, FieldCoords spawn_field_coords);
+  void addHero(std::string name, FieldCoords spawn_field_coords, int starting_energy = 100);
   bool updateResourceQuantity(ResourceType resource_type, int delta);
   bool changeIncome(ResourceType resource_type, int delta);
   int getResourceAmount(ResourceType resource) const {
@@ -51,6 +51,7 @@ class Player {
   int getResourceIncome(ResourceType resource) const {
     return income_.at(resource);
   }
+  void nextHero();
 };
 
 #endif
