@@ -1,0 +1,75 @@
+{
+    "_comment": "Example go-to structure for unit config used for config loading tests. One should follow this example to create proper config used in game",
+    "CASTLE": {
+        "1": {
+            "name": "Lackey",
+            "hitpoints_per_unit": 1,
+            "speed": 2,
+            "min_damage": 3,
+            "max_damage": 4,
+            "attack": 5,
+            "defense": 6,
+            "is_ranged": true,
+            "immune_to_retaliation": false
+        },
+        "2": {
+            "name": "Knight",
+            "hitpoints_per_unit": 7,
+            "speed": 8,
+            "min_damage": 9,
+            "max_damage": 10,
+            "attack": 11,
+            "defense": 12,
+            "is_ranged": true,
+            "immune_to_retaliation": true
+        }
+    },
+    "INFERNO": {
+        "1": {
+            "name": "Imp",
+            "hitpoints_per_unit": 6,
+            "speed": 5,
+            "min_damage": 4,
+            "max_damage": 3,
+            "attack": 2,
+            "defense": 1,
+            "is_ranged": false,
+            "immune_to_retaliation": false
+        },
+        "2": {
+            "name": "Literally The Devil",
+            "hitpoints_per_unit": 12,
+            "speed": 11,
+            "min_damage": 10,
+            "max_damage": 9,
+            "attack": 8,
+            "defense": 7,
+            "is_ranged": false,
+            "immune_to_retaliation": true
+        }
+    },
+    "INVALID_UNIT_TYPE": {
+        "1": {
+            "name": "Shouldn't be read",
+            "hitpoints_per_unit": -1,
+            "speed": -1,
+            "min_damage": -1,
+            "max_damage": -1,
+            "attack": -1,
+            "defense": -1,
+            "is_ranged": false,
+            "immune_to_retaliation": false
+        },
+        "2": {
+            "name": "Shouldn't be read",
+            "hitpoints_per_unit": -1,
+            "speed": -1,
+            "min_damage": -1,
+            "max_damage": -1,
+            "attack": -1,
+            "defense": -1,
+            "is_ranged": false,
+            "immune_to_retaliation": false
+        }
+    }
+}

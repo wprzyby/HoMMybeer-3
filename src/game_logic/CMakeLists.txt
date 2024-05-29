@@ -7,6 +7,10 @@ add_library(game_logic STATIC
                               generators/MapUtils.cc
                               Session.cc
                               MapObject.cc
-                              Config.cc)
+                              Config.cc
+                              UnitBlock.cc
+                              UnitBlockGenerator.cc
+                              UnitConfig.cc
+)
 
 target_include_directories(game_logic PUBLIC . generators ${CMAKE_SOURCE_DIR}/lib/nlohmann)
