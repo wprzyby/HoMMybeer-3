@@ -78,6 +78,7 @@ else()
     enable_testing()
     add_subdirectory(src/game_logic)
     add_subdirectory(tests)
+    target_compile_options(tests PRIVATE ${WARNINGS} $<$<CONFIG:Debug>:${DEBUG_FLAGS}> $<$<CONFIG:Release>:${RELEASE_FLAGS}>)
     if(ENABLE_COVERAGE)
         # TODO: setup test coverage with CMake
     endif()

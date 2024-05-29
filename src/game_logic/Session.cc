@@ -44,7 +44,7 @@ Session* Session::getInstance() {
 }
 
 void Session::newGame(Map game_map, std::vector<Player> players,
-                      Difficulty difficulty) {
-  game = make_unique<Game>(players, game_map);
+                      Difficulty difficulty, std::vector<std::shared_ptr<MapObject>> starting_objects) {
+  game = make_unique<Game>(players, game_map, starting_objects);
   session_state_ = SessionState::IN_GAME;
 }

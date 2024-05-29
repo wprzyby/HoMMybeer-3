@@ -36,7 +36,7 @@ class Map {
                           // to be more than the range of uint
   }
   ~Map() = default;
-  const Field* getField(
+  std::optional<const Field*> getField(
       FieldCoords coords) const;  // method for getting visual field parameters
   FieldArray_t getFieldArray() { return field_array_; }
   unsigned int getWidth() const { return width_; };

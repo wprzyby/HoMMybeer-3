@@ -9,6 +9,10 @@
 #define SRC_GAME_LOGIC_MAP_UTILS_H_
 
 #include <Map.h>
+#include <MapObject.h>
+
+#include <memory>
+#include <vector>
 
 enum class MapSize { S = 10, M = 20, L = 50, XL = 100 };
 
@@ -19,5 +23,10 @@ struct MapInfo {
 };
 
 MapInfo generateGrassMap(MapSize map_size, int num_of_players);
+
+MapInfo generateLargeExampleMap();
+
+std::vector<std::shared_ptr<MapObject>> generateExampleStaticObjects();
+std::vector<std::shared_ptr<MapObject>> generateExamplePickableObjects();
 
 #endif  // SRC_GAME_LOGIC_MAP_UTILS_H_

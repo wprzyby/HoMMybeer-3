@@ -23,7 +23,6 @@
 #include <iostream>
 #include <utility>
 
-
 TEST(sessionTests, allowsOneInstance) {
   Session* sess1 = Session::getInstance();
   Session* sess2 = Session::getInstance();
@@ -40,16 +39,17 @@ TEST(mapUtilsTest, generateGrassMapTest) {
   EXPECT_EQ(map_info.map.getWidth(), static_cast<int>(MapSize::S));
   EXPECT_EQ(map_info.num_of_players, 3);
   EXPECT_EQ(map_info.starting_locations.size(), 3);
-  EXPECT_EQ(map_info.map.getField(FieldCoords{1, 1})->isWalkable(), true);
+  EXPECT_EQ(map_info.map.getField(FieldCoords{1, 1}).value()->isWalkable(),
+            true);
 }
 
 TEST(mapTests, basicMapFunctionality) {
   MapInfo map_i = generateGrassMap(MapSize::S, 3);
   Map map = map_i.map;
-  EXPECT_NE(map.getField(FieldCoords{0, 0}), nullptr);
-  EXPECT_EQ(map.getField(FieldCoords{static_cast<int>(MapSize::S) + 1,
-                                     static_cast<int>(MapSize::S) + 1}),
-            nullptr);
+  EXPECT_TRUE(map.getField(FieldCoords{0, 0}).has_value());
+  EXPECT_FALSE(map.getField(FieldCoords{static_cast<int>(MapSize::S) + 1,
+                                        static_cast<int>(MapSize::S) + 1})
+                   .has_value());
 }
 
 TEST(mapObjectTests, mountainObjectInitializationTest) {
@@ -62,19 +62,19 @@ TEST(mapObjectTests, mountainObjectInitializationTest) {
   ASSERT_EQ(mountain.occupiedFields().size(), 12);
   EXPECT_THAT(mountain.occupiedFields(),
               testing::UnorderedElementsAre(
-                  FieldCoords{1, 2}, FieldCoords{1, 3}, FieldCoords{1, 4},
-                  FieldCoords{1, 5}, FieldCoords{2, 1}, FieldCoords{2, 2},
-                  FieldCoords{2, 3}, FieldCoords{2, 4}, FieldCoords{2, 5},
-                  FieldCoords{3, 1}, FieldCoords{3, 2}, FieldCoords{3, 3}));
+                  FieldCoords{2, 1}, FieldCoords{2, 2}, FieldCoords{2, 3},
+                  FieldCoords{2, 4}, FieldCoords{3, 1}, FieldCoords{3, 2},
+                  FieldCoords{3, 3}, FieldCoords{3, 4}, FieldCoords{3, 5},
+                  FieldCoords{4, 3}, FieldCoords{4, 4}, FieldCoords{4, 5}));
 
   GeologicalObject mountain2 =
       GeologicalObject(FieldCoords{2, 3}, GeologicalStructureType::MOUNTAIN, 0);
   EXPECT_THAT(mountain2.occupiedFields(),
               testing::UnorderedElementsAre(
-                  FieldCoords{3, 5}, FieldCoords{3, 6}, FieldCoords{3, 7},
-                  FieldCoords{3, 8}, FieldCoords{4, 4}, FieldCoords{4, 5},
-                  FieldCoords{4, 6}, FieldCoords{4, 7}, FieldCoords{4, 8},
-                  FieldCoords{5, 4}, FieldCoords{5, 5}, FieldCoords{5, 6}));
+                  FieldCoords{4, 4}, FieldCoords{5, 4}, FieldCoords{4, 5},
+                  FieldCoords{5, 5}, FieldCoords{4, 6}, FieldCoords{5, 6},
+                  FieldCoords{6, 6}, FieldCoords{4, 7}, FieldCoords{5, 7},
+                  FieldCoords{6, 7}, FieldCoords{5, 8}, FieldCoords{6, 8}));
 }
 
 class basicTestGame : public testing::Test {
@@ -103,31 +103,47 @@ TEST_F(basicTestGame, addingAndDeletingGeologicalObject) {
   std::shared_ptr<GeologicalObject> geoObj = std::make_shared<GeologicalObject>(
       FieldCoords{0, 0}, GeologicalStructureType::MOUNTAIN, 0);
   sess->game->addMapObject(geoObj);
-  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{0, 0})->isWalkable());
-  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{1, 2})->isWalkable());
-  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{3, 3})->isWalkable());
-  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{2, 4})->isWalkable());
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{0, 0})->getObject(),
-            nullptr);
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{2, 1})->getObject(),
-            geoObj);
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{3, 1})->getObject(),
-            geoObj);
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{2, 5})->getObject(),
-            geoObj);
+  EXPECT_TRUE(
+      sess->game->getMap()->getField(FieldCoords{0, 0}).value()->isWalkable());
+  EXPECT_FALSE(
+      sess->game->getMap()->getField(FieldCoords{2, 2}).value()->isWalkable());
+  EXPECT_FALSE(
+      sess->game->getMap()->getField(FieldCoords{3, 3}).value()->isWalkable());
+  EXPECT_FALSE(
+      sess->game->getMap()->getField(FieldCoords{2, 4}).value()->isWalkable());
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{0, 0}).value()->getObject(),
+      nullptr);
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{4, 5}).value()->getObject(),
+      geoObj);
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{3, 5}).value()->getObject(),
+      geoObj);
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{2, 1}).value()->getObject(),
+      geoObj);
   sess->game->deleteMapObject(0);
-  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{0, 0})->isWalkable());
-  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{1, 2})->isWalkable());
-  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{3, 3})->isWalkable());
-  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{2, 4})->isWalkable());
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{0, 0})->getObject(),
-            nullptr);
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{2, 1})->getObject(),
-            nullptr);
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{3, 1})->getObject(),
-            nullptr);
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{2, 5})->getObject(),
-            nullptr);
+  EXPECT_TRUE(
+      sess->game->getMap()->getField(FieldCoords{0, 0}).value()->isWalkable());
+  EXPECT_TRUE(
+      sess->game->getMap()->getField(FieldCoords{2, 2}).value()->isWalkable());
+  EXPECT_TRUE(
+      sess->game->getMap()->getField(FieldCoords{3, 3}).value()->isWalkable());
+  EXPECT_TRUE(
+      sess->game->getMap()->getField(FieldCoords{2, 4}).value()->isWalkable());
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{0, 0}).value()->getObject(),
+      nullptr);
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{4, 5}).value()->getObject(),
+      nullptr);
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{3, 5}).value()->getObject(),
+      nullptr);
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{2, 1}).value()->getObject(),
+      nullptr);
 }
 
 TEST_F(basicTestGame, playerInitTest) {
@@ -159,12 +175,15 @@ TEST_F(basicTestGame, pickableResourceTest) {
       std::make_shared<PickableResource>(FieldCoords{4, 2}, ResourceType::ORE,
                                          5);
   sess->game->addMapObject(ore_stash);
-  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{4, 3})->isWalkable());
+  EXPECT_FALSE(
+      sess->game->getMap()->getField(FieldCoords{4, 3}).value()->isWalkable());
   EXPECT_TRUE(sess->game->getMap()
                   ->getField(FieldCoords{4, 3})
+                  .value()
                   ->getObject()
                   ->objectAction());
-  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{4, 3})->isWalkable());
+  EXPECT_TRUE(
+      sess->game->getMap()->getField(FieldCoords{4, 3}).value()->isWalkable());
   EXPECT_EQ(
       sess->game->getCurrentPlayer()->getResourceAmount(ResourceType::ORE), 15);
 }
@@ -174,15 +193,21 @@ TEST_F(basicTestGame, resourceGeneratorTest) {
       std::make_shared<ResourceGenerator>(FieldCoords{3, 3}, ResourceType::WOOD,
                                           2);
   sess->game->addMapObject(wood_workshop);
-  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{5, 4})->isWalkable());
-  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{5, 7})->isWalkable());
-  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{4, 7})->isWalkable());
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{4, 7})->getObject(),
-            wood_workshop);
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{5, 4})->getObject(),
-            wood_workshop);
+  EXPECT_FALSE(
+      sess->game->getMap()->getField(FieldCoords{5, 4}).value()->isWalkable());
+  EXPECT_FALSE(
+      sess->game->getMap()->getField(FieldCoords{5, 7}).value()->isWalkable());
+  EXPECT_FALSE(
+      sess->game->getMap()->getField(FieldCoords{4, 7}).value()->isWalkable());
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{4, 7}).value()->getObject(),
+      wood_workshop);
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{5, 4}).value()->getObject(),
+      wood_workshop);
   EXPECT_TRUE(sess->game->getMap()
                   ->getField(FieldCoords{5, 7})
+                  .value()
                   ->getObject()
                   ->objectAction());
   EXPECT_EQ(
@@ -194,11 +219,111 @@ TEST_F(basicTestGame, cityInit) {
       std::make_shared<City>(FieldCoords{5, 5}, Faction::CASTLE);
   sess->game->addMapObject(castle_city);
   EXPECT_FALSE(
-      sess->game->getMap()->getField(FieldCoords{10, 6})->isWalkable());
-  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{8, 8})->isWalkable());
-  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{8, 9})->isWalkable());
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{9, 10})->getObject(),
-            castle_city);
-  EXPECT_EQ(sess->game->getMap()->getField(FieldCoords{10, 8})->getObject(),
-            castle_city);
+      sess->game->getMap()->getField(FieldCoords{10, 6}).value()->isWalkable());
+  EXPECT_FALSE(
+      sess->game->getMap()->getField(FieldCoords{8, 8}).value()->isWalkable());
+  EXPECT_FALSE(
+      sess->game->getMap()->getField(FieldCoords{8, 9}).value()->isWalkable());
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{9, 10}).value()->getObject(),
+      castle_city);
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{10, 8}).value()->getObject(),
+      castle_city);
+}
+
+TEST(mapObjectTests, conflictingObjectsAtInit) {
+  Config* conf = Config::getInstance();
+  std::string path = Config::getProjectPath();
+  conf->loadData(path + "/assets/ObjectsMetadata.json");
+  MapInfo map_info = generateGrassMap(MapSize::L, 1);
+  std::vector<Player> players{
+      Player(false, Faction::CASTLE, map_info.starting_locations[0])};
+  std::vector<std::shared_ptr<MapObject>> objects = {
+      std::make_shared<GeologicalObject>(FieldCoords{0, 0},
+                                         GeologicalStructureType::TREE, 7),
+      std::make_shared<GeologicalObject>(FieldCoords{0, 0},
+                                         GeologicalStructureType::TREE, 7)};
+  Session* sess = Session::getInstance();
+  EXPECT_THROW(sess->newGame(map_info.map, players, Difficulty::EASY, objects),
+               Game::WrongObjectPlacementException);
+}
+
+TEST(mapObjectTests, conflictingObjectsAtAdding) {
+  Config* conf = Config::getInstance();
+  std::string path = Config::getProjectPath();
+  conf->loadData(path + "/assets/ObjectsMetadata.json");
+  MapInfo map_info = generateGrassMap(MapSize::L, 1);
+  std::vector<Player> players{
+      Player(false, Faction::CASTLE, map_info.starting_locations[0])};
+  std::vector<std::shared_ptr<MapObject>> objects = {
+      std::make_shared<GeologicalObject>(FieldCoords{0, 0},
+                                         GeologicalStructureType::TREE, 7)};
+  Session* sess = Session::getInstance();
+  sess->newGame(map_info.map, players, Difficulty::EASY, objects);
+  EXPECT_TRUE(sess->game->addMapObject(std::make_shared<PickableResource>(
+      FieldCoords{6, 6}, ResourceType::GOLD, 50)));
+  EXPECT_NE(
+      sess->game->getMap()->getField(FieldCoords{6, 7}).value()->getObject(),
+      nullptr);
+  EXPECT_FALSE(sess->game->addMapObject(std::make_shared<GeologicalObject>(
+      FieldCoords{0, 0}, GeologicalStructureType::TREE, 7)));
+  EXPECT_FALSE(sess->game->addMapObject(std::make_shared<GeologicalObject>(
+      FieldCoords{2, 2}, GeologicalStructureType::TREE, 5)));
+  EXPECT_EQ(
+      sess->game->getMap()->getField(FieldCoords{4, 4}).value()->getObject(),
+      nullptr);
+}
+
+class TestMapTests : public testing::Test {
+ protected:
+  Session* sess;
+  TestMapTests() { sess = Session::getInstance(); }
+  void SetUp() override {
+    Config* conf = Config::getInstance();
+    std::string path = Config::getProjectPath();
+    conf->loadData(path + "/assets/ObjectsMetadata.json");
+    MapInfo map_info = generateLargeExampleMap();
+    std::vector<Player> players{
+        Player(false, Faction::CASTLE, map_info.starting_locations[0])};
+    std::vector<std::shared_ptr<MapObject>> static_map_objects =
+        generateExampleStaticObjects();
+    std::vector<std::shared_ptr<MapObject>> pickable_map_objects =
+        generateExamplePickableObjects();
+    std::vector<std::shared_ptr<MapObject>> starting_objects(
+        static_map_objects.size() + pickable_map_objects.size());
+    std::merge(static_map_objects.begin(), static_map_objects.end(),
+               pickable_map_objects.begin(), pickable_map_objects.end(),
+               starting_objects.begin());
+    try
+    {
+      sess->newGame(map_info.map, players, Difficulty::EASY, starting_objects);
+    }
+    catch(Game::WrongObjectPlacementException& e)
+    {
+      std::cerr << e.what() << '\n';
+    }
+    
+    
+  }
+  void TearDown() override { sess = nullptr; }
+};
+
+TEST_F(TestMapTests, exampleMapInitTest) {
+  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{10, 12}).value()->isWalkable());
+  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{21, 26}).value()->isWalkable());
+  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{4, 28}).value()->isWalkable());
+  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{36, 13}).value()->isWalkable());
+  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{22, 29}).value()->isWalkable());
+  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{33, 38}).value()->isWalkable());
+  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{41, 48}).value()->isWalkable());
+  EXPECT_FALSE(sess->game->getMap()->getField(FieldCoords{41, 39}).value()->isWalkable());
+  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{36, 27}).value()->isWalkable());
+  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{46, 40}).value()->isWalkable());
+  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{21, 43}).value()->isWalkable());
+  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{22, 27}).value()->isWalkable());
+  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{11, 2}).value()->isWalkable());
+  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{10, 17}).value()->isWalkable());
+  EXPECT_TRUE(sess->game->getMap()->getField(FieldCoords{20, 26}).value()->isWalkable());
+  
 }

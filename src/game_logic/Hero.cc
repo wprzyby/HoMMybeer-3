@@ -10,29 +10,34 @@
  */
 
 #include <Hero.h>
+#include <Session.h>
 
 using namespace std;
 
-// optional<Path> Hero::setMoveGoal(FieldCoords goal) {
-//   if
-//   (!(Session::getInstance()->game->getMap()->getField(goal)->isWalkable())) {
-//     // pathfinding etc
-//     return {};
-//   }
-//   Path opt_path = {};
-//   opt_path.push_back(goal);
-//   move_path_ = opt_path;
-//   return opt_path;
-// }
+optional<Path> Hero::setMoveGoal(FieldCoords goal) {
+  if (!(Session::getInstance()->game->getMap()->getField(goal).value()->isWalkable())) {
+    return {};
+  }
+  Path opt_path = {};
+  opt_path.push_back(goal);
+  move_path_ = opt_path;
+  return opt_path;
+}
 
 void Hero::moveTo(FieldCoords coords) {
-  /*
-  while (energy_ > 0 && !(move_path_.empty())) {
+  while ((energy_ - Field::resistance
+                        .at(Session::getInstance()->game->getMap()->getField(
+                            move_path_.back()).value()
+                        ->getTerrainType())) > 0 &&
+         !(move_path_.empty())) {
     step(move_path_.back());
     move_path_.pop_back();
+    energy_ =
+        energy_ - Field::resistance
+                      .at(Session::getInstance()->game->getMap()->getField(
+                          move_path_.back()).value()
+                      ->getTerrainType());
   }
-  */
-  this->step(coords);
 }
 
 void Hero::step(FieldCoords step_to) {

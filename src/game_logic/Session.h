@@ -15,6 +15,7 @@
 #include <Config.h>
 #include <Game.h>
 #include <Map.h>
+#include <MapObject.h>
 
 #include <memory>
 #include <string>
@@ -52,7 +53,7 @@ class Session {
   SessionState getSessionState();
   void setSessionState(SessionState new_state) { session_state_ = new_state; };
   void newGame(Map game_map, std::vector<Player> players,
-               Difficulty difficulty);
+               Difficulty difficulty, std::vector<std::shared_ptr<MapObject>> starting_objects = {});
   std::unique_ptr<Game> game;
 };
 

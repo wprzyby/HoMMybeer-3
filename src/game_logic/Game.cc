@@ -16,6 +16,23 @@
 
 using namespace std;
 
+Game::Game(std::vector<Player> players, Map map,
+           std::vector<std::shared_ptr<MapObject>> starting_map_objects)
+    : players_in_game_(players), game_map_(map), curr_player_idx(0) {
+  for (auto obj : starting_map_objects) {
+    if (!addMapObject(obj)) {
+      FieldCoords wrong_coord;
+      for (FieldCoords coord_to_check : obj->occupiedFields()) {
+        if (!game_map_.getField(coord_to_check).value()->isWalkable()) {
+          wrong_coord = coord_to_check;
+          break;
+        }
+      }
+      throw WrongObjectPlacementException(wrong_coord, *game_map_.getField(wrong_coord).value()->getObject(), *obj);
+    }
+  }
+}
+
 Player* Game::getPlayer(int idx) {
   if (players_in_game_.size() <= idx) {
     return nullptr;
@@ -24,7 +41,7 @@ Player* Game::getPlayer(int idx) {
 }
 
 bool Game::moveCurrPlayer(FieldCoords coords) {
-  if (not game_map_.getField(coords)->isWalkable()) {
+  if (not game_map_.getField(coords).value()->isWalkable()) {
     return false;
   }
   this->getCurrentPlayer()->getCurrentHero()->moveTo(coords);
@@ -54,7 +71,7 @@ bool Game::deleteMapObject(int id) {
 bool Game::addMapObject(shared_ptr<MapObject> obj_to_add) {
   FieldCoords origin = obj_to_add->getOrigin();
   for (FieldCoords coord_to_check : obj_to_add->occupiedFields()) {
-    if (!game_map_.getField(coord_to_check)->isWalkable()) {
+    if (!game_map_.getField(coord_to_check).value()->isWalkable()) {
       return false;
     }
   }

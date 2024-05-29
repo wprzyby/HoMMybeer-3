@@ -26,19 +26,21 @@ class Hero {
   std::string name_;
   FieldCoords hero_coords_;
   Path move_path_;
-  float energy_;
+  int energy_;
   void step(FieldCoords step_to);
+  int max_energy_;
 
  public:
-  Hero(std::string name, FieldCoords spawn_field_coords)
+  Hero(std::string name, FieldCoords spawn_field_coords, int starting_energy = 100)
       : name_(name),
         hero_coords_(spawn_field_coords),
         move_path_({}),
-        energy_(10000){};
+        energy_(starting_energy), max_energy_(starting_energy){};
   ~Hero() = default;
   std::string getHeroName() const { return name_; };
   FieldCoords getHeroCoords() const { return hero_coords_; };
-  // std::optional<Path> setMoveGoal(FieldCoords goal);
+  std::optional<Path> setMoveGoal(FieldCoords goal);
+  void refillEnergy() {energy_ = max_energy_;}
   void moveTo(FieldCoords coords);
 };
 
