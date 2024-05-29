@@ -12,24 +12,44 @@
 #include <Game.h>
 
 #include <algorithm>
-#include <memory>
+#include <variant>
+
+#include "Hero.h"
+#include "MapObject.h"
 
 using namespace std;
 
+std::vector<FieldCoords> getOccupiedFields(MapObject& map_object) {
+  return std::visit([&](auto& arg) { return arg.occupiedFields(); },
+                    map_object);
+}
+
+int getId(MapObject& map_object) {
+  return std::visit([&](auto& arg) { return arg.getId(); }, map_object);
+}
+
+FieldCoords getOrigin(MapObject& map_object) {
+  return std::visit([&](auto& arg) { return arg.getOrigin(); }, map_object);
+}
+
 Game::Game(std::vector<Player> players, Map map,
-           std::vector<std::shared_ptr<MapObject>> starting_map_objects)
+           std::vector<MapObject> starting_map_objects)
     : players_in_game_(players), game_map_(map), curr_player_idx(0) {
-  for (auto obj : starting_map_objects) {
-    if (!addMapObject(obj)) {
-      FieldCoords wrong_coord;
-      for (FieldCoords coord_to_check : obj->occupiedFields()) {
-        if (!game_map_.getField(coord_to_check).value()->isWalkable()) {
-          wrong_coord = coord_to_check;
-          break;
-        }
-      }
-      throw WrongObjectPlacementException(wrong_coord, *game_map_.getField(wrong_coord).value()->getObject(), *obj);
+  for (auto& map_object : starting_map_objects) {
+    if (addMapObject(map_object)) {
+      break;
     }
+
+    FieldCoords wrong_coord;
+    for (FieldCoords coord_to_check : getOccupiedFields(map_object)) {
+      if (!game_map_.getField(coord_to_check).value()->isWalkable()) {
+        wrong_coord = coord_to_check;
+        break;
+      }
+    }
+    throw WrongObjectPlacementException(
+        wrong_coord, *game_map_.getField(wrong_coord).value()->getObject(),
+        map_object);
   }
 }
 
@@ -50,9 +70,8 @@ bool Game::moveCurrPlayer(FieldCoords coords) {
 
 bool Game::deleteMapObject(int id) {
   int idx_to_delete = 0;
-  auto it = find_if(
-      map_objects_.begin(), map_objects_.end(),
-      [&id](const shared_ptr<MapObject> obj) { return obj->getId() == id; });
+  auto it = find_if(map_objects_.begin(), map_objects_.end(),
+                    [&](auto& map_obj) { return getId(map_obj) == id; });
   if (it != map_objects_.end()) {
     idx_to_delete = distance(map_objects_.begin(), it);
   } else {
@@ -60,7 +79,7 @@ bool Game::deleteMapObject(int id) {
   }
 
   std::vector<FieldCoords> fields_to_empty =
-      map_objects_[idx_to_delete]->occupiedFields();
+      getOccupiedFields(map_objects_[idx_to_delete]);
   for (FieldCoords coords : fields_to_empty) {
     game_map_.deleteObjectFrom(coords);
   }
@@ -68,19 +87,35 @@ bool Game::deleteMapObject(int id) {
   return true;
 }
 
-bool Game::addMapObject(shared_ptr<MapObject> obj_to_add) {
-  FieldCoords origin = obj_to_add->getOrigin();
-  for (FieldCoords coord_to_check : obj_to_add->occupiedFields()) {
+bool Game::addMapObject(MapObject obj_to_add) {
+  FieldCoords origin = getOrigin(obj_to_add);
+  for (FieldCoords coord_to_check : getOccupiedFields(obj_to_add)) {
     if (!game_map_.getField(coord_to_check).value()->isWalkable()) {
       return false;
     }
   }
   map_objects_.push_back(obj_to_add);
 
-  for (FieldCoords coord_to_set : obj_to_add->occupiedFields()) {
+  for (FieldCoords coord_to_set : getOccupiedFields(obj_to_add)) {
     if (!game_map_.setObjectTo(coord_to_set, obj_to_add)) {
       return false;
     }
   }
   return true;
+}
+
+void Game::executeAction(FieldCoords coords) {
+  auto ret = game_map_.getField(coords);
+  if (!ret.has_value()) {
+    return;
+  }
+  auto field = ret.value();
+
+  if (field->isWalkable()) {
+    // TODO
+    return;
+  }
+
+  auto object_variant = *field->getObject();
+  std::visit([&](auto& object) { object.objectAction(this); }, object_variant);
 }

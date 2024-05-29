@@ -24,7 +24,7 @@ map<TerrainType, int> Field::resistance = {
   {TerrainType::STONE, 5}
 };
 
-bool Field::setObject(shared_ptr<MapObject> object) {
+bool Field::setObject(MapObject* object) {
   if (object_ != nullptr) {
     return false;
   }

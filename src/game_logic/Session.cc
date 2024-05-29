@@ -20,7 +20,6 @@ using namespace std;
 Session* Session::session_ = nullptr;
 
 Session::Session() {
-  game = Game({}, Map({}));
   session_state_ = SessionState::START_MENU;
   time_t t = time(0);
   cout << "Session created at: " << asctime(localtime(&t));
@@ -44,7 +43,7 @@ Session* Session::getInstance() {
 }
 
 void Session::newGame(Map game_map, std::vector<Player> players,
-                      Difficulty difficulty, std::vector<std::shared_ptr<MapObject>> starting_objects) {
+                      Difficulty difficulty, std::vector<MapObject> starting_objects) {
   game = Game(players, game_map, starting_objects);
   session_state_ = SessionState::IN_GAME;
 }

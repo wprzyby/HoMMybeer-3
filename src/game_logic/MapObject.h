@@ -12,12 +12,19 @@
 #include <Config.h>
 #include <Player.h>
 
-#include <string>
+#include <common.hpp>
+#include <variant>
 #include <vector>
 
-using FieldCoords = std::pair<int, int>;
+class GeologicalObject;
+class PickableResource;
+class ResourceGenerator;
+class City;
 
-class MapObject {
+using MapObject =
+    std::variant<GeologicalObject, PickableResource, ResourceGenerator, City>;
+
+class MapObjectBase {
  private:
   static int current_id_;
   FieldCoords origin_;  // origin is always placed in the top left corner of the
@@ -28,18 +35,15 @@ class MapObject {
   int id_;
 
  public:
-  MapObject(FieldCoords origin, std::vector<FieldCoords> space_taken)
+  MapObjectBase(FieldCoords origin, std::vector<FieldCoords> space_taken)
       : origin_(origin), space_taken_(space_taken), id_(current_id_++) {}
-  ~MapObject() = default;
-  virtual std::optional<bool>
-  objectAction() = 0;  // will return true if has action and
-                       // completes it, false if has no action
+  ~MapObjectBase() = default;
   const std::vector<FieldCoords> occupiedFields() const;
   int getId() const { return id_; }
   FieldCoords getOrigin() const { return origin_; }
 };
 
-class GeologicalObject : public MapObject {
+class GeologicalObject : public MapObjectBase {
  private:
   GeologicalStructureType struct_type_;
   int variant_;
@@ -47,20 +51,28 @@ class GeologicalObject : public MapObject {
  public:
   GeologicalObject(FieldCoords origin, GeologicalStructureType struct_type,
                    int variant);
-  std::optional<bool> objectAction() override { return {}; }
+  template <typename Game>
+  std::optional<bool> objectAction(Game* /*unused*/) {
+    return {};
+  }
 };
 
-class PickableResource : public MapObject {
+class PickableResource : public MapObjectBase {
  private:
   ResourceType resource_type_;
   int amount_;
 
  public:
   PickableResource(FieldCoords origin, ResourceType resource_type, int amount);
-  std::optional<bool> objectAction() override;
+  template <typename Game>
+  std::optional<bool> objectAction(Game* game) {
+    bool success = game->getCurrentPlayer()->updateResourceQuantity(
+        resource_type_, amount_);
+    return game->deleteMapObject(id_) && success;
+  }
 };
 
-class ResourceGenerator : public MapObject {
+class ResourceGenerator : public MapObjectBase {
  private:
   ResourceType resource_type_;
   int weekly_income_;
@@ -69,17 +81,31 @@ class ResourceGenerator : public MapObject {
  public:
   ResourceGenerator(FieldCoords origin, ResourceType resource_type,
                     int weekly_income);
-  std::optional<bool> objectAction() override;
+
+  template <typename Game>
+  std::optional<bool> objectAction(Game* game)  {
+    if (game->getCurrentPlayer()->changeIncome(resource_type_,
+                                               weekly_income_)) {
+      owner_id_ = game->getCurrPlayerId();
+      return true;
+    }
+    return false;
+  }
   int getOwnerId() { return owner_id_; }
 };
 
-class City : public MapObject {
+class City : public MapObjectBase {
  private:
   Faction type_;
   int owner_id_;
 
  public:
   City(FieldCoords origin, Faction type, int owner_id = -1);
-  std::optional<bool> objectAction() override { return true; }
+
+  template <typename Game>
+  std::optional<bool> objectAction(Game* /*unused*/) {
+    return true;
+  }
 };
+
 #endif

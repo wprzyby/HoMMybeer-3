@@ -17,8 +17,6 @@
 #include <Hero.h>
 
 #include <map>
-#include <memory>
-#include <optional>
 #include <vector>
 
 using Inventory = std::map<ResourceType, int>;

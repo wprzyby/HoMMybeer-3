@@ -12,7 +12,6 @@
 #ifndef SRC_GAME_LOGIC_HERO_H_
 #define SRC_GAME_LOGIC_HERO_H_
 
-#include <memory>
 #include <optional>
 #include <string>
 #include <utility>

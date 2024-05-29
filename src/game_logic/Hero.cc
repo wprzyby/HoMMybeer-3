@@ -16,7 +16,7 @@ using namespace std;
 
 optional<Path> Hero::setMoveGoal(FieldCoords goal) {
   if (!(Session::getInstance()
-            ->game->getMap()
+            ->game.getMap()
             ->getField(goal)
             .value()
             ->isWalkable())) {
@@ -31,14 +31,14 @@ optional<Path> Hero::setMoveGoal(FieldCoords goal) {
 void Hero::moveTo(FieldCoords coords) {
   while (!(move_path_.empty()) &&
          (energy_ - Field::resistance.at(Session::getInstance()
-                                             ->game->getMap()
+                                             ->game.getMap()
                                              ->getField(move_path_.back())
                                              .value()
                                              ->getTerrainType())) > 0) {
     step(move_path_.back());
     move_path_.pop_back();
     energy_ = energy_ - Field::resistance.at(Session::getInstance()
-                                                 ->game->getMap()
+                                                 ->game.getMap()
                                                  ->getField(move_path_.back())
                                                  .value()
                                                  ->getTerrainType());

@@ -18,29 +18,33 @@
 #include <Player.h>
 
 #include <format>
-#include <memory>
-#include <optional>
 #include <vector>
+
+std::vector<FieldCoords> getOccupiedFields(MapObject& map_object);
+int getId(MapObject& map_object);
+FieldCoords getOrigin(MapObject& map_object);
 
 class Game {
  private:
   std::vector<Player> players_in_game_;
   Map game_map_;
-  std::vector<std::shared_ptr<MapObject>> map_objects_;
+  std::vector<MapObject> map_objects_;
   Difficulty difficulty_;
   int curr_player_idx;
 
  public:
+  Game() = default;
   Game(std::vector<Player> players, Map map,
-       std::vector<std::shared_ptr<MapObject>> starting_map_objects = {});
+       std::vector<MapObject> starting_map_objects = {});
   Map* getMap() { return &game_map_; }
   Player* getPlayer(int idx);
   Player* getCurrentPlayer() { return &players_in_game_[curr_player_idx]; }
   ~Game() = default;
   bool moveCurrPlayer(FieldCoords coords);
-  bool addMapObject(std::shared_ptr<MapObject> obj_to_add);
+  bool addMapObject(MapObject obj_to_add);
   bool deleteMapObject(int id);
   int getCurrPlayerId() const { return curr_player_idx; }
+  void executeAction(FieldCoords coords);
   static constexpr int MAX_PLAYERS = 4;
   class WrongObjectPlacementException : public std::exception {
     FieldCoords conflicting_coords_;
@@ -49,10 +53,10 @@ class Game {
 
    public:
     WrongObjectPlacementException(FieldCoords conflicting_coords,
-                                  MapObject& obj_present, MapObject& obj_added)
+                                  auto& obj_present, auto& obj_added)
         : conflicting_coords_(conflicting_coords),
-          present_origin_(obj_present.getOrigin()),
-          incoming_origin_(obj_added.getOrigin()) {}
+          present_origin_(getOrigin(obj_present)),
+          incoming_origin_(getOrigin(obj_added)) {}
     WrongObjectPlacementException(
         const WrongObjectPlacementException& e) throw()
         : conflicting_coords_(e.conflicting_coords_) {}

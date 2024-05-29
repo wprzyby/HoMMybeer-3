@@ -14,10 +14,10 @@
 
 #include <Config.h>
 #include <Field.h>
+#include <MapObject.h>
 
 #include <optional>
 #include <vector>
-
 
 using FieldArray_t = std::vector<std::vector<Field>>;
 using FieldCoords = std::pair<int, int>;
@@ -35,6 +35,7 @@ class Map {
              0xFFFFFFFF;  // due to conversion warning; we don't expect the size
                           // to be more than the range of uint
   }
+  Map() : field_array_({}) {}
   ~Map() = default;
   std::optional<const Field*> getField(
       FieldCoords coords) const;  // method for getting visual field parameters
@@ -43,9 +44,8 @@ class Map {
   bool deleteObjectFrom(FieldCoords coords_to_delete) const {
     return fieldToModify(coords_to_delete)->deleteObject();
   }
-  bool setObjectTo(FieldCoords coords_to_delete,
-                   std::shared_ptr<MapObject> obj) const {
-    return fieldToModify(coords_to_delete)->setObject(obj);
+  bool setObjectTo(FieldCoords coords, MapObject obj) const {
+    return fieldToModify(coords)->setObject(&obj);
   }
 };
 

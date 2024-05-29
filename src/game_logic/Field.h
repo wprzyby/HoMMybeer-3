@@ -16,13 +16,7 @@
 #include <Config.h>
 #include <MapObject.h>
 
-#include <memory>
-#include <utility>
-
-
-using FieldCoords = std::pair<int, int>;
-
-FieldCoords operator+(const FieldCoords& l, const FieldCoords& r);
+#include <common.hpp>
 
 class Field {
  private:
@@ -30,7 +24,7 @@ class Field {
   bool walk_through_;
   TerrainType terrain_type_;
   FieldCoords coords_;
-  std::shared_ptr<MapObject> object_;
+  MapObject* object_;
 
  public:
   explicit Field(int x = 0, int y = 0,
@@ -45,10 +39,10 @@ class Field {
   FieldCoords getFieldCoords() const { return coords_; };
   bool isWalkable() const { return walk_through_; };
   TerrainType getTerrainType() const { return terrain_type_; }
-  const std::shared_ptr<MapObject> getObject() const { return object_; }
-  bool setObject(std::shared_ptr<MapObject> object);
+  MapObject* getObject() const { return object_; }
+  bool setObject(MapObject* object);
   bool deleteObject();
-  static std::map<TerrainType, int> resistance; 
+  static std::map<TerrainType, int> resistance;
 };
 
 #endif

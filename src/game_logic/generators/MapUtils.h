@@ -26,7 +26,7 @@ MapInfo generateGrassMap(MapSize map_size, int num_of_players);
 
 MapInfo generateLargeExampleMap();
 
-std::vector<std::shared_ptr<MapObject>> generateExampleStaticObjects();
-std::vector<std::shared_ptr<MapObject>> generateExamplePickableObjects();
+std::vector<MapObject> generateExampleStaticObjects();
+std::vector<MapObject> generateExamplePickableObjects();
 
 #endif  // SRC_GAME_LOGIC_MAP_UTILS_H_

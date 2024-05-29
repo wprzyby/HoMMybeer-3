@@ -12,7 +12,6 @@
 #ifndef SRC_GAME_LOGIC_CONFIG_H_
 #define SRC_GAME_LOGIC_CONFIG_H_
 
-#include <filesystem>
 #include <json.hpp>
 #include <string>
 
