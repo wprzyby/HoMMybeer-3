@@ -1,7 +1,7 @@
 /**
  * @file Hero.h
  * @author Piotr Kluba
- * @brief Funcionality responsible for the single hero
+ * @brief Functionality responsible for the single hero
  * @version 0.1
  * @date 2024-04-17
  *
@@ -14,32 +14,38 @@
 
 #include <memory>
 #include <optional>
+#include <stack>
 #include <string>
 #include <utility>
 #include <vector>
 
 using FieldCoords = std::pair<int, int>;
-using Path = std::vector<FieldCoords>;
+using Path = std::stack<FieldCoords>;
+using MoveCosts = std::stack<int>;
 
 class Hero {
  private:
   std::string name_;
   FieldCoords hero_coords_;
   Path move_path_;
-  float energy_;
+  int energy_;
   void step(FieldCoords step_to);
+  int max_energy_;
 
  public:
-  Hero(std::string name, FieldCoords spawn_field_coords)
+  Hero(std::string name, FieldCoords spawn_field_coords,
+       int starting_energy = 100)
       : name_(name),
         hero_coords_(spawn_field_coords),
-        move_path_({}),
-        energy_(10000){};
+        energy_(starting_energy),
+        max_energy_(starting_energy){};
   ~Hero() = default;
   std::string getHeroName() const { return name_; };
   FieldCoords getHeroCoords() const { return hero_coords_; };
-  // std::optional<Path> setMoveGoal(FieldCoords goal);
-  void moveTo(FieldCoords coords);
+  void setMovePath(Path new_path) { move_path_ = new_path; }
+  void refillEnergy() { energy_ = max_energy_; }
+  bool moveAlong(Path updated_path, MoveCosts costs);
+  int getEnergy() const { return energy_; }
 };
 
 #endif

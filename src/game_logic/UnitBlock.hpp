@@ -79,7 +79,8 @@ void strike(UnitBlock& attacker, UnitBlock& defender) {
   static RNG rng;
 
   unsigned int base_damage{0};
-  for (auto i : std::ranges::views::iota(0U, attacker.unit_count)) {
+  for ([[maybe_unused]] auto i :
+       std::ranges::views::iota(0U, attacker.unit_count)) {
     base_damage +=
         rng.getRandIntInclusive(attacker.min_damage, attacker.max_damage);
   }
@@ -87,8 +88,8 @@ void strike(UnitBlock& attacker, UnitBlock& defender) {
   auto damage_multiplier = attack_defense_diff > 0
                                ? ATTACK_DAMAGE_BONUS_MULTIPLIER
                                : DEFENSE_DAMAGE_BONUS_MULTIPLIER;
-  unsigned int damage =
-      std::round(base_damage * (1 + damage_multiplier * attack_defense_diff));
+  unsigned int damage = static_cast<unsigned int>(
+      std::round(base_damage * (1 + damage_multiplier * attack_defense_diff)));
 
   defender.current_total_hitpoints =
       std::max(static_cast<int>(defender.current_total_hitpoints - damage), 0);

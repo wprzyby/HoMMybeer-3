@@ -4,3 +4,9 @@ Przybylski
 Piotr
 Kluba
 tparam
+Pickable
+retv
+pathfinding
+retpath
+retcosts
+MAPOBJECT

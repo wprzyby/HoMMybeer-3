@@ -16,8 +16,8 @@
 #include <Field.h>
 
 #include <optional>
+#include <set>
 #include <vector>
-
 
 using FieldArray_t = std::vector<std::vector<Field>>;
 using FieldCoords = std::pair<int, int>;
@@ -28,6 +28,7 @@ class Map {
   FieldArray_t field_array_;
   std::vector<FieldCoords> starting_locations_;
   Field* fieldToModify(FieldCoords coords) const;
+  std::set<FieldCoords> getViableAdjacent_(FieldCoords coords) const;
 
  public:
   explicit Map(FieldArray_t fields) : field_array_(fields) {
@@ -36,7 +37,7 @@ class Map {
                           // to be more than the range of uint
   }
   ~Map() = default;
-  const Field* getField(
+  std::optional<const Field*> getField(
       FieldCoords coords) const;  // method for getting visual field parameters
   FieldArray_t getFieldArray() { return field_array_; }
   unsigned int getWidth() const { return width_; };
@@ -47,6 +48,7 @@ class Map {
                    std::shared_ptr<MapObject> obj) const {
     return fieldToModify(coords_to_delete)->setObject(obj);
   }
+  std::set<FieldCoords> constructGraph(FieldCoords seed_coords) const;
 };
 
 #endif

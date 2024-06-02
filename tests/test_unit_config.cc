@@ -4,11 +4,11 @@
  */
 
 #include <UnitConfig.h>
+#include <common.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 #include <UnitBlock.hpp>
-#include <filesystem>
 #include <fstream>
 #include <optional>
 #include <string>
@@ -16,11 +16,7 @@
 class UnitConfigTest : public testing::Test {
  protected:
   UnitConfigTest() {
-    std::string project_name = "hommybeer-3";
-    std::filesystem::path cwd = std::filesystem::current_path();
-    size_t pos = cwd.string().find(project_name);
-    std::string project_path =
-        cwd.string().substr(0, pos + project_name.length());
+    std::string project_path = getProjectPath();
     config_path = project_path + "/tests/test_unit_config.json";
 
     std::ifstream ifs;

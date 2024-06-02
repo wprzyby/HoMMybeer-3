@@ -48,6 +48,9 @@ class Field {
   const std::shared_ptr<MapObject> getObject() const { return object_; }
   bool setObject(std::shared_ptr<MapObject> object);
   bool deleteObject();
+  static std::map<TerrainType, int> resistance; 
+  static bool isAdjacent(FieldCoords first, FieldCoords second);
+  
 };
 
 #endif

@@ -48,7 +48,6 @@ class Config {
   static Config* getInstance();
   void loadData(std::string metadata_path = "./ObjectsMetadata.json");
   const nlohmann::json getMetadata() const { return metadata_; };
-  static std::string getProjectPath(std::string project_name = "hommybeer-3");
   const static std::map<Faction, std::string> kDefaultHeroNames;
   static Inventory getStartingInventory(Difficulty difficulty) {
     return starting_inventories_.at(difficulty);

@@ -124,10 +124,3 @@ void Config::loadData(string metadata_path) {
   metadata_ = json::parse(ifs);
   ifs.close();
 }
-
-std::string Config::getProjectPath(std::string project_name) {
-  filesystem::path cwd = filesystem::current_path();
-  int name_length = project_name.length();
-  size_t pos = cwd.string().find(project_name);
-  return cwd.string().substr(0, pos + name_length);
-}
