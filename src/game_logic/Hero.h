@@ -15,6 +15,7 @@
 #include <memory>
 #include <optional>
 #include <stack>
+#include <UnitBlock.hpp>
 #include <string>
 #include <utility>
 #include <vector>
@@ -29,6 +30,7 @@ class Hero {
   FieldCoords hero_coords_;
   Path move_path_;
   int energy_;
+  std::vector<UnitBlock> units_;
   void step(FieldCoords step_to);
   int max_energy_;
 
@@ -46,6 +48,11 @@ class Hero {
   void refillEnergy() { energy_ = max_energy_; }
   bool moveAlong(Path updated_path, MoveCosts costs);
   int getEnergy() const { return energy_; }
+  // std::optional<Path> setMoveGoal(FieldCoords goal);
+  [[nodiscard]] const std::vector<UnitBlock>& getUnits() const {
+    return units_;
+  }
+  void addUnit(const UnitBlock& unit) { units_.push_back(unit); }
 };
 
 #endif
