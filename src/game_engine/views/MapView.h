@@ -12,28 +12,23 @@
 #include <Map.h>
 
 #include <SFML/Graphics.hpp>
-#include <map>
 
 class MapView : public sf::Drawable, public sf::Transformable {
-  constexpr static int kFieldScale = 5;
-
  public:
-  MapView(int window_width, int window_height)
-      : window_width_(window_width), window_height_(window_height) {}
-  ~MapView() = default;
+  MapView() = default;
 
-  bool loadTileset(const std::string& tileset_path, sf::Vector2u tileSize,
-                   const int num_of_tiles);
-  void loadFieldArray(FieldArray_t field_array);
+  static bool loadTileset(const std::string& tileset_path);
+  void setMap(FieldArray_t field_array, sf::Vector2u field_offset,
+              sf::Vector2u tile_size);
+  static const sf::Vector2u MAP_TILE_SIZE;
+  constexpr static int VISIBLE_MAP_WIDTH = 16;
 
  private:
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-  sf::Texture tileset_;
-  int num_of_tiles_;
-  sf::Vector2u tile_size_;
+  inline static sf::Texture tileset_;
   sf::VertexArray vertices_;
-  int window_width_;
-  int window_height_;
+  static constexpr unsigned int CORNERS_IN_TRIANGLE = 6;
+  static constexpr unsigned int TRIANGLES_IN_SQUARE = 6;
 };
 
 #endif  // SRC_GAME_ENGINE_VIEWS_MAP_VIEW_H_

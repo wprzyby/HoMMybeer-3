@@ -55,13 +55,14 @@ class Config {
   static Incomes getStartingIncomes(Difficulty difficulty) {
     return starting_incomes_.at(difficulty);
   }
-  std::string enumToStringTranslate(ResourceType enum_to_translate) {
+  static std::string enumToStringTranslate(ResourceType enum_to_translate) {
     return resource_type_translator_.at(enum_to_translate);
   }
-  std::string enumToStringTranslate(GeologicalStructureType enum_to_translate) {
+  static std::string enumToStringTranslate(
+      GeologicalStructureType enum_to_translate) {
     return geological_structure_translator_.at(enum_to_translate);
   }
-  std::string enumToStringTranslate(Faction enum_to_translate) {
+  static std::string enumToStringTranslate(Faction enum_to_translate) {
     return faction_type_translator_.at(enum_to_translate);
   }
 };

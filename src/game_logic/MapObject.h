@@ -12,6 +12,7 @@
 #include <Config.h>
 #include <Player.h>
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -28,7 +29,6 @@ class MapObject {
   Game* parent_;
   std::vector<FieldCoords> space_taken_;
   int id_;
-  
 
  public:
   MapObject(FieldCoords origin, Game* parent,
@@ -45,8 +45,8 @@ class MapObject {
   void setParent(Game* new_parent) { parent_ = new_parent; }
   int getId() const { return id_; }
   FieldCoords getOrigin() const { return origin_; }
+  virtual std::map<std::string, std::string> getSpecs() const = 0;
 };
-
 class GeologicalObject : public MapObject {
  private:
   GeologicalStructureType struct_type_;
@@ -56,6 +56,7 @@ class GeologicalObject : public MapObject {
   GeologicalObject(FieldCoords origin, Game* parent,
                    GeologicalStructureType struct_type, int variant);
   std::optional<bool> objectAction() override { return {}; }
+  std::map<std::string, std::string> getSpecs() const override;
 };
 
 class PickableResource : public MapObject {
@@ -67,6 +68,7 @@ class PickableResource : public MapObject {
   PickableResource(FieldCoords origin, Game* parent, ResourceType resource_type,
                    int amount);
   std::optional<bool> objectAction() override;
+  std::map<std::string, std::string> getSpecs() const override;
 };
 
 class ResourceGenerator : public MapObject {
@@ -80,6 +82,7 @@ class ResourceGenerator : public MapObject {
                     ResourceType resource_type, int weekly_income);
   std::optional<bool> objectAction() override;
   int getOwnerId() { return owner_id_; }
+  std::map<std::string, std::string> getSpecs() const override;
 };
 
 class City : public MapObject {
@@ -90,5 +93,6 @@ class City : public MapObject {
  public:
   City(FieldCoords origin, Game* parent, Faction type, int owner_id = -1);
   std::optional<bool> objectAction() override { return true; }
+  std::map<std::string, std::string> getSpecs() const override;
 };
 #endif

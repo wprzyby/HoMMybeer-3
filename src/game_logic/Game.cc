@@ -37,13 +37,32 @@ Game::Game(std::vector<Player> players, Map map,
     }
   }
 }
-
-Player* Game::getPlayer(int idx) {
+const Player* Game::getPlayer(int idx) const {
   if (players_in_game_.size() <= idx) {
     return nullptr;
   }
   return &players_in_game_[idx];
 }
+std::vector<const Hero*> Game::heroesInGame() const {
+  std::vector<const Hero*> heroes_in_game;
+  int players = numPlayers();
+  for (int i = 0; i < players; i++) {
+    int heroes = getPlayer(i)->numHeroes();
+    for (int j = 0; j < heroes; j++) {
+      heroes_in_game.push_back(getPlayer(i)->getHero(j));
+    }
+  }
+  return heroes_in_game;
+}
+
+std::vector<const MapObject*> Game::objectsInGame() const {
+  std::vector<const MapObject*> objects_in_game;
+  for (auto object : map_objects_) {
+    objects_in_game.push_back(&(*object));
+  }
+  return objects_in_game;
+}
+
 bool Game::deleteMapObject(int id) {
   int idx_to_delete = 0;
   auto it = find_if(

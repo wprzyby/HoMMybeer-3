@@ -21,7 +21,6 @@
 #include <string>
 #include <vector>
 
-
 enum class SessionState {
   IN_GAME,
   START_MENU,
@@ -53,7 +52,8 @@ class Session {
   SessionState getSessionState();
   void setSessionState(SessionState new_state) { session_state_ = new_state; };
   void newGame(Map game_map, std::vector<Player> players,
-               Difficulty difficulty = Difficulty::NORMAL, std::vector<std::shared_ptr<MapObject>> starting_objects = {});
+               Difficulty difficulty = Difficulty::NORMAL,
+               std::vector<std::shared_ptr<MapObject>> starting_objects = {});
   Game game;
 };
 

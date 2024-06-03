@@ -19,8 +19,7 @@ bool Hero::moveAlong(Path updated_path, MoveCosts costs) {
     return false;
   }
 
-  while (!(move_path_.empty()) &&
-         (energy_ - costs.top() > 0)) {
+  while (!(move_path_.empty()) && (energy_ - costs.top() > 0)) {
     step(move_path_.top());
     move_path_.pop();
     energy_ = energy_ - costs.top();

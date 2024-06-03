@@ -11,31 +11,30 @@
 #ifndef SRC_GAME_ENGINE_VIEWS_HERO_VIEW_H_
 #define SRC_GAME_ENGINE_VIEWS_HERO_VIEW_H_
 
+#include <Game.h>
+#include <Hero.h>
+#include <MapView.h>
 #include <Session.h>
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <string>
 
 class HeroView : public sf::Drawable, public sf::Transformable {
  private:
-  inline static sf::Texture heroes_;
-  static const int icon_height_ = 64;
-  static const int icon_width_ = 96;
-  sf::Sprite sprite_;
-  int window_width_;
-  int window_height_;
-  int map_width_;
+  inline static sf::Texture heroes_texture_;
+  static const int ICON_HEIGHT = 64;
+  static const int ICON_WIDTH = 96;
+  static const sf::Vector2f HERO_POSITION_OFFSET;
+  std::vector<sf::Sprite> sprites_;
+  static bool visible(FieldCoords hero_coords, sf::Vector2u field_offset);
 
  public:
-  HeroView(int window_width, int window_height)
-      : sprite_(sf::Sprite()),
-        window_width_(window_width),
-        window_height_(window_height),
-        map_width_(Session::getInstance()->game->getMap()->getWidth()) {}
-  ~HeroView() = default;
+  explicit HeroView() = default;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-  bool loadTileSet(const std::string& tileset_path);
-  void setHero(const Hero& hero);
+  static bool loadTileSet(const std::string& tileset_path);
+  void setHeroes(std::vector<const Hero*> heroes, sf::Vector2u field_offset,
+                 sf::Vector2u tile_size);
 };
 
 #endif

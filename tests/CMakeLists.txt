@@ -1,7 +1,6 @@
 include(GoogleTest)
 
 
-
 add_executable(tests
     test_unit_block.cc
     test_unit_block_generator.cc

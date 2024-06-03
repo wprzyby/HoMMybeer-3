@@ -12,37 +12,63 @@
 #include <HeroView.h>
 #include <Session.h>
 
+#include <SFML/System/Vector2.hpp>
+
+const sf::Vector2f HeroView::HERO_POSITION_OFFSET = sf::Vector2f{32, 32};
+
 void HeroView::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   states.transform *= getTransform();
   // apply the tileset texture
-  states.texture = &HeroView::heroes_;
+  states.texture = &HeroView::heroes_texture_;
 
   // draw the vertex array
-  target.draw(sprite_, states);
+  for (const sf::Sprite& sprite : sprites_) {
+    target.draw(sprite, states);
+  }
+}
+bool HeroView::visible(FieldCoords hero_coords, sf::Vector2u field_offset) {
+  return hero_coords.first >= field_offset.y &&
+         hero_coords.second >= field_offset.x &&
+         hero_coords.first <=
+             field_offset.y + (MapView::VISIBLE_MAP_WIDTH + 1) &&
+         hero_coords.second <=
+             field_offset.x + (MapView::VISIBLE_MAP_WIDTH + 1);
 }
 
 bool HeroView::loadTileSet(const std::string& tileset_path) {
-  if (!HeroView::heroes_.loadFromFile(tileset_path)) {
-    return false;
-  }
-  return true;
+  return HeroView::heroes_texture_.loadFromFile(tileset_path);
 }
+void HeroView::setHeroes(std::vector<const Hero*> heroes,
+                         sf::Vector2u field_offset, sf::Vector2u tile_size) {
+  sprites_.clear();
+  auto cmp = [](const Hero* left, const Hero* right) {
+    if (left->getHeroCoords().second == right->getHeroCoords().second) {
+      return left->getHeroCoords().first > right->getHeroCoords().first;
+    }
+    return left->getHeroCoords().second > right->getHeroCoords().second;
+  };
 
-void HeroView::setHero(const Hero& hero) {
-  int hero_pose = 1;
-  int hero_number = 1;
-  sprite_.setTexture(HeroView::heroes_);
-  sprite_.setTextureRect(sf::IntRect(hero_pose * icon_width_,
-                                     hero_number * icon_height_, icon_width_,
-                                     icon_height_));
-  sprite_.setOrigin(icon_width_ / 2.f, icon_height_ / 2.f);
-  // sprite_.setScale()
+  std::sort(heroes.begin(), heroes.end(), cmp);
 
-  sprite_.setPosition(
-      sf::Vector2f{(hero.getHeroCoords().first *
-                    static_cast<float>(window_width_) / map_width_) +
-                       icon_width_ / 2.f,
-                   (hero.getHeroCoords().second *
-                    static_cast<float>(window_height_) / map_width_) +
-                       icon_height_ / 2.f});
+  for (const Hero* hero : heroes) {
+    FieldCoords hero_coords = hero->getHeroCoords();
+    if (!visible(hero_coords, field_offset)) {
+      continue;
+    }
+    int hero_pose = 1;
+    int hero_number = 1;
+    sf::Sprite sprite(HeroView::heroes_texture_);
+    sprite.setOrigin(HERO_POSITION_OFFSET);
+    sprite.setTextureRect(sf::IntRect(hero_pose * ICON_WIDTH,
+                                      hero_number * ICON_HEIGHT, ICON_WIDTH,
+                                      ICON_HEIGHT));
+    sprite.setPosition(sf::Vector2f(
+        {static_cast<float>(
+             (hero_coords.second - static_cast<int>(field_offset.x)) *
+             static_cast<int>(tile_size.x)),
+         static_cast<float>(
+             (hero_coords.first - static_cast<int>(field_offset.y)) *
+             static_cast<int>(tile_size.y))}));
+    sprites_.push_back(sprite);
+  }
 }

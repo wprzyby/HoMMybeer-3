@@ -18,9 +18,9 @@ using json = nlohmann::json;
 int MapObject::current_id_ = 0;
 
 const vector<FieldCoords> MapObject::occupiedFields() const {
-  vector<FieldCoords> retv = {};
-  for (FieldCoords coord : space_taken_) {
-    retv.push_back(origin_ + coord);
+  vector<FieldCoords> retv(space_taken_.size());
+  for (int i = 0; i < space_taken_.size(); ++i) {
+    retv[i] = (origin_ + space_taken_[i]);
   }
   return retv;
 }
@@ -33,13 +33,45 @@ GeologicalObject::GeologicalObject(FieldCoords origin, Game* parent,
       variant_(variant) {
   json metadata = Config::getInstance()->getMetadata();
   metadata = metadata["geological"];
-  metadata = metadata[Config::getInstance()->enumToStringTranslate(struct_type)]
+  metadata = metadata[Config::enumToStringTranslate(struct_type)]
                      ["spaces_occupied"][to_string(variant_)];
   for (auto coord : metadata) {
-    space_taken_.push_back(FieldCoords{coord[0], coord[1]});
+    space_taken_.emplace_back(coord[0], coord[1]);
   }
 
   // TODO: nicer way to convert enum
+}
+
+std::map<std::string, std::string> GeologicalObject::getSpecs() const {
+  std::map<std::string, std::string> retmap;
+  retmap["ObjectType"] = "geological";
+  retmap["SubType"] = Config::enumToStringTranslate(struct_type_);
+  retmap["Variant"] = to_string(variant_);
+  return retmap;
+}
+
+std::map<std::string, std::string> PickableResource::getSpecs() const {
+  std::map<std::string, std::string> retmap;
+  retmap["ObjectType"] = "resources";
+  retmap["SubType"] = "Resources";
+  retmap["Variant"] = Config::enumToStringTranslate(resource_type_);
+  return retmap;
+}
+
+std::map<std::string, std::string> ResourceGenerator::getSpecs() const {
+  std::map<std::string, std::string> retmap;
+  retmap["ObjectType"] = "resources";
+  retmap["SubType"] = "Mines";
+  retmap["Variant"] = Config::enumToStringTranslate(resource_type_);
+  return retmap;
+}
+
+std::map<std::string, std::string> City::getSpecs() const {
+  std::map<std::string, std::string> retmap;
+  retmap["ObjectType"] = "cities";
+  retmap["SubType"] = "Cities";
+  retmap["Variant"] = Config::enumToStringTranslate(type_);
+  return retmap;
 }
 
 PickableResource::PickableResource(FieldCoords origin, Game* parent,
@@ -47,13 +79,12 @@ PickableResource::PickableResource(FieldCoords origin, Game* parent,
     : MapObject(origin, parent, {}),
       amount_(amount),
       resource_type_(resource_type) {
-  space_taken_.push_back(FieldCoords{0, 1});
+  space_taken_.emplace_back(0, 1);
 }
 
 std::optional<bool> PickableResource::objectAction() {
-  bool success =
-      parent_->getCurrentPlayer()->updateResourceQuantity(
-          resource_type_, amount_);
+  bool success = parent_->getCurrentPlayer()->updateResourceQuantity(
+      resource_type_, amount_);
   return parent_->deleteMapObject(id_) && success;
 }
 
@@ -65,17 +96,16 @@ ResourceGenerator::ResourceGenerator(FieldCoords origin, Game* parent,
       owner_id_(-1),
       resource_type_(resource_type) {
   json metadata = Config::getInstance()->getMetadata();
-  metadata =
-      metadata["resources"]["Mines"]["spaces_occupied"]
-              [Config::getInstance()->enumToStringTranslate(resource_type)];
+  metadata = metadata["resources"]["Mines"]["spaces_occupied"]
+                     [Config::enumToStringTranslate(resource_type)];
   for (auto coord : metadata) {
-    space_taken_.push_back(FieldCoords{coord[0], coord[1]});
+    space_taken_.emplace_back(coord[0], coord[1]);
   }
 }
 
 std::optional<bool> ResourceGenerator::objectAction() {
-  if (parent_->getCurrentPlayer()->changeIncome(
-          resource_type_, weekly_income_)) {
+  if (parent_->getCurrentPlayer()->changeIncome(resource_type_,
+                                                weekly_income_)) {
     owner_id_ = parent_->getCurrPlayerId();
     return true;
   }
@@ -88,6 +118,6 @@ City::City(FieldCoords origin, Game* parent, Faction type, int owner_id)
   metadata = metadata["cities"]["Cities"]["spaces_occupied"]
                      [Config::getInstance()->enumToStringTranslate(type)];
   for (auto coord : metadata) {
-    space_taken_.push_back(FieldCoords{coord[0], coord[1]});
+    space_taken_.emplace_back(coord[0], coord[1]);
   }
 }

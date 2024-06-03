@@ -194,7 +194,7 @@ std::vector<std::shared_ptr<MapObject>> generateExamplePickableObjects() {
       std::make_shared<PickableResource>(FieldCoords{33, 37}, nullptr,
                                          ResourceType::GOLD, 1000),
       std::make_shared<PickableResource>(FieldCoords{19, 25}, nullptr,
-                                         ResourceType::CRYSTAL, 5),
+                                         ResourceType::WOOD, 5),
   };
   return starting_objects;
 }

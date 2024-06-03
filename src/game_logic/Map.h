@@ -39,7 +39,7 @@ class Map {
   ~Map() = default;
   std::optional<const Field*> getField(
       FieldCoords coords) const;  // method for getting visual field parameters
-  FieldArray_t getFieldArray() { return field_array_; }
+  FieldArray_t getFieldArray() const { return field_array_; }
   unsigned int getWidth() const { return width_; };
   bool deleteObjectFrom(FieldCoords coords_to_delete) const {
     return fieldToModify(coords_to_delete)->deleteObject();

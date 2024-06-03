@@ -26,7 +26,7 @@ Player::Player(bool is_ai, Faction faction, FieldCoords starting_location,
       selected_hero_idx_(0),
       inventory_(starting_inventory),
       income_(starting_income) {
-  players_heros_ = vector<Hero>{
+  players_heroes_ = vector<Hero>{
       Hero(Config::kDefaultHeroNames.at(faction), starting_location)};
 }
 
@@ -34,14 +34,14 @@ Player::~Player() {}
 
 void Player::addHero(std::string name, FieldCoords spawn_field_coords,
                      int starting_energy) {
-  players_heros_.push_back(Hero(name, spawn_field_coords, starting_energy));
+  players_heroes_.push_back(Hero(name, spawn_field_coords, starting_energy));
 }
 
-Hero* Player::getHero(int idx) {
-  if (idx >= players_heros_.size()) {
+const Hero* Player::getHero(int idx) const {
+  if (idx >= players_heroes_.size()) {
     return nullptr;
   }
-  return &players_heros_[idx];
+  return &players_heroes_[idx];
 }
 
 bool Player::updateResourceQuantity(ResourceType resource_type, int delta) {
@@ -61,7 +61,7 @@ bool Player::changeIncome(ResourceType resource_type, int delta) {
 }
 
 void Player::nextHero() {
-  if (selected_hero_idx_ == players_heros_.size() - 1) {
+  if (selected_hero_idx_ == players_heroes_.size() - 1) {
     selected_hero_idx_ = 0;
   } else {
     selected_hero_idx_++;

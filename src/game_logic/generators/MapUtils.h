@@ -14,7 +14,7 @@
 #include <memory>
 #include <vector>
 
-enum class MapSize { S = 10, M = 20, L = 50, XL = 100 };
+enum class MapSize { S = 20, M = 35, L = 50, XL = 100 };
 
 struct MapInfo {
   Map map;
