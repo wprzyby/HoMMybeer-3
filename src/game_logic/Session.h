@@ -29,6 +29,7 @@ enum class SessionState {
   LOAD_CASTLE,
   LOAD_BATTLE,
   IN_BATTLE,
+  BATTLE_AI_REFRESH,
   IN_CASTLE  // TODO: fill if necessary
 };
 

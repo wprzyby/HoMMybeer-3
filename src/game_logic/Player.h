@@ -66,7 +66,8 @@ class Player {
   Faction getFaction() const { return faction_; }
   void setCurrentHeroUnits(const std::vector<UnitBlock>& units);
   void setHeroUnits(int hero_idx, const std::vector<UnitBlock>& units);
-  bool isDead();
+  bool isDead() const;
+  bool isAI() const {return is_ai_;}
 };
 
 #endif

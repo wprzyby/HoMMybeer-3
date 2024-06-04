@@ -1,13 +1,19 @@
 #include "BattleWindowController.h"
 
-#include <stdexcept>
+#include <chrono>
+#include <thread>
 
 #include "Session.h"
+#include "ai/combat_evaluation.h"
+
+const std::function<float(const combat::BattleState&, combat::HeroRole)>
+    BattleWindowController::MINI_MAX_STATE_EVAL = combat::ai::complexEvaluate;
 
 void BattleWindowController::update(sf::Event& event,
                                     SessionState session_state, Game& game) {
   if (session_state != SessionState::LOAD_BATTLE and
-      session_state != SessionState::IN_BATTLE) {
+      session_state != SessionState::IN_BATTLE and
+      session_state != SessionState::BATTLE_AI_REFRESH) {
     return;
   }
 
@@ -23,7 +29,29 @@ void BattleWindowController::update(sf::Event& event,
         combat::Battleground::DEFAULT_SIZE,
         Session::getInstance()->getBattleTerrainType());
     battleground_view_.loadState(battle_manager_.getState());
+    if (isAiPlaying(game)) {
+      Session::getInstance()->setSessionState(SessionState::BATTLE_AI_REFRESH);
+    } else {
+      Session::getInstance()->setSessionState(SessionState::IN_BATTLE);
+    }
+    return;
+  }
+  if (session_state == SessionState::BATTLE_AI_REFRESH) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    auto move = mini_max_fighter_.makeMove(
+        battle_manager_.getState(),
+        battle_manager_.getState().currently_moving_);
+    if (makeMoveIsBattleOver(move)) {
+      handleEndOfBattle(game);
+      return;
+    }
     Session::getInstance()->setSessionState(SessionState::IN_BATTLE);
+    return;
+  }
+
+  // STATE IN_BATTLE
+  if (isAiPlaying(game)) {
+    Session::getInstance()->setSessionState(SessionState::BATTLE_AI_REFRESH);
     return;
   }
 
@@ -36,11 +64,11 @@ void BattleWindowController::update(sf::Event& event,
   if (not clicked_coords.has_value()) {
     return;
   }
-  battle_manager_.makeMove(clicked_coords.value());
-  battleground_view_.loadState(battle_manager_.getState());
-  if (battle_manager_.getState().winner_.has_value()) {
+  if (makeMoveIsBattleOver(clicked_coords.value())) {
     handleEndOfBattle(game);
+    return;
   }
+  Session::getInstance()->setSessionState(SessionState::IN_BATTLE);
 }
 
 void BattleWindowController::handleEndOfBattle(Game& game) {
@@ -73,4 +101,22 @@ void BattleWindowController::handleEndOfBattle(Game& game) {
 void BattleWindowController::draw(sf::RenderTarget& target,
                                   sf::RenderStates states) const {
   target.draw(battleground_view_, states);
+}
+
+bool BattleWindowController::isAiPlaying(const Game& game) const {
+  bool is_ai_playing{false};
+  if (battle_manager_.getState().currently_moving_ ==
+      combat::HeroRole::ATTACKER) {
+    is_ai_playing = game.getCurrentPlayer()->isAI();
+  } else {
+    is_ai_playing = game.getPlayer(attacked_player_idx_)->isAI();
+  }
+  return is_ai_playing;
+}
+
+bool BattleWindowController::makeMoveIsBattleOver(
+    std::optional<combat::HexFieldCoords> move) {
+  battle_manager_.makeMove(move);
+  battleground_view_.loadState(battle_manager_.getState());
+  return battle_manager_.getState().winner_.has_value();
 }

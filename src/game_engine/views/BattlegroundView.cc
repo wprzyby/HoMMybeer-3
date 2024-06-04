@@ -2,8 +2,7 @@
 
 #include <Config.h>
 
-#include <SFML/Graphics/Rect.hpp>
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics.hpp>
 #include <stdexcept>
 
 #include "combat_common.h"
@@ -31,12 +30,7 @@ bool BattlegroundView::setupBattle(combat::BattlegroundSize battleground_size,
   background_texture_size_ =
       sf::Vector2i(background_texture_size_data[0].get<int>(),
                    background_texture_size_data[1].get<int>());
-  auto control_bar_height = metadata["control_bar_height"].get<int>();
-  scale_ = sf::Vector2f(
-      static_cast<float>(battle_view_size_.x) / background_texture_size_.x,
-      static_cast<float>(battle_view_size_.y - control_bar_height) /
-          background_texture_size_.y);
-  // hex_grid_view_.setScale(scale_);
+  control_bar_height_ = metadata["control_bar_height"].get<int>();
   auto background_path = getProjectPath() + "/" +
                          metadata["battleground_backgrounds"]
                                  [config->enumToStringTranslate(terrain_type)]
@@ -87,10 +81,13 @@ bool BattlegroundView::loadBackground(const std::string& background_path) {
   if (!background_texture_.loadFromFile(background_path)) {
     return false;
   }
+  bottom_bar_ = sf::RectangleShape(
+      sf::Vector2f(background_texture_size_.x, control_bar_height_));
+  bottom_bar_.setFillColor(sf::Color(128, 64, 0));
+  bottom_bar_.setPosition(0, background_texture_size_.y);
   background_sprite_.setTexture(background_texture_);
   background_sprite_.setTextureRect(sf::IntRect(
       0, 0, background_texture_size_.x, background_texture_size_.y));
-  // background_sprite_.setScale(scale_);
   return true;
 }
 
@@ -99,6 +96,7 @@ void BattlegroundView::draw(sf::RenderTarget& target,
   states.transform *= getTransform();
   states.texture = &hex_grid_view_.hex_texture_;
   target.draw(background_sprite_, states);
+  target.draw(bottom_bar_, states);
   target.draw(hex_grid_view_, states);
   target.draw(battle_units_view_, states);
 }

@@ -88,6 +88,9 @@ int main() {
       event_handler.handle(event, Session::getSessionState(), session->game);
       Session::setSessionState(SessionState::IN_GAME);
     }
+    if (Session::getSessionState() == SessionState::BATTLE_AI_REFRESH) {
+      event_handler.handle(event, Session::getSessionState(), session->game);
+    }
     // if (Session::getSessionState() == SessionState::LOAD_CASTLE) {
     //   event_handler.handle(event, Session::getSessionState(), session->game);
     //   Session::setSessionState(SessionState::IN_CASTLE);
@@ -116,6 +119,10 @@ int main() {
         break;
 
       case SessionState::IN_BATTLE:
+        window.draw(battle_window_controller);
+        break;
+
+      case SessionState::BATTLE_AI_REFRESH:
         window.draw(battle_window_controller);
         break;
 

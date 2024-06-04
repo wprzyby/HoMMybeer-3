@@ -2,6 +2,7 @@
 #define SRC_GAME_ENGINE_VIEWS_BATTLEGROUND_VIEW_H
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Vector2.hpp>
 
 #include "BattleState.h"
@@ -31,12 +32,14 @@ class BattlegroundView : public sf::Drawable, public sf::Transformable {
   sf::Texture background_texture_;
   sf::Vector2i background_texture_size_;
   sf::Sprite background_sprite_;
+  sf::RectangleShape bottom_bar_;
   combat::BattlegroundSize battleground_size_;
   sf::Vector2f scale_;
   sf::Vector2i battle_view_size_;
   sf::Vector2f hex_grid_offset_;
   HexGridView hex_grid_view_;
   BattleUnitsView battle_units_view_;
+  int control_bar_height_;
 };
 
 #endif  // SRC_GAME_ENGINE_VIEWS_BATTLEGROUND_VIEW_H

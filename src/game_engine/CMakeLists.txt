@@ -15,6 +15,6 @@ add_library(game_engine STATIC
                     views/BattlegroundView.cc
                     views/HexGridView.cc
                     views/BattleUnitsView.cc) 
-target_link_libraries(game_engine PUBLIC game_logic combat sfml-graphics)
+target_link_libraries(game_engine PUBLIC game_logic combat ai sfml-graphics)
 target_include_directories(game_engine PUBLIC . views)
                     

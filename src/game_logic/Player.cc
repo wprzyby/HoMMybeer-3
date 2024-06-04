@@ -39,7 +39,8 @@ void Player::addHero(std::string name, FieldCoords spawn_field_coords,
   players_heroes_.push_back(new_hero);
 }
 
-void Player::addHero(std::string name, FieldCoords spawn_field_coords, Faction faction) {
+void Player::addHero(std::string name, FieldCoords spawn_field_coords,
+                     Faction faction) {
   Hero new_hero(name, spawn_field_coords, faction);
   new_hero.setUnits(Config::getInstance()->getStartingUnits(faction_));
   players_heroes_.push_back(new_hero);
@@ -118,4 +119,4 @@ void Player::setHeroUnits(int hero_idx, const std::vector<UnitBlock>& units) {
   nextHero();
   players_heroes_.erase(players_heroes_.begin() + index);
 }
-bool Player::isDead() { return players_heroes_.size() == 0; }
+bool Player::isDead() const { return players_heroes_.size() == 0; }
