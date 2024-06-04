@@ -15,6 +15,9 @@
 #include <gtest/gtest.h>
 #include <testUtils.h>
 
+#include "Config.h"
+
+
 TEST(heroMovementTests, basicHeroMovementTest) {
   Game game = createBasicGame();
   ASSERT_EQ(game.getCurrentPlayer()->getCurrentHero()->getHeroCoords(),
@@ -77,7 +80,8 @@ TEST(heroMovementTests, heroNotMovingNoPath) {
 
 TEST(heroMovementTests, heroNotMovingNoEnergy) {
   Game game = createExampleGame();
-  game.getCurrentPlayer()->addHero("Tired Tristan", FieldCoords{7, 4}, 0);
+  game.getCurrentPlayer()->addHero("Tired Tristan", FieldCoords{7, 4},
+                                   Faction::CASTLE, 0);
   game.getCurrentPlayer()->nextHero();
   game.getCurrentPlayer()->getCurrentHero()->setMovePath(
       Path({FieldCoords{7, 5}}), MoveCosts({10}));

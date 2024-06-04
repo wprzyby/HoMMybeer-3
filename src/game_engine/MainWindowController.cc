@@ -12,8 +12,6 @@
 #include <MainWindowController.h>
 #include <Session.h>
 
-#include "MapUtils.h"
-
 void MainWindowController::update(sf::Event& event, SessionState session_state,
                                   Game& /*game*/) {
   if (session_state == SessionState::START_MENU) {
@@ -23,4 +21,9 @@ void MainWindowController::update(sf::Event& event, SessionState session_state,
       Session::getInstance()->setSessionState(SessionState::LOAD_GAME);
     }
   }
+}
+
+void MainWindowController::draw(sf::RenderTarget& target,
+                                sf::RenderStates /*states*/) const {
+  target.draw(main_view_);
 }

@@ -56,7 +56,7 @@ void ControlsView::setControls() {
                             next_hero_text_.getLocalBounds().getPosition());
   next_hero_text_.setPosition(next_hero_button_.getPosition() +
                               (next_hero_button_.getSize() / 2.f));
-  next_turn_text_ = sf::Text{"Next Turn", font_};
+  next_turn_text_ = sf::Text{"Next Player", font_};
   next_turn_text_.setOrigin(next_turn_text_.getGlobalBounds().getSize() / 2.f +
                             next_turn_text_.getLocalBounds().getPosition());
   next_turn_text_.setPosition(next_turn_button_.getPosition() +

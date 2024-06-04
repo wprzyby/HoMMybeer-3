@@ -1,0 +1,6 @@
+{
+    "background_size": [800, 374],
+    "castle": "assets/towns/Castle.png",
+    "inferno": "assets/towns/Inferno.png",
+    "fortress": "assets/towns/Fortress.png"
+}

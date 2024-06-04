@@ -24,7 +24,9 @@
 enum class SessionState {
   IN_GAME,
   LOAD_GAME,
+  REFRESH,
   START_MENU,
+  LOAD_CASTLE,
   IN_BATTLE,
   IN_CASTLE  // TODO: fill if necessary
 };
@@ -43,7 +45,8 @@ class Session {
   Session();
   void loadGameFromFile(std::string filepath);
   static Session* session_;
-  SessionState session_state_;
+  inline static SessionState session_state_;
+  inline static Faction current_town_;
 
  public:
   Session(Session& other) = delete;
@@ -51,8 +54,12 @@ class Session {
   ~Session();
   static Session* getInstance();
   const std::vector<Save> getSavedGames();
-  SessionState getSessionState() const { return session_state_; }
-  void setSessionState(SessionState new_state) { session_state_ = new_state; };
+  static SessionState getSessionState() { return session_state_; }
+  static void setSessionState(SessionState new_state) {
+    session_state_ = new_state;
+  };
+  static void setTown(Faction faction) { current_town_ = faction; }
+  static Faction getTown() { return current_town_; }
   void newGame(
       const Map& game_map, std::vector<Player> players,
       Difficulty difficulty = Difficulty::NORMAL,

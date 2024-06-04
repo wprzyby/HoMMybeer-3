@@ -18,6 +18,8 @@
 #include <utility>
 #include <vector>
 
+#include "Config.h"
+
 using FieldCoords = std::pair<int, int>;
 using Path = std::stack<FieldCoords>;
 using MoveCosts = std::stack<int>;
@@ -33,14 +35,18 @@ class Hero {
   std::vector<UnitBlock> units_;
   void step(FieldCoords step_to);
   int max_energy_;
+  Faction faction_;
 
  public:
   Hero(std::string name, FieldCoords spawn_field_coords,
-       int starting_energy = DEFAULT_STARTING_ENERGY)
+       Faction faction = Faction::CASTLE,
+       int starting_energy =
+           DEFAULT_STARTING_ENERGY)  // TODO remove default faction
       : name_(std::move(name)),
         hero_coords_(std::move(spawn_field_coords)),
         energy_(starting_energy),
-        max_energy_(starting_energy){};
+        max_energy_(starting_energy),
+        faction_(faction){};
   std::string getHeroName() const { return name_; };
   FieldCoords getHeroCoords() const { return hero_coords_; };
   void setMovePath(Path new_path, MoveCosts move_costs) {
@@ -54,8 +60,9 @@ class Hero {
   [[nodiscard]] const std::vector<UnitBlock>& getUnits() const {
     return units_;
   }
-  void addUnit(const UnitBlock& unit) { units_.push_back(unit); }
+  void addUnit(const UnitBlock& unit);
   std::pair<Path, int> getPathInParts() const;
+  Faction getFaction() const { return faction_; }
 };
 
 #endif

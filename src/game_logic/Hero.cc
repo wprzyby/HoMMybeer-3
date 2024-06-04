@@ -49,3 +49,18 @@ std::pair<Path, int> Hero::getPathInParts() const {
   }
   return {move_path_, retval};
 }
+
+void Hero::addUnit(const UnitBlock& unit) {
+  auto has_same_level = [&](const UnitBlock& owned_unit) {
+    return owned_unit.level == unit.level;
+  };
+  auto unit_iterator =
+      std::find_if(units_.begin(), units_.end(), has_same_level);
+
+  if (unit_iterator == std::end(units_)) {
+    units_.push_back(unit);
+    return;
+  }
+  unit_iterator->unit_count += unit.unit_count;
+  unit_iterator->current_total_hitpoints += unit.current_total_hitpoints;
+}

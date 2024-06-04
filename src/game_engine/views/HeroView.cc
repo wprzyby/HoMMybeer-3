@@ -56,7 +56,18 @@ void HeroView::setHeroes(std::vector<const Hero*> heroes,
       continue;
     }
     int hero_pose = 1;
-    int hero_number = 1;
+    int hero_number;
+    switch (hero->getFaction()) {
+      case Faction::CASTLE:
+        hero_number = 1;
+        break;
+      case Faction::INFERNO:
+        hero_number = 16;
+        break;
+      case Faction::FORTRESS:
+        hero_number = 14;
+        break;
+    }
     sf::Sprite sprite(HeroView::heroes_texture_);
     sprite.setOrigin(HERO_POSITION_OFFSET);
     sprite.setTextureRect(sf::IntRect(hero_pose * ICON_WIDTH,

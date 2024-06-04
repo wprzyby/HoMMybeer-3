@@ -8,7 +8,6 @@
 #include <MapObject.h>
 #include <Session.h>
 
-#include <iostream>
 #include <json.hpp>
 #include <string>
 
@@ -124,4 +123,10 @@ City::City(FieldCoords origin, Game* parent, Faction type, int owner_id)
   for (auto coord : metadata) {
     space_taken_.emplace_back(coord[0], coord[1]);
   }
+}
+
+std::optional<bool> City::objectAction() {
+  Session::setSessionState(SessionState::LOAD_CASTLE);
+  Session::setTown(type_);
+  return true;
 }

@@ -16,6 +16,8 @@
 
 #include <map>
 #include <string>
+#include <utility>
+
 
 using namespace std;
 
@@ -24,17 +26,18 @@ Player::Player(bool is_ai, Faction faction, FieldCoords starting_location,
     : is_ai_(is_ai),
       faction_(faction),
       selected_hero_idx_(0),
-      inventory_(starting_inventory),
-      income_(starting_income) {
+      inventory_(std::move(starting_inventory)),
+      income_(std::move(starting_income)) {
   players_heroes_ = vector<Hero>{
-      Hero(Config::kDefaultHeroNames.at(faction), starting_location)};
+      Hero(Config::kDefaultHeroNames.at(faction), starting_location, faction_)};
 }
 
 Player::~Player() {}
 
 void Player::addHero(std::string name, FieldCoords spawn_field_coords,
-                     int starting_energy) {
-  players_heroes_.push_back(Hero(name, spawn_field_coords, starting_energy));
+                     Faction faction, int starting_energy) {
+  players_heroes_.emplace_back(name, spawn_field_coords, faction,
+                               starting_energy);
 }
 
 const Hero* Player::getHero(int idx) const {

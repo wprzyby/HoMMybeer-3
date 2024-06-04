@@ -16,6 +16,9 @@
 #include <gtest/gtest.h>
 #include <testUtils.h>
 
+#include "Config.h"
+
+
 TEST(gameInitTests, newGame) {
   Game game = createBasicGame();
   EXPECT_NE(game.getPlayer(0), nullptr);
@@ -37,7 +40,8 @@ TEST(gameInitTests, playerInitTest) {
   EXPECT_FALSE(
       game.getCurrentPlayer()->updateResourceQuantity(ResourceType::ORE, -20));
   EXPECT_EQ(game.getCurrentPlayer()->getResourceAmount(ResourceType::ORE), 10);
-  game.getCurrentPlayer()->addHero("Random Random", FieldCoords{3, 3});
+  game.getCurrentPlayer()->addHero("Random Random", FieldCoords{3, 3},
+                                   Faction::CASTLE);
   game.getCurrentPlayer()->nextHero();
   EXPECT_EQ(game.getCurrentPlayer()->getCurrentHero(),
             game.getCurrentPlayer()->getHero(1));

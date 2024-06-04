@@ -94,7 +94,7 @@ class City : public MapObject {
 
  public:
   City(FieldCoords origin, Game* parent, Faction type, int owner_id = -1);
-  std::optional<bool> objectAction() override { return true; }
+  std::optional<bool> objectAction() override;
   std::map<std::string, std::string> getSpecs() const override;
   int getOwner() const override { return owner_id_; }
 };

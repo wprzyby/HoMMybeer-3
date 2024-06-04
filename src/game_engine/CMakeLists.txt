@@ -8,6 +8,8 @@ add_library(game_engine STATIC
                     views/ObjectsView.cc
                     EventHandler.cc
                     views/PathView.cc
-                    MainWindowController.cc) 
+                    MainWindowController.cc
+                    views/TownView.cc
+                    TownWindowController.cc) 
 target_link_libraries(game_engine PUBLIC game_logic sfml-graphics)
 target_include_directories(game_engine PUBLIC . views)

@@ -47,8 +47,8 @@ class Player {
     return &players_heroes_[selected_hero_idx_];
   }
   void addHero(std::string name, FieldCoords spawn_field_coords,
-               int starting_energy = 100);
-  void addHero(Hero hero) { players_heroes_.push_back(hero); };
+               Faction faction, int starting_energy = 100);
+  void addHero(const Hero& hero) { players_heroes_.push_back(hero); };
   void weeklyIncome();
   bool updateResourceQuantity(ResourceType resource_type, int delta);
   int numHeroes() const { return static_cast<int>(players_heroes_.size()); }
@@ -61,6 +61,7 @@ class Player {
     return income_.at(resource);
   }
   void nextHero();
+  Faction getFaction() const { return faction_; }
 };
 
 #endif

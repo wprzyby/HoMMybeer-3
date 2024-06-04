@@ -124,3 +124,10 @@ void Config::loadData(string metadata_path) {
   metadata_ = json::parse(ifs);
   ifs.close();
 }
+
+void Config::loadTownData(string metadata_path) {
+  ifstream ifs;
+  ifs.open(metadata_path);
+  town_metadata_ = json::parse(ifs);
+  ifs.close();
+}

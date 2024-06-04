@@ -12,7 +12,6 @@
 #ifndef SRC_GAME_LOGIC_CONFIG_H_
 #define SRC_GAME_LOGIC_CONFIG_H_
 
-#include <filesystem>
 #include <json.hpp>
 #include <string>
 
@@ -34,6 +33,7 @@ class Config {
   Config();
   static Config* config_;
   nlohmann::json metadata_;
+  nlohmann::json town_metadata_;
   const static std::map<Difficulty, Inventory> starting_inventories_;
   const static std::map<Difficulty, Incomes> starting_incomes_;
   const static std::map<ResourceType, std::string> resource_type_translator_;
@@ -47,7 +47,9 @@ class Config {
   ~Config();
   static Config* getInstance();
   void loadData(std::string metadata_path = "./ObjectsMetadata.json");
+  void loadTownData(std::string metadata_path = "./TownsMetadata.json");
   const nlohmann::json getMetadata() const { return metadata_; };
+  const nlohmann::json getTownMetadata() const { return town_metadata_; };
   const static std::map<Faction, std::string> kDefaultHeroNames;
   static Inventory getStartingInventory(Difficulty difficulty) {
     return starting_inventories_.at(difficulty);

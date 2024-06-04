@@ -38,40 +38,40 @@ void MapWindowController::scrollGameView(const sf::Vector2i& translation,
   map_pixel_offset_ = sf::Vector2u(new_offset);
   sf::Vector2u new_field_offset = getFieldOffset();
   if (old_field_offset != new_field_offset) {
-    map_view_->setMap(game.getMap()->getFieldArray(), new_field_offset,
-                      MapView::MAP_TILE_SIZE);
+    map_view_.setMap(game.getMap()->getFieldArray(), new_field_offset,
+                     MapView::MAP_TILE_SIZE);
 
-    hero_view_->setHeroes(game.heroesInGame(), new_field_offset,
-                          MapView::MAP_TILE_SIZE);
-    objects_view_->setObjects(game.objectsInGame(), new_field_offset,
-                              MapView::MAP_TILE_SIZE);
-    path_view_->setPath(game.getCurrentPlayer()->getCurrentHero(),
-                        new_field_offset, MapView::MAP_TILE_SIZE);
+    hero_view_.setHeroes(game.heroesInGame(), new_field_offset,
+                         MapView::MAP_TILE_SIZE);
+    objects_view_.setObjects(game.objectsInGame(), new_field_offset,
+                             MapView::MAP_TILE_SIZE);
+    path_view_.setPath(game.getCurrentPlayer()->getCurrentHero(),
+                       new_field_offset, MapView::MAP_TILE_SIZE);
   }
-  map_view_->setOrigin(sf::Vector2f(getPartialPixelOffset()));
-  hero_view_->setOrigin(sf::Vector2f(getPartialPixelOffset()));
-  objects_view_->setOrigin(sf::Vector2f(getPartialPixelOffset()));
-  path_view_->setOrigin(sf::Vector2f(getPartialPixelOffset()));
-  map_view_->setPosition(sf::Vector2f(game_window_offset_));
-  hero_view_->setPosition(sf::Vector2f(game_window_offset_));
-  objects_view_->setPosition(sf::Vector2f(game_window_offset_));
-  path_view_->setPosition(sf::Vector2f(game_window_offset_));
+  map_view_.setOrigin(sf::Vector2f(getPartialPixelOffset()));
+  hero_view_.setOrigin(sf::Vector2f(getPartialPixelOffset()));
+  objects_view_.setOrigin(sf::Vector2f(getPartialPixelOffset()));
+  path_view_.setOrigin(sf::Vector2f(getPartialPixelOffset()));
+  map_view_.setPosition(sf::Vector2f(game_window_offset_));
+  hero_view_.setPosition(sf::Vector2f(game_window_offset_));
+  objects_view_.setPosition(sf::Vector2f(game_window_offset_));
+  path_view_.setPosition(sf::Vector2f(game_window_offset_));
 }
 
 void MapWindowController::changeMapContents(const Game& game) {
-  hero_view_->setHeroes(game.heroesInGame(), getFieldOffset(),
-                        MapView::MAP_TILE_SIZE);
-  objects_view_->setObjects(game.objectsInGame(), getFieldOffset(),
-                            MapView::MAP_TILE_SIZE);
-  path_view_->setPath(game.getCurrentPlayer()->getCurrentHero(),
-                      getFieldOffset(), MapView::MAP_TILE_SIZE);
-  hero_view_->setOrigin(sf::Vector2f(getPartialPixelOffset()));
-  objects_view_->setOrigin(sf::Vector2f(getPartialPixelOffset()));
-  path_view_->setOrigin(sf::Vector2f(getPartialPixelOffset()));
-  hero_view_->setPosition(sf::Vector2f(game_window_offset_));
-  objects_view_->setPosition(sf::Vector2f(game_window_offset_));
-  path_view_->setPosition(sf::Vector2f(game_window_offset_));
-  resources_view_->setResources(game.getCurrentPlayer(), game.getWeekday());
+  hero_view_.setHeroes(game.heroesInGame(), getFieldOffset(),
+                       MapView::MAP_TILE_SIZE);
+  objects_view_.setObjects(game.objectsInGame(), getFieldOffset(),
+                           MapView::MAP_TILE_SIZE);
+  path_view_.setPath(game.getCurrentPlayer()->getCurrentHero(),
+                     getFieldOffset(), MapView::MAP_TILE_SIZE);
+  hero_view_.setOrigin(sf::Vector2f(getPartialPixelOffset()));
+  objects_view_.setOrigin(sf::Vector2f(getPartialPixelOffset()));
+  path_view_.setOrigin(sf::Vector2f(getPartialPixelOffset()));
+  hero_view_.setPosition(sf::Vector2f(game_window_offset_));
+  objects_view_.setPosition(sf::Vector2f(game_window_offset_));
+  path_view_.setPosition(sf::Vector2f(game_window_offset_));
+  resources_view_.setResources(game.getCurrentPlayer(), game.getWeekday());
 }
 
 void MapWindowController::repositionCamera(const Game& game) {
@@ -117,26 +117,29 @@ void MapWindowController::selfInit() {
   Session::getInstance()->newGame(map_info.map, players, Difficulty::EASY,
                                   starting_objects);
 
-  map_view_->setMap(Session::getInstance()->game.getMap()->getFieldArray(),
-                    {0, 0}, MapView::MAP_TILE_SIZE);
+  map_view_.setMap(Session::getInstance()->game.getMap()->getFieldArray(),
+                   {0, 0}, MapView::MAP_TILE_SIZE);
 
-  hero_view_->setHeroes(Session::getInstance()->game.heroesInGame(), {0, 0},
-                        MapView::MAP_TILE_SIZE);
-  objects_view_->setObjects(Session::getInstance()->game.objectsInGame(),
-                            {0, 0}, MapView::MAP_TILE_SIZE);
-  path_view_->setPath(
+  hero_view_.setHeroes(Session::getInstance()->game.heroesInGame(), {0, 0},
+                       MapView::MAP_TILE_SIZE);
+  objects_view_.setObjects(Session::getInstance()->game.objectsInGame(), {0, 0},
+                           MapView::MAP_TILE_SIZE);
+  path_view_.setPath(
       Session::getInstance()->game.getCurrentPlayer()->getCurrentHero(), {0, 0},
       MapView::MAP_TILE_SIZE);
   changeMapContents(Session::getInstance()->game);
   repositionCamera(Session::getInstance()->game);
 
-  controlls_view_->setControls();
+  controlls_view_.setControls();
 }
 
 void MapWindowController::update(sf::Event& event, SessionState session_state,
                                  Game& game) {
   if (session_state == SessionState::LOAD_GAME) {
     selfInit();
+  }
+  if (session_state == SessionState::REFRESH) {
+    changeMapContents(game);
   }
 
   if (session_state != SessionState::IN_GAME) {
@@ -159,17 +162,17 @@ void MapWindowController::update(sf::Event& event, SessionState session_state,
   if (event.type == sf::Event::MouseButtonPressed) {
     if (event.mouseButton.button == sf::Mouse::Left) {
       sf::Vector2i where_clicked{event.mouseButton.x, event.mouseButton.y};
-      if (controlls_view_->nextHeroClicked(sf::Vector2f(where_clicked))) {
+      if (controlls_view_.nextHeroClicked(sf::Vector2f(where_clicked))) {
         game.getCurrentPlayer()->nextHero();
         repositionCamera(game);
       }
-      if (controlls_view_->nextTurnClicked(sf::Vector2f(where_clicked))) {
+      if (controlls_view_.nextTurnClicked(sf::Vector2f(where_clicked))) {
         game.nextPlayer();
-        resources_view_->setResources(game.getCurrentPlayer(),
-                                      game.getWeekday());
+        resources_view_.setResources(game.getCurrentPlayer(),
+                                     game.getWeekday());
         repositionCamera(game);
       }
-      if (controlls_view_->exitClicked(sf::Vector2f(where_clicked))) {
+      if (controlls_view_.exitClicked(sf::Vector2f(where_clicked))) {
         Session::getInstance()->setSessionState(SessionState::START_MENU);
         // TODO popup if sure to exit
       }
@@ -195,4 +198,15 @@ void MapWindowController::update(sf::Event& event, SessionState session_state,
       changeMapContents(game);
     }
   }
+}
+
+void MapWindowController::draw(sf::RenderTarget& target,
+                               sf::RenderStates states) const {
+  target.draw(map_view_);
+  target.draw(path_view_);
+  target.draw(objects_view_);
+  target.draw(hero_view_);
+  target.draw(controlls_view_);
+  target.draw(resources_view_);
+  target.draw(border_view_);
 }

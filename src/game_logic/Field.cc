@@ -19,12 +19,10 @@ FieldCoords operator+(const FieldCoords& l, const FieldCoords& r) {
   return {l.first + r.first, l.second + r.second};
 }
 
-map<TerrainType, int> Field::resistance = {
-  {TerrainType::GRASS, 10},
-  {TerrainType::DIRT, 10},
-  {TerrainType::SNOW, 20},
-  {TerrainType::STONE, 5}
-};
+map<TerrainType, int> Field::resistance = {{TerrainType::GRASS, 10},
+                                           {TerrainType::DIRT, 10},
+                                           {TerrainType::SNOW, 20},
+                                           {TerrainType::STONE, 5}};
 
 bool Field::setObject(shared_ptr<MapObject> object) {
   if (object_ != nullptr) {
@@ -45,5 +43,8 @@ bool Field::deleteObject() {
 }
 
 bool Field::isAdjacent(FieldCoords first, FieldCoords second) {
-  return (std::abs(first.first - second.first) == 1 || std::abs(first.second-second.second) == 1);
+  return ((std::abs(first.first - second.first) == 1 ||
+           std::abs(first.first - second.first) == 0) &&
+          (std::abs(first.second - second.second) == 1 ||
+           std::abs(first.second - second.second) == 0));
 }
