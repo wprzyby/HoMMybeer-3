@@ -24,7 +24,8 @@
 enum class SessionState {
   IN_GAME,
   START_MENU,
-  IN_GAME_MENU,  // TODO: fill if necessary
+  IN_BATTLE,
+  IN_CASTLE  // TODO: fill if necessary
 };
 
 struct Save {
@@ -49,11 +50,12 @@ class Session {
   ~Session();
   static Session* getInstance();
   const std::vector<Save> getSavedGames();
-  SessionState getSessionState();
+  SessionState getSessionState() const { return session_state_; }
   void setSessionState(SessionState new_state) { session_state_ = new_state; };
-  void newGame(Map game_map, std::vector<Player> players,
-               Difficulty difficulty = Difficulty::NORMAL,
-               std::vector<std::shared_ptr<MapObject>> starting_objects = {});
+  void newGame(
+      const Map& game_map, std::vector<Player> players,
+      Difficulty difficulty = Difficulty::NORMAL,
+      const std::vector<std::shared_ptr<MapObject>>& starting_objects = {});
   Game game;
 };
 

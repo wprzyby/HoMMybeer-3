@@ -40,14 +40,19 @@ class Player {
           Config::getStartingInventory(Difficulty::NORMAL),
       Incomes starting_income = Config::getStartingIncomes(Difficulty::NORMAL));
   ~Player();
-  const Hero* getHero(int idx) const;  // TODO: overload with ex name
+  [[nodiscard]] const Hero* getHero(
+      int idx) const;  // TODO: overload with ex name
   Hero* getCurrentHero() { return &players_heroes_[selected_hero_idx_]; }
+  [[nodiscard]] const Hero* getCurrentHero() const {
+    return &players_heroes_[selected_hero_idx_];
+  }
   void addHero(std::string name, FieldCoords spawn_field_coords,
                int starting_energy = 100);
   void addHero(Hero hero) { players_heroes_.push_back(hero); };
   bool updateResourceQuantity(ResourceType resource_type, int delta);
   int numHeroes() const { return static_cast<int>(players_heroes_.size()); }
   bool changeIncome(ResourceType resource_type, int delta);
+  void refillHeroesEnergy();
   int getResourceAmount(ResourceType resource) const {
     return inventory_.at(resource);
   }

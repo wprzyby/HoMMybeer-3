@@ -23,7 +23,7 @@ TEST(heroMovementTests, basicHeroMovementTest) {
   Path move_path({FieldCoords{1, 4}, FieldCoords{1, 3}, FieldCoords{1, 2}});
   Path other_path({FieldCoords{1, 2}, FieldCoords{1, 3}, FieldCoords{2, 3}});
   MoveCosts costs({10, 10, 10});
-  game.getCurrentPlayer()->getCurrentHero()->setMovePath(move_path);
+  game.getCurrentPlayer()->getCurrentHero()->setMovePath(move_path, costs);
   EXPECT_FALSE(
       game.getCurrentPlayer()->getCurrentHero()->moveAlong(other_path, costs));
   EXPECT_TRUE(
@@ -34,7 +34,7 @@ TEST(heroMovementTests, basicHeroMovementTest) {
   move_path = Path({FieldCoords{5, 5}, FieldCoords{4, 4}, FieldCoords{3, 4},
                     FieldCoords{2, 4}});
   costs = MoveCosts({20, 20, 20, 20});
-  game.getCurrentPlayer()->getCurrentHero()->setMovePath(move_path);
+  game.getCurrentPlayer()->getCurrentHero()->setMovePath(move_path, costs);
   EXPECT_TRUE(
       game.getCurrentPlayer()->getCurrentHero()->moveAlong(move_path, costs));
   ASSERT_EQ(game.getCurrentPlayer()->getCurrentHero()->getHeroCoords(),
@@ -69,7 +69,7 @@ TEST(heroMovementTests, heroNotMovingNoPath) {
   Game game = createExampleGame();
   ASSERT_EQ(game.getCurrentPlayer()->getCurrentHero()->getHeroCoords(),
             (FieldCoords{7, 3}));
-  game.getCurrentPlayer()->getCurrentHero()->setMovePath({});
+  game.getCurrentPlayer()->getCurrentHero()->setMovePath({}, {});
   game.getCurrentPlayer()->getCurrentHero()->moveAlong({}, {});
   EXPECT_EQ(game.getCurrentPlayer()->getCurrentHero()->getHeroCoords(),
             (FieldCoords{7, 3}));
@@ -80,7 +80,7 @@ TEST(heroMovementTests, heroNotMovingNoEnergy) {
   game.getCurrentPlayer()->addHero("Tired Tristan", FieldCoords{7, 4}, 0);
   game.getCurrentPlayer()->nextHero();
   game.getCurrentPlayer()->getCurrentHero()->setMovePath(
-      Path({FieldCoords{7, 5}}));
+      Path({FieldCoords{7, 5}}), MoveCosts({10}));
   game.getCurrentPlayer()->getCurrentHero()->moveAlong(
       Path({FieldCoords{7, 5}}), MoveCosts({10}));
   EXPECT_EQ(game.getCurrentPlayer()->getCurrentHero()->getHeroCoords(),

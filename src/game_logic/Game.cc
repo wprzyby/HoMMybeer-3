@@ -12,17 +12,16 @@
 #include <Game.h>
 
 #include <algorithm>
-#include <iostream>
 #include <memory>
 #include <queue>
-#include <stack>
+#include <utility>
 
 using namespace std;
 
-Game::Game(std::vector<Player> players, Map map,
-           std::vector<std::shared_ptr<MapObject>> starting_map_objects)
-    : players_in_game_(players), game_map_(map), curr_player_idx(0) {
-  for (auto obj : starting_map_objects) {
+Game::Game(std::vector<Player> players, const Map& map,
+           const std::vector<std::shared_ptr<MapObject>>& starting_map_objects)
+    : players_in_game_(std::move(players)), game_map_(map), curr_player_idx(0) {
+  for (const auto& obj : starting_map_objects) {
     if (!addMapObject(obj)) {
       FieldCoords wrong_coord;
       for (FieldCoords coord_to_check : obj->occupiedFields()) {
@@ -37,6 +36,17 @@ Game::Game(std::vector<Player> players, Map map,
     }
   }
 }
+
+Game& Game::operator=(const Game& other) {
+  players_in_game_ = other.players_in_game_;
+  game_map_ = other.game_map_;
+  map_objects_ = other.map_objects_;
+  for (const auto& obj : map_objects_) {
+    obj->setParent(this);
+  }
+  return *this;
+}
+
 const Player* Game::getPlayer(int idx) const {
   if (players_in_game_.size() <= idx) {
     return nullptr;
@@ -57,7 +67,8 @@ std::vector<const Hero*> Game::heroesInGame() const {
 
 std::vector<const MapObject*> Game::objectsInGame() const {
   std::vector<const MapObject*> objects_in_game;
-  for (auto object : map_objects_) {
+  objects_in_game.reserve(map_objects_.size());
+  for (const auto& object : map_objects_) {
     objects_in_game.push_back(&(*object));
   }
   return objects_in_game;
@@ -83,7 +94,7 @@ bool Game::deleteMapObject(int id) {
   return true;
 }
 
-bool Game::addMapObject(shared_ptr<MapObject> obj_to_add) {
+bool Game::addMapObject(const shared_ptr<MapObject>& obj_to_add) {
   FieldCoords origin = obj_to_add->getOrigin();
   for (FieldCoords coord_to_check : obj_to_add->occupiedFields()) {
     if (!game_map_.getField(coord_to_check).has_value() ||
@@ -91,13 +102,12 @@ bool Game::addMapObject(shared_ptr<MapObject> obj_to_add) {
       return false;
     }
   }
-
+  obj_to_add->setParent(this);
   for (FieldCoords coord_to_set : obj_to_add->occupiedFields()) {
     if (!game_map_.setObjectTo(coord_to_set, obj_to_add)) {
       return false;
     }
   }
-  obj_to_add->setParent(this);
   map_objects_.push_back(obj_to_add);
   return true;
 }
@@ -117,7 +127,7 @@ std::optional<std::pair<Path, MoveCosts>> Game::findPath_(FieldCoords path_to) {
   for (FieldCoords coord : all_nodes) {
     nodes_w_costs_previous[coord] = {0xFFFFFFF, {}};
   }
-  auto getAdjacent = [&](FieldCoords coords) {
+  auto get_adjacent = [&](FieldCoords coords) {
     std::vector<FieldCoords> adjacent = {
         coords + FieldCoords{1, 0},   coords + FieldCoords{1, 1},
         coords + FieldCoords{0, 1},   coords + FieldCoords{-1, 0},
@@ -142,9 +152,9 @@ std::optional<std::pair<Path, MoveCosts>> Game::findPath_(FieldCoords path_to) {
       queue;
   nodes_w_costs_previous[current_hero_location] = {0, {}};
   std::set<FieldCoords> visited_fields;
-  queue.push({current_hero_location, 0});
+  queue.emplace(current_hero_location, 0);
   while (!visited_fields.contains(path_to)) {
-    std::vector<FieldCoords> adjacent_fields = getAdjacent(queue.top().first);
+    std::vector<FieldCoords> adjacent_fields = get_adjacent(queue.top().first);
     for (FieldCoords adjacent : adjacent_fields) {
       if (!visited_fields.contains(adjacent)) {
         int next_resistance =
@@ -162,7 +172,7 @@ std::optional<std::pair<Path, MoveCosts>> Game::findPath_(FieldCoords path_to) {
             nodes_w_costs_previous[queue.top().first].first + next_resistance;
         if (nodes_w_costs_previous[adjacent].first > alt_cost) {
           nodes_w_costs_previous[adjacent] = {alt_cost, queue.top().first};
-          queue.push({adjacent, alt_cost});
+          queue.emplace(adjacent, alt_cost);
         }
       }
     }
@@ -200,7 +210,7 @@ void Game::executeAction(FieldCoords coords) {
     if (!this->getCurrentPlayer()->getCurrentHero()->moveAlong(
             found_shortest.value().first, found_shortest.value().second)) {
       this->getCurrentPlayer()->getCurrentHero()->setMovePath(
-          found_shortest.value().first);
+          found_shortest.value().first, found_shortest.value().second);
     }
     return;
   }
@@ -214,5 +224,13 @@ void Game::executeAction(FieldCoords coords) {
       return;
     }
   }
-  return;
+}
+
+void Game::nextPlayer() {
+  getCurrentPlayer()->refillHeroesEnergy();
+  if (curr_player_idx == players_in_game_.size() - 1) {
+    curr_player_idx = 0;
+    return;
+  }
+  ++curr_player_idx;
 }

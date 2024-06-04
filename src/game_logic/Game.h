@@ -30,23 +30,25 @@ class Game {
   std::vector<Player> players_in_game_;
   Map game_map_;
   std::vector<std::shared_ptr<MapObject>> map_objects_;
-  Difficulty difficulty_;
   int curr_player_idx;
   std::optional<std::pair<Path, MoveCosts>> findPath_(FieldCoords path_to);
 
  public:
-  Game(std::vector<Player> players, Map map,
-       std::vector<std::shared_ptr<MapObject>> starting_map_objects = {});
+  Game(
+      std::vector<Player> players, const Map& map,
+      const std::vector<std::shared_ptr<MapObject>>& starting_map_objects = {});
+  Game& operator=(const Game& other);
   const Map* getMap() const { return &game_map_; }
   const Player* getPlayer(int idx) const;
-  std::vector<const Hero*> heroesInGame()
-      const;  // only for visuals
-  std::vector<const MapObject*> objectsInGame()
-      const;  // only for visuals
+  void nextPlayer();
+  std::vector<const Hero*> heroesInGame() const;        // only for visuals
+  std::vector<const MapObject*> objectsInGame() const;  // only for visuals
   Player* getCurrentPlayer() { return &players_in_game_[curr_player_idx]; }
-  ~Game() = default;
+  const Player* getCurrentPlayer() const {
+    return &players_in_game_[curr_player_idx];
+  }
   int numPlayers() const { return static_cast<int>(players_in_game_.size()); }
-  bool addMapObject(std::shared_ptr<MapObject> obj_to_add);
+  bool addMapObject(const std::shared_ptr<MapObject>& obj_to_add);
   bool deleteMapObject(int id);
   int getCurrPlayerId() const { return curr_player_idx; }
   void executeAction(FieldCoords coords);
@@ -63,10 +65,10 @@ class Game {
           present_origin_(obj_present.getOrigin()),
           incoming_origin_(obj_added.getOrigin()) {}
     WrongObjectPlacementException(
-        const WrongObjectPlacementException& e) throw()
-        : conflicting_coords_(e.conflicting_coords_) {}
+        const WrongObjectPlacementException& other) noexcept
+        : conflicting_coords_(other.conflicting_coords_) {}
     FieldCoords getBadChar() const { return conflicting_coords_; }
-    const std::string what() {
+    std::string what() {
       return std::format(
           "Conflicting coords are: {}, {}. Already present origin is: {}, {}. "
           "Conflicting object origin is: {}, {}",

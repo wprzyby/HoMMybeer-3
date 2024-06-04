@@ -14,6 +14,7 @@
 
 #include <ctime>
 #include <iostream>
+#include <utility>
 
 using namespace std;
 
@@ -43,8 +44,8 @@ Session* Session::getInstance() {
 }
 
 void Session::newGame(
-    Map game_map, std::vector<Player> players, Difficulty difficulty,
-    std::vector<std::shared_ptr<MapObject>> starting_objects) {
-  game = Game(players, game_map, starting_objects);
+    const Map& game_map, std::vector<Player> players, Difficulty difficulty,
+    const std::vector<std::shared_ptr<MapObject>>& starting_objects) {
+  game = Game(std::move(players), game_map, starting_objects);
   session_state_ = SessionState::IN_GAME;
 }

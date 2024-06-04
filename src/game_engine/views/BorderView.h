@@ -16,9 +16,14 @@
 class BorderView : public sf::Drawable, public sf::Transformable {
   sf::RectangleShape rect_vertical_;
   sf::RectangleShape rect_horizontal_;
+  sf::Vector2f game_window_size_;
+  sf::Vector2f game_window_offset_;
 
  public:
-  BorderView() = default;
+  BorderView(sf::Vector2f game_window_offset, sf::Vector2f game_window_size)
+      : game_window_size_(game_window_size),
+        game_window_offset_(game_window_offset) {}
+        
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
   void setBorder();
 };

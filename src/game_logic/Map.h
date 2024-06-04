@@ -17,6 +17,7 @@
 
 #include <optional>
 #include <set>
+#include <utility>
 #include <vector>
 
 using FieldArray_t = std::vector<std::vector<Field>>;
@@ -46,7 +47,7 @@ class Map {
   }
   bool setObjectTo(FieldCoords coords_to_delete,
                    std::shared_ptr<MapObject> obj) const {
-    return fieldToModify(coords_to_delete)->setObject(obj);
+    return fieldToModify(coords_to_delete)->setObject(std::move(obj));
   }
   std::set<FieldCoords> constructGraph(FieldCoords seed_coords) const;
 };

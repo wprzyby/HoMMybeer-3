@@ -12,13 +12,11 @@
 #ifndef SRC_GAME_LOGIC_HERO_H_
 #define SRC_GAME_LOGIC_HERO_H_
 
-#include <memory>
-#include <optional>
-#include <stack>
 #include <UnitBlock.hpp>
+#include <stack>
 #include <string>
 #include <utility>
-#include <vector>
+
 
 using FieldCoords = std::pair<int, int>;
 using Path = std::stack<FieldCoords>;
@@ -26,9 +24,11 @@ using MoveCosts = std::stack<int>;
 
 class Hero {
  private:
+  inline static constexpr int DEFAULT_STARTING_ENERGY = 100;
   std::string name_;
   FieldCoords hero_coords_;
   Path move_path_;
+  MoveCosts current_path_costs_;
   int energy_;
   std::vector<UnitBlock> units_;
   void step(FieldCoords step_to);
@@ -36,15 +36,17 @@ class Hero {
 
  public:
   Hero(std::string name, FieldCoords spawn_field_coords,
-       int starting_energy = 100)
-      : name_(name),
+       int starting_energy = DEFAULT_STARTING_ENERGY)
+      : name_(std::move(name)),
         hero_coords_(spawn_field_coords),
         energy_(starting_energy),
         max_energy_(starting_energy){};
-  ~Hero() = default;
   std::string getHeroName() const { return name_; };
   FieldCoords getHeroCoords() const { return hero_coords_; };
-  void setMovePath(Path new_path) { move_path_ = new_path; }
+  void setMovePath(Path new_path, MoveCosts move_costs) {
+    move_path_ = std::move(new_path);
+    current_path_costs_ = std::move(move_costs);
+  }
   void refillEnergy() { energy_ = max_energy_; }
   bool moveAlong(Path updated_path, MoveCosts costs);
   int getEnergy() const { return energy_; }
@@ -53,6 +55,7 @@ class Hero {
     return units_;
   }
   void addUnit(const UnitBlock& unit) { units_.push_back(unit); }
+  std::pair<Path, int> getPathInParts() const;
 };
 
 #endif

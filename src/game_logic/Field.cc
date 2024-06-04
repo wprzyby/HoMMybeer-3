@@ -11,6 +11,8 @@
  */
 
 #include <Field.h>
+
+#include <utility>
 using namespace std;
 
 FieldCoords operator+(const FieldCoords& l, const FieldCoords& r) {
@@ -28,7 +30,7 @@ bool Field::setObject(shared_ptr<MapObject> object) {
   if (object_ != nullptr) {
     return false;
   }
-  object_ = object;
+  object_ = std::move(object);
   walk_through_ = false;
   return true;
 }

@@ -67,3 +67,9 @@ void Player::nextHero() {
     selected_hero_idx_++;
   }
 }
+
+void Player::refillHeroesEnergy() {
+  for (Hero& hero : players_heroes_) {
+    hero.refillEnergy();
+  }
+}

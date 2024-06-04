@@ -32,3 +32,20 @@ void Hero::step(FieldCoords step_to) {
   // checking if field is adjacent and if is possible to move to
   hero_coords_ = step_to;
 }
+
+std::pair<Path, int> Hero::getPathInParts() const {
+  Path analyzed_path = move_path_;
+  int analyzed_energy = energy_;
+  MoveCosts analyzed_costs = current_path_costs_;
+
+  int retval = 0;
+  while (!(analyzed_path.empty()) &&
+         (analyzed_energy - analyzed_costs.top() > 0)) {
+    analyzed_path.pop();
+    analyzed_energy = analyzed_energy - analyzed_costs.top();
+
+    analyzed_costs.pop();
+    ++retval;
+  }
+  return {move_path_, retval};
+}

@@ -14,6 +14,7 @@
 
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 using FieldCoords = std::pair<int, int>;
@@ -35,7 +36,7 @@ class MapObject {
             std::vector<FieldCoords> space_taken)
       : origin_(origin),
         parent_(parent),
-        space_taken_(space_taken),
+        space_taken_(std::move(space_taken)),
         id_(current_id_++) {}
   ~MapObject() = default;
   virtual std::optional<bool>

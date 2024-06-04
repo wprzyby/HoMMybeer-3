@@ -16,9 +16,16 @@
 class ResourcesView : public sf::Drawable, public sf::Transformable {
  private:
   sf::RectangleShape background_;
+  sf::Vector2f window_size_;
+  sf::Vector2f game_window_size_;
+  sf::Vector2f game_window_offset_;
 
  public:
-  ResourcesView() = default;
+  ResourcesView(sf::Vector2f window_size, sf::Vector2f game_window_size,
+                sf::Vector2f game_window_offset)
+      : window_size_(window_size),
+        game_window_size_(game_window_size),
+        game_window_offset_(game_window_offset) {}
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
   void setResources();
 };

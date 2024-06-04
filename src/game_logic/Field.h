@@ -44,7 +44,7 @@ class Field {
   FieldCoords getFieldCoords() const { return coords_; };
   bool isWalkable() const { return walk_through_; };
   TerrainType getTerrainType() const { return terrain_type_; }
-  const std::shared_ptr<MapObject> getObject() const { return object_; }
+  std::shared_ptr<MapObject> getObject() const { return object_; }
   bool setObject(std::shared_ptr<MapObject> object);
   bool deleteObject();
   static std::map<TerrainType, int> resistance;
