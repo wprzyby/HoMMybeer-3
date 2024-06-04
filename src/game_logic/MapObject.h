@@ -44,6 +44,7 @@ class MapObject {
                        // completes it, false if has no action
   const std::vector<FieldCoords> occupiedFields() const;
   void setParent(Game* new_parent) { parent_ = new_parent; }
+  virtual int getOwner() const { return -1; }
   int getId() const { return id_; }
   FieldCoords getOrigin() const { return origin_; }
   virtual std::map<std::string, std::string> getSpecs() const = 0;
@@ -82,7 +83,7 @@ class ResourceGenerator : public MapObject {
   ResourceGenerator(FieldCoords origin, Game* parent,
                     ResourceType resource_type, int weekly_income);
   std::optional<bool> objectAction() override;
-  int getOwnerId() { return owner_id_; }
+  int getOwner() const override { return owner_id_; }
   std::map<std::string, std::string> getSpecs() const override;
 };
 
@@ -95,5 +96,6 @@ class City : public MapObject {
   City(FieldCoords origin, Game* parent, Faction type, int owner_id = -1);
   std::optional<bool> objectAction() override { return true; }
   std::map<std::string, std::string> getSpecs() const override;
+  int getOwner() const override { return owner_id_; }
 };
 #endif

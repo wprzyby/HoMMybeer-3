@@ -49,6 +49,7 @@ class Player {
   void addHero(std::string name, FieldCoords spawn_field_coords,
                int starting_energy = 100);
   void addHero(Hero hero) { players_heroes_.push_back(hero); };
+  void weeklyIncome();
   bool updateResourceQuantity(ResourceType resource_type, int delta);
   int numHeroes() const { return static_cast<int>(players_heroes_.size()); }
   bool changeIncome(ResourceType resource_type, int delta);

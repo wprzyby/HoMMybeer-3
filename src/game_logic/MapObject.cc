@@ -106,6 +106,10 @@ ResourceGenerator::ResourceGenerator(FieldCoords origin, Game* parent,
 std::optional<bool> ResourceGenerator::objectAction() {
   if (parent_->getCurrentPlayer()->changeIncome(resource_type_,
                                                 weekly_income_)) {
+    if (owner_id_ != -1) {
+      parent_->getPlayer(owner_id_)->changeIncome(resource_type_,
+                                                  -weekly_income_);
+    }
     owner_id_ = parent_->getCurrPlayerId();
     return true;
   }

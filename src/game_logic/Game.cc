@@ -20,7 +20,10 @@ using namespace std;
 
 Game::Game(std::vector<Player> players, const Map& map,
            const std::vector<std::shared_ptr<MapObject>>& starting_map_objects)
-    : players_in_game_(std::move(players)), game_map_(map), curr_player_idx(0) {
+    : players_in_game_(std::move(players)),
+      game_map_(map),
+      curr_player_idx(0),
+      day_of_week_(1) {
   for (const auto& obj : starting_map_objects) {
     if (!addMapObject(obj)) {
       FieldCoords wrong_coord;
@@ -53,6 +56,25 @@ const Player* Game::getPlayer(int idx) const {
   }
   return &players_in_game_[idx];
 }
+
+Player* Game::getPlayer(int idx) {
+  if (players_in_game_.size() <= idx) {
+    return nullptr;
+  }
+  return &players_in_game_[idx];
+}
+
+void Game::nextDay() {
+  if (day_of_week_ == 7) {
+    for (auto& player : players_in_game_) {
+      player.weeklyIncome();
+    }
+    day_of_week_ = 1;
+  } else {
+    ++day_of_week_;
+  }
+}
+
 std::vector<const Hero*> Game::heroesInGame() const {
   std::vector<const Hero*> heroes_in_game;
   int players = numPlayers();
@@ -229,6 +251,7 @@ void Game::executeAction(FieldCoords coords) {
 void Game::nextPlayer() {
   getCurrentPlayer()->refillHeroesEnergy();
   if (curr_player_idx == players_in_game_.size() - 1) {
+    nextDay();
     curr_player_idx = 0;
     return;
   }

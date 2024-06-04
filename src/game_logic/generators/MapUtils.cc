@@ -58,7 +58,7 @@ MapInfo generateLargeExampleMap() {
 
 std::vector<std::shared_ptr<MapObject>> generateExampleStaticObjects() {
   std::vector<std::shared_ptr<MapObject>> starting_objects = {
-      std::make_shared<City>(FieldCoords{0, 0}, nullptr, Faction::CASTLE, 0),
+      std::make_shared<City>(FieldCoords{0, 0}, nullptr, Faction::CASTLE, -1),
       std::make_shared<GeologicalObject>(FieldCoords{-1, 3}, nullptr,
                                          GeologicalStructureType::TREE, 7),
       std::make_shared<GeologicalObject>(FieldCoords{10, 7}, nullptr,
@@ -94,7 +94,7 @@ std::vector<std::shared_ptr<MapObject>> generateExampleStaticObjects() {
       std::make_shared<ResourceGenerator>(FieldCoords{3, 27}, nullptr,
                                           ResourceType::SULFUR, 3),
       std::make_shared<City>(FieldCoords{31, 10}, nullptr, Faction::FORTRESS,
-                             0),
+                             -1),
       std::make_shared<GeologicalObject>(FieldCoords{29, 4}, nullptr,
                                          GeologicalStructureType::MOUNTAIN, 1),
       std::make_shared<GeologicalObject>(FieldCoords{32, 8}, nullptr,
@@ -111,7 +111,8 @@ std::vector<std::shared_ptr<MapObject>> generateExampleStaticObjects() {
                                          GeologicalStructureType::TREE, 5),
       std::make_shared<GeologicalObject>(FieldCoords{32, 14}, nullptr,
                                          GeologicalStructureType::TREE, 7),
-      std::make_shared<City>(FieldCoords{37, 44}, nullptr, Faction::INFERNO, 0),
+      std::make_shared<City>(FieldCoords{37, 44}, nullptr, Faction::INFERNO,
+                             -1),
       std::make_shared<GeologicalObject>(FieldCoords{35, 44}, nullptr,
                                          GeologicalStructureType::MOUNTAIN, 0),
       std::make_shared<GeologicalObject>(FieldCoords{38, 40}, nullptr,

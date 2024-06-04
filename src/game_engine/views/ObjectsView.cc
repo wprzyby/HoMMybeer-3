@@ -82,6 +82,17 @@ void ObjectsView::setObjects(std::vector<const MapObject*> objects,
                                               .at(specs.at("Variant"));
     sf::Vector2i texture_size({texture_size_inp[0], texture_size_inp[1]});
     sf::Vector2i texture_origin({texture_origin_inp[0], texture_origin_inp[1]});
+    if ((specs.at("SubType") == "Mines" || specs.at("SubType") == "Cities") &&
+        object->getOwner() != -1) {
+      int texture_row_height = Config::getInstance()
+                                   ->getMetadata()
+                                   .at(specs.at("ObjectType"))
+                                   .at(specs.at("SubType"))
+                                   .at("row_height");
+      texture_origin.y =
+          texture_origin.y + texture_row_height * (object->getOwner() + 1);
+    }
+
     sprite.setTextureRect(sf::IntRect(texture_origin, texture_size));
     FieldCoords origin = object->getOrigin();
     if (origin.first < field_offset.y && origin.second < field_offset.x) {

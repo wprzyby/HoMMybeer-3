@@ -68,10 +68,12 @@ int main() {
       sf::Vector2f(MAIN_WINDOW_SIZE), sf::Vector2f(GAME_WINDOW_SIZE),
       sf::Vector2f(GAME_WINDOW_OFFSET), MapWindowController::font};
   controls_view.setControls();
-  ResourcesView resources_view{sf::Vector2f(MAIN_WINDOW_SIZE),
-                               sf::Vector2f(GAME_WINDOW_SIZE),
-                               sf::Vector2f(GAME_WINDOW_OFFSET)};
-  resources_view.setResources();
+  ResourcesView resources_view{
+      sf::Vector2f(MAIN_WINDOW_SIZE), sf::Vector2f(GAME_WINDOW_SIZE),
+      sf::Vector2f(GAME_WINDOW_OFFSET), MapWindowController::font};
+  ResourcesView::loadtileset(path + "/assets/Resources.png");
+  resources_view.setResources(session->game.getCurrentPlayer(),
+                              session->game.getWeekday());
   ObjectsView objects_view;
   ObjectsView::loadTileSet({{"Cities", path + "/assets/Cities.png"},
                             {"Mountain", path + "/assets/Mountains.png"},
@@ -104,23 +106,6 @@ int main() {
         window.close();
       }
       event_handler.handle(event, session->getSessionState(), session->game);
-      // if (event.type == sf::Event::MouseButtonPressed) {
-      //   if (event.mouseButton.button == sf::Mouse::Left) {
-      //     // int x_clicked = event.mouseButton.x;
-      //     // int y_clicked = event.mouseButton.y;
-      //     // Session* sess = Session::getInstance();
-      //     // int map_width = sess->game->getMap()->getWidth();
-      //     // sess->game->moveCurrPlayer(
-      //     //     FieldCoords{std::floor(x_clicked * map_width /
-      //     kWindowWidth),
-      //     //                 std::floor(y_clicked * map_width /
-      //     //                 kWindowHeight)});
-      //     // hero_view.setHero(
-      //     //     *(sess->game->getCurrentPlayer()->getCurrentHero()));
-      //   }
-      //   if (event.mouseButton.button == sf::Mouse::Right) {
-      //   }
-      // }
     }
 
     // clear the window with black color

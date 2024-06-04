@@ -32,6 +32,7 @@ class Game {
   std::vector<std::shared_ptr<MapObject>> map_objects_;
   int curr_player_idx;
   std::optional<std::pair<Path, MoveCosts>> findPath_(FieldCoords path_to);
+  unsigned int day_of_week_;
 
  public:
   Game(
@@ -40,6 +41,9 @@ class Game {
   Game& operator=(const Game& other);
   const Map* getMap() const { return &game_map_; }
   const Player* getPlayer(int idx) const;
+  unsigned int getWeekday() const { return day_of_week_; }
+  void nextDay();
+  Player* getPlayer(int idx);
   void nextPlayer();
   std::vector<const Hero*> heroesInGame() const;        // only for visuals
   std::vector<const MapObject*> objectsInGame() const;  // only for visuals

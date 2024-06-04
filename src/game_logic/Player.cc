@@ -73,3 +73,9 @@ void Player::refillHeroesEnergy() {
     hero.refillEnergy();
   }
 }
+
+void Player::weeklyIncome() {
+  for (auto resource_income : income_) {
+    updateResourceQuantity(resource_income.first, resource_income.second);
+  }
+}

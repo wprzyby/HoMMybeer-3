@@ -70,6 +70,7 @@ void MapWindowController::changeMapContents(const Game& game) {
   hero_view_->setPosition(sf::Vector2f(game_window_offset_));
   objects_view_->setPosition(sf::Vector2f(game_window_offset_));
   path_view_->setPosition(sf::Vector2f(game_window_offset_));
+  resources_view_->setResources(game.getCurrentPlayer(), game.getWeekday());
 }
 
 void MapWindowController::repositionCamera(const Game& game) {
@@ -125,6 +126,8 @@ void MapWindowController::update(sf::Event& event, SessionState session_state,
       }
       if (controlls_view_->nextTurnClicked(sf::Vector2f(where_clicked))) {
         game.nextPlayer();
+        resources_view_->setResources(game.getCurrentPlayer(),
+                                      game.getWeekday());
         repositionCamera(game);
       }
       if (controlls_view_->exitClicked(sf::Vector2f(where_clicked))) {

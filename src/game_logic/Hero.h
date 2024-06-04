@@ -38,7 +38,7 @@ class Hero {
   Hero(std::string name, FieldCoords spawn_field_coords,
        int starting_energy = DEFAULT_STARTING_ENERGY)
       : name_(std::move(name)),
-        hero_coords_(spawn_field_coords),
+        hero_coords_(std::move(spawn_field_coords)),
         energy_(starting_energy),
         max_energy_(starting_energy){};
   std::string getHeroName() const { return name_; };
