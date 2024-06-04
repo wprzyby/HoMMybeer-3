@@ -18,7 +18,7 @@
 
 using namespace std;
 
-Game::Game(std::vector<Player> players, const Map& map,
+Game::Game(std::vector<Player> players, Map map,
            const std::vector<std::shared_ptr<MapObject>>& starting_map_objects)
     : players_in_game_(std::move(players)),
       game_map_(map),

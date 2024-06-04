@@ -36,7 +36,7 @@ class Game {
 
  public:
   Game(
-      std::vector<Player> players, const Map& map,
+      std::vector<Player> players, Map map,
       const std::vector<std::shared_ptr<MapObject>>& starting_map_objects = {});
   Game& operator=(const Game& other);
   const Map* getMap() const { return &game_map_; }

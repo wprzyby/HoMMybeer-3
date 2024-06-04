@@ -13,6 +13,8 @@
 #include <Field.h>
 #include <Game.h>
 #include <HeroView.h>
+#include <MainView.h>
+#include <MainWindowController.h>
 #include <MapUtils.h>
 #include <MapView.h>
 #include <MapWindowController.h>
@@ -24,6 +26,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
 #include <cmath>
 
 const static sf::Vector2u MAIN_WINDOW_SIZE = sf::Vector2u{800, 600};
@@ -32,33 +35,20 @@ const static sf::Vector2u GAME_WINDOW_OFFSET = sf::Vector2u{10, 10};
 
 int main() {
   Session* session = Session::getInstance();
+  session->setSessionState(SessionState::START_MENU);
   Config* conf = Config::getInstance();
 
   std::string path = getProjectPath();
   conf->loadData(path + "/assets/ObjectsMetadata.json");
   MapWindowController::loadFont(path + "/assets/OldLondon.ttf");
-  MapInfo map_info = generateLargeExampleMap();
-  std::vector<Player> players{
-      Player(false, Faction::CASTLE, map_info.starting_locations[0]),
-      Player(false, Faction::INFERNO, FieldCoords{45, 47})};
-  std::vector<std::shared_ptr<MapObject>> static_map_objects =
-      generateExampleStaticObjects();
-  std::vector<std::shared_ptr<MapObject>> pickable_map_objects =
-      generateExamplePickableObjects();
-  std::vector<std::shared_ptr<MapObject>> starting_objects(
-      static_map_objects.size() + pickable_map_objects.size());
-  std::merge(static_map_objects.begin(), static_map_objects.end(),
-             pickable_map_objects.begin(), pickable_map_objects.end(),
-             starting_objects.begin());
-  session->newGame(map_info.map, players, Difficulty::EASY, starting_objects);
+  MainView main_screen{MAIN_WINDOW_SIZE};
+  MainView::loadtileset(path + "/assets/MainPage.png");
+  main_screen.setMain();
+  MainWindowController main_controller(&main_screen);
   MapView map_view;
   MapView::loadTileset(path + "/assets/Terrains.png");
-  map_view.setMap(session->game.getMap()->getFieldArray(), sf::Vector2u({0, 0}),
-                  MapView::MAP_TILE_SIZE);
   HeroView hero_view;
   HeroView::loadTileSet(path + "/assets/Heroes.png");
-  hero_view.setHeroes(session->game.heroesInGame(), sf::Vector2u({0, 0}),
-                      MapView::MAP_TILE_SIZE);
   map_view.setPosition(sf::Vector2f(GAME_WINDOW_OFFSET));
   hero_view.setPosition(sf::Vector2f(GAME_WINDOW_OFFSET));
   BorderView border_view{sf::Vector2f(GAME_WINDOW_OFFSET),
@@ -67,13 +57,11 @@ int main() {
   ControlsView controls_view{
       sf::Vector2f(MAIN_WINDOW_SIZE), sf::Vector2f(GAME_WINDOW_SIZE),
       sf::Vector2f(GAME_WINDOW_OFFSET), MapWindowController::font};
-  controls_view.setControls();
   ResourcesView resources_view{
       sf::Vector2f(MAIN_WINDOW_SIZE), sf::Vector2f(GAME_WINDOW_SIZE),
       sf::Vector2f(GAME_WINDOW_OFFSET), MapWindowController::font};
   ResourcesView::loadtileset(path + "/assets/Resources.png");
-  resources_view.setResources(session->game.getCurrentPlayer(),
-                              session->game.getWeekday());
+
   ObjectsView objects_view;
   ObjectsView::loadTileSet({{"Cities", path + "/assets/Cities.png"},
                             {"Mountain", path + "/assets/Mountains.png"},
@@ -81,14 +69,12 @@ int main() {
                             {"Resources", path + "/assets/Resources.png"},
                             {"Mines", path + "/assets/Mines.png"}});
   objects_view.setPosition(sf::Vector2f(GAME_WINDOW_OFFSET));
-  objects_view.setObjects(session->game.objectsInGame(), sf::Vector2u({0, 0}),
-                          MapView::MAP_TILE_SIZE);
   PathView path_view;
   MapWindowController map_controller = MapWindowController(
       GAME_WINDOW_SIZE, GAME_WINDOW_OFFSET, &map_view, &hero_view,
       &objects_view, &path_view, &controls_view, &resources_view);
 
-  EventHandler event_handler({&map_controller});
+  EventHandler event_handler({&map_controller, &main_controller});
   // create the window
   sf::RenderWindow window(sf::VideoMode(MAIN_WINDOW_SIZE.x, MAIN_WINDOW_SIZE.y),
                           "HoMMyBeer 3");
@@ -98,7 +84,12 @@ int main() {
   while (window.isOpen()) {
     // check all the window's events that were triggered since the last
     // iteration of the loop
+
     sf::Event event{};
+    if (session->getSessionState() == SessionState::LOAD_GAME) {
+      event_handler.handle(event, session->getSessionState(), session->game);
+      session->setSessionState(SessionState::IN_GAME);
+    }
     while (window.pollEvent(event)) {
       // "close requested" event: we close the window
 
@@ -131,6 +122,10 @@ int main() {
         break;
 
       case SessionState::START_MENU:
+        window.draw(main_screen);
+        break;
+
+      case SessionState::LOAD_GAME:
         break;
     }
 

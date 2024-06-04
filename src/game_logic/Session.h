@@ -23,6 +23,7 @@
 
 enum class SessionState {
   IN_GAME,
+  LOAD_GAME,
   START_MENU,
   IN_BATTLE,
   IN_CASTLE  // TODO: fill if necessary

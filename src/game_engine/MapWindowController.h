@@ -42,6 +42,7 @@ class MapWindowController : public Controller {
   PathView* path_view_;
   ControlsView* controlls_view_;
   ResourcesView* resources_view_;
+  bool time_for_init_;
   sf::Vector2u getFieldOffset() const {
     return sf::Vector2u({static_cast<unsigned int>(std::floor(
                              map_pixel_offset_.x / MapView::MAP_TILE_SIZE.x)),
@@ -52,6 +53,8 @@ class MapWindowController : public Controller {
     return sf::Vector2u({map_pixel_offset_.x % MapView::MAP_TILE_SIZE.x,
                          map_pixel_offset_.y % MapView::MAP_TILE_SIZE.y});
   }
+
+  void selfInit();
 
  public:
   MapWindowController(sf::Vector2u game_window_size,
@@ -67,7 +70,8 @@ class MapWindowController : public Controller {
         objects_view_(objects_view),
         path_view_(path_view),
         controlls_view_(controlls_view),
-        resources_view_(resources_view) {}
+        resources_view_(resources_view),
+        time_for_init_(false) {}
 
   void scrollGameView(const sf::Vector2i& translation, const Game& game);
 

@@ -9,6 +9,7 @@
  *
  */
 
+#include <MapUtils.h>
 #include <MapWindowController.h>
 #include <Session.h>
 
@@ -99,11 +100,49 @@ void MapWindowController::repositionCamera(const Game& game) {
   scrollGameView(translation, game);
 }
 
+void MapWindowController::selfInit() {
+  MapInfo map_info = generateLargeExampleMap();
+  std::vector<Player> players{
+      Player(false, Faction::CASTLE, map_info.starting_locations[0]),
+      Player(false, Faction::INFERNO, FieldCoords{45, 47})};
+  std::vector<std::shared_ptr<MapObject>> static_map_objects =
+      generateExampleStaticObjects();
+  std::vector<std::shared_ptr<MapObject>> pickable_map_objects =
+      generateExamplePickableObjects();
+  std::vector<std::shared_ptr<MapObject>> starting_objects(
+      static_map_objects.size() + pickable_map_objects.size());
+  std::merge(static_map_objects.begin(), static_map_objects.end(),
+             pickable_map_objects.begin(), pickable_map_objects.end(),
+             starting_objects.begin());
+  Session::getInstance()->newGame(map_info.map, players, Difficulty::EASY,
+                                  starting_objects);
+
+  map_view_->setMap(Session::getInstance()->game.getMap()->getFieldArray(),
+                    {0, 0}, MapView::MAP_TILE_SIZE);
+
+  hero_view_->setHeroes(Session::getInstance()->game.heroesInGame(), {0, 0},
+                        MapView::MAP_TILE_SIZE);
+  objects_view_->setObjects(Session::getInstance()->game.objectsInGame(),
+                            {0, 0}, MapView::MAP_TILE_SIZE);
+  path_view_->setPath(
+      Session::getInstance()->game.getCurrentPlayer()->getCurrentHero(), {0, 0},
+      MapView::MAP_TILE_SIZE);
+  changeMapContents(Session::getInstance()->game);
+  repositionCamera(Session::getInstance()->game);
+
+  controlls_view_->setControls();
+}
+
 void MapWindowController::update(sf::Event& event, SessionState session_state,
                                  Game& game) {
+  if (session_state == SessionState::LOAD_GAME) {
+    selfInit();
+  }
+
   if (session_state != SessionState::IN_GAME) {
     return;
   }
+
   if (event.type == sf::Event::KeyPressed) {
     sf::Vector2i translation;
     if (event.key.scancode == sf::Keyboard::Scan::Right) {
