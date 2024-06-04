@@ -16,7 +16,7 @@
 #include <stack>
 #include <string>
 #include <utility>
-
+#include <vector>
 
 using FieldCoords = std::pair<int, int>;
 using Path = std::stack<FieldCoords>;
