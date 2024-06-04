@@ -53,7 +53,7 @@ TEST(gameInitTests, playerInitTest) {
 TEST(gameInitTests, conflictingObjectsAtInit) {
   Config* conf = Config::getInstance();
   std::string path = getProjectPath();
-  conf->loadData(path + "/assets/ObjectsMetadata.json");
+  conf->loadObjectsData(path + "/assets/ObjectsMetadata.json");
   MapInfo map_info = generateGrassMap(MapSize::L, 1);
   std::vector<Player> players{
       Player(false, Faction::CASTLE, map_info.starting_locations[0])};
@@ -69,7 +69,7 @@ TEST(gameInitTests, conflictingObjectsAtInit) {
 TEST(gameModificationsTests, conflictingObjectsAtAdding) {
   Config* conf = Config::getInstance();
   std::string path = getProjectPath();
-  conf->loadData(path + "/assets/ObjectsMetadata.json");
+  conf->loadObjectsData(path + "/assets/ObjectsMetadata.json");
   MapInfo map_info = generateGrassMap(MapSize::L, 1);
   std::vector<Player> players{
       Player(false, Faction::CASTLE, map_info.starting_locations[0])};

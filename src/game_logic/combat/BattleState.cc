@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "Battleground.h"
-#include "common.h"
+#include "combat_common.h"
 
 namespace combat {
 
@@ -33,6 +33,9 @@ std::optional<HeroRole> BattleState::checkForWinner(
 
 UnitQueue BattleState::setupUnitMoveQueue(
     const std::vector<UnitIdentifier>& unit_ids, const UnitContainer& units) {
+  if (unit_ids.empty()) {
+    return {};
+  }
   auto is_unit_faster = [&](UnitIdentifier a, UnitIdentifier b) {
     return units.at(a).speed > units.at(b).speed;
   };
@@ -44,8 +47,23 @@ UnitQueue BattleState::setupUnitMoveQueue(
   return ret_val;
 }
 
+void BattleState::setupUnitMoveQueue(BattleState& state) {
+  auto is_unit_faster = [&](UnitIdentifier a, UnitIdentifier b) {
+    return state.hero_units_.at(a).speed > state.hero_units_.at(b).speed;
+  };
+  auto alive_unit_ids = state.battleground_.getAliveUnitsIds();
+  for (auto elem : alive_unit_ids) {
+    state.unit_move_queue_.emplace_back(elem);
+  }
+  std::sort(state.unit_move_queue_.begin(), state.unit_move_queue_.end(),
+            is_unit_faster);
+}
+
 void BattleState::removeFromMoveQueue(UnitQueue& queue, UnitIdentifier unit) {
   auto find_result = std::find(queue.begin(), queue.end(), unit);
+  if (find_result == queue.end()) {
+    return;
+  }
   queue.erase(find_result);
 }
 
@@ -121,14 +139,32 @@ BattleState BattleState::attackWithCurrentUnit(
   new_units[current_unit_id_] = attacking_unit;
   new_units[defender_id] = defending_unit;
 
-  return BattleState{new_units,                //
-                     new_queue,                //
-                     new_battleground,         //
-                     this->current_unit_id_,   //
-                     this->currently_moving_,  //
-                     this->round_phase_,       //
-                     checkForWinner(new_battleground)}
-      .passRound();
+  auto new_state = BattleState{new_units,                //
+                               new_queue,                //
+                               new_battleground,         //
+                               this->current_unit_id_,   //
+                               this->currently_moving_,  //
+                               this->round_phase_,       //
+                               checkForWinner(new_battleground)};
+  passRound(new_state);
+  return std::move(new_state);
+}
+
+void BattleState::passRound(BattleState& state) {
+  if (state.round_phase_ == RoundPhase::MOVING and
+      (state.hero_units_.at(state.current_unit_id_).is_ranged or
+       state.battleground_.getAdjacentEnemyUnitsCoords(state.current_unit_id_)
+               .size() > 0)) {
+    state.round_phase_ = RoundPhase::ATTACKING;
+    return;
+  }
+  if (state.unit_move_queue_.empty()) {
+    setupUnitMoveQueue(state);
+  }
+  state.current_unit_id_ = state.unit_move_queue_.front();
+  state.unit_move_queue_.pop_front();
+  state.round_phase_ = RoundPhase::MOVING;
+  state.currently_moving_ = state.current_unit_id_.first;
 }
 
 BattleState BattleState::passRound() const {

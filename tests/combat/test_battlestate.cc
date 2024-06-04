@@ -1,9 +1,10 @@
 #include <BattleState.h>
 #include <gtest/gtest.h>
 
-#include "UnitBlock.hpp"
 #include "Battleground.h"
-#include "common.h"
+#include "UnitBlock.hpp"
+#include "combat_common.h"
+
 
 using namespace combat;
 

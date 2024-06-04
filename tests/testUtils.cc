@@ -21,7 +21,7 @@
 
 Game createBasicGame() {
   std::string path = getProjectPath();
-  Config::getInstance()->loadData(path + "/assets/ObjectsMetadata.json");
+  Config::getInstance()->loadObjectsData(path + "/assets/ObjectsMetadata.json");
   MapInfo map_info = generateGrassMap(MapSize::L, 1);
   std::vector<Player> players{
       Player(false, Faction::CASTLE, FieldCoords{1, 1})};
@@ -30,7 +30,7 @@ Game createBasicGame() {
 
 Game createExampleGame() {
   std::string path = getProjectPath();
-  Config::getInstance()->loadData(path + "/assets/ObjectsMetadata.json");
+  Config::getInstance()->loadObjectsData(path + "/assets/ObjectsMetadata.json");
   MapInfo map_info = generateLargeExampleMap();
   std::vector<Player> players{
       Player(false, Faction::CASTLE, map_info.starting_locations[0])};

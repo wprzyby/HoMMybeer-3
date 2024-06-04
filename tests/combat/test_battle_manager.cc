@@ -1,5 +1,5 @@
 #include <BattleManager.h>
-#include <common.h>
+#include <combat_common.h>
 #include <gtest/gtest.h>
 
 #include "Hero.h"

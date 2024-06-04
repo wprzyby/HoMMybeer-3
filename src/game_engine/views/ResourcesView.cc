@@ -31,14 +31,14 @@ void ResourcesView::setResources(const Player* player, int day) {
     sf::Sprite sprite(ResourcesView::icons_texture_);
     std::vector<int> texture_size_inp =
         Config::getInstance()
-            ->getMetadata()
+            ->getObjectsMetadata()
             .at("resources")
             .at("Resources")
             .at("texture_size")
             .at(Config::enumToStringTranslate(static_cast<ResourceType>(i)));
     std::vector<int> texture_origin_inp =
         Config::getInstance()
-            ->getMetadata()
+            ->getObjectsMetadata()
             .at("resources")
             .at("Resources")
             .at("starts_at")

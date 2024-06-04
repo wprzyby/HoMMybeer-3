@@ -6,6 +6,7 @@
  *
  */
 
+#include <BattleWindowController.h>
 #include <BorderView.h>
 #include <Config.h>
 #include <ControlsView.h>
@@ -32,6 +33,8 @@
 #include <SFML/Window/Event.hpp>
 #include <cmath>
 
+#include "BattlegroundView.h"
+
 const static sf::Vector2u MAIN_WINDOW_SIZE = sf::Vector2u{800, 600};
 const static sf::Vector2u GAME_WINDOW_SIZE = sf::Vector2u{512, 512};
 const static sf::Vector2u GAME_WINDOW_OFFSET = sf::Vector2u{10, 10};
@@ -42,8 +45,11 @@ int main() {
   Config* conf = Config::getInstance();
 
   std::string path = getProjectPath();
-  conf->loadData(path + "/assets/ObjectsMetadata.json");
   conf->loadTownData(path + "/assets/TownsMetadata.json");
+  conf->loadObjectsData(path + "/assets/ObjectsMetadata.json");
+  conf->loadBattleData(path + "/assets/BattlegroundMetadata.json");
+  conf->loadUnitConfig(path + "/assets/UnitConfig.json");
+
   MapWindowController::loadFont(path + "/assets/OldLondon.ttf");
   TownWindowController::loadFont(path + "/assets/Augusta.ttf");
   MainView::loadtileset(path + "/assets/MainPage.png");
@@ -60,12 +66,13 @@ int main() {
                             {"Mines", path + "/assets/Mines.png"}});
   MapWindowController map_controller = MapWindowController(
       GAME_WINDOW_SIZE, GAME_WINDOW_OFFSET, MAIN_WINDOW_SIZE);
-
+  BattlegroundView battleground_view;
   TownWindowController town_controller =
       TownWindowController(MAIN_WINDOW_SIZE, UnitConfig());
-
+BattleWindowController battle_window_controller(
+               GAME_WINDOW_SIZE, &battleground_view);
   EventHandler event_handler(
-      {&map_controller, &main_controller, &town_controller});
+      {&map_controller, &main_controller, &battle_window_controller, &town_controller});
   // create the window
   sf::RenderWindow window(sf::VideoMode(MAIN_WINDOW_SIZE.x, MAIN_WINDOW_SIZE.y),
                           "HoMMyBeer 3");
@@ -111,6 +118,7 @@ int main() {
         break;
 
       case SessionState::IN_BATTLE:
+        window.draw(battleground_view);
         break;
 
       case SessionState::IN_CASTLE:
@@ -127,6 +135,8 @@ int main() {
       case SessionState::LOAD_CASTLE:
         break;
       case SessionState::REFRESH:
+        break;
+      case SessionState::LOAD_BATTLE:
         break;
     }
 

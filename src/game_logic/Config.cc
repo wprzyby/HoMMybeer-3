@@ -14,7 +14,10 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <string>
+
+#include "UnitBlockGenerator.hpp"
 
 using namespace std;
 using json = nlohmann::json;
@@ -78,6 +81,11 @@ const std::map<Difficulty, Incomes> Config::starting_incomes_ = {
       {ResourceType::CRYSTAL, 1},
       {ResourceType::MERCURY, 1}}}};
 
+const std::map<Faction, UnitOrigin> Config::faction_to_unit_origin_ = {
+    {Faction::CASTLE, UnitOrigin::CASTLE},
+    {Faction::FORTRESS, UnitOrigin::FORTRESS},
+    {Faction::INFERNO, UnitOrigin::INFERNO}};
+
 // TODO: edit the default values (propably with tests)
 
 const std::map<ResourceType, std::string> Config::resource_type_translator_ = {
@@ -99,10 +107,17 @@ const std::map<Faction, std::string> Config::faction_type_translator_ = {
     {Faction::FORTRESS, "fortress"},
 };
 
+const std::map<TerrainType, std::string> Config::terrain_type_translator_ = {
+    {TerrainType::DIRT, "dirt"},
+    {TerrainType::GRASS, "grass"},
+    {TerrainType::SNOW, "snow"},
+    {TerrainType::STONE, "stone"},
+};
+
 Config::Config() {
   time_t t = time(0);
   cout << "Config created at: " << asctime(localtime(&t));
-  metadata_ = nullptr;
+  objects_metadata_ = nullptr;
 }
 
 Config::~Config() {
@@ -118,10 +133,17 @@ Config* Config::getInstance() {
   return config_;
 }
 
-void Config::loadData(string metadata_path) {
+void Config::loadObjectsData(string objects_metadata_path) {
   ifstream ifs;
-  ifs.open(metadata_path);
-  metadata_ = json::parse(ifs);
+  ifs.open(objects_metadata_path);
+  objects_metadata_ = json::parse(ifs);
+  ifs.close();
+}
+
+void Config::loadBattleData(string battle_metadata_path) {
+  ifstream ifs;
+  ifs.open(battle_metadata_path);
+  battle_metadata_ = json::parse(ifs);
   ifs.close();
 }
 
@@ -130,4 +152,25 @@ void Config::loadTownData(string metadata_path) {
   ifs.open(metadata_path);
   town_metadata_ = json::parse(ifs);
   ifs.close();
+}
+void Config::loadUnitConfig(std::string unit_config_path) {
+  ifstream ifs;
+  ifs.open(unit_config_path);
+  unit_config_.parseFromJson(ifs);
+  ifs.close();
+}
+
+std::vector<UnitBlock> Config::getStartingUnits(Faction faction) {
+  UnitBlockGenerator generator(unit_config_);
+  std::vector<UnitBlock> units;
+  for (auto i : std::views::iota(0U, STARTING_UNITS_MAX_LEVEL)) {
+    auto unit = generator.getUnitBlock(faction_to_unit_origin_.at(faction),
+                                       i + 1, STARTING_UNIT_COUNTS[i]);
+    if (not unit.has_value()) {
+      throw std::runtime_error(
+          "Starting unit config invalid - failed to generate units");
+    }
+    units.push_back(unit.value());
+  }
+  return units;
 }

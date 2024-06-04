@@ -14,7 +14,7 @@
 #include <utility>
 #include <vector>
 
-#include "common.h"
+#include "combat_common.h"
 
 /**
  * using the Hexagonal Efficient Coordinate System coordinate system, described

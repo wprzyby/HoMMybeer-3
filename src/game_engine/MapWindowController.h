@@ -56,6 +56,8 @@ class MapWindowController : public Controller, public sf::Drawable {
     return sf::Vector2u({map_pixel_offset_.x % MapView::MAP_TILE_SIZE.x,
                          map_pixel_offset_.y % MapView::MAP_TILE_SIZE.y});
   }
+  std::optional<std::pair<int, int>> findHeroClicked(FieldCoords field_clicked,
+                                                     const Game& game);
 
   void selfInit();
 

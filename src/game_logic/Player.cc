@@ -18,7 +18,6 @@
 #include <string>
 #include <utility>
 
-
 using namespace std;
 
 Player::Player(bool is_ai, Faction faction, FieldCoords starting_location,
@@ -28,19 +27,32 @@ Player::Player(bool is_ai, Faction faction, FieldCoords starting_location,
       selected_hero_idx_(0),
       inventory_(std::move(starting_inventory)),
       income_(std::move(starting_income)) {
-  players_heroes_ = vector<Hero>{
-      Hero(Config::kDefaultHeroNames.at(faction), starting_location, faction_)};
+  addHero(Config::kDefaultHeroNames.at(faction), starting_location, faction_);
 }
 
 Player::~Player() {}
 
 void Player::addHero(std::string name, FieldCoords spawn_field_coords,
                      Faction faction, int starting_energy) {
-  players_heroes_.emplace_back(name, spawn_field_coords, faction,
-                               starting_energy);
+  Hero new_hero(name, spawn_field_coords, faction, starting_energy);
+  new_hero.setUnits(Config::getInstance()->getStartingUnits(faction_));
+  players_heroes_.push_back(new_hero);
+}
+
+void Player::addHero(std::string name, FieldCoords spawn_field_coords, Faction faction) {
+  Hero new_hero(name, spawn_field_coords, faction);
+  new_hero.setUnits(Config::getInstance()->getStartingUnits(faction_));
+  players_heroes_.push_back(new_hero);
 }
 
 const Hero* Player::getHero(int idx) const {
+  if (idx >= players_heroes_.size()) {
+    return nullptr;
+  }
+  return &players_heroes_[idx];
+}
+
+Hero* Player::getHeroToModify(int idx) {
   if (idx >= players_heroes_.size()) {
     return nullptr;
   }
@@ -82,3 +94,28 @@ void Player::weeklyIncome() {
     updateResourceQuantity(resource_income.first, resource_income.second);
   }
 }
+
+void Player::setCurrentHeroUnits(const std::vector<UnitBlock>& units) {
+  setHeroUnits(selected_hero_idx_, units);
+}
+void Player::setHeroUnits(int hero_idx, const std::vector<UnitBlock>& units) {
+  if (hero_idx >= players_heroes_.size()) {
+    return;
+  }
+  players_heroes_[hero_idx].setUnits(units);
+  if (players_heroes_[hero_idx].getUnits().size() != 0) {
+    return;
+  }
+  if (hero_idx != selected_hero_idx_) {
+    players_heroes_.erase(players_heroes_.begin() + hero_idx);
+    return;
+  }
+  if (players_heroes_.size() == 1) {
+    players_heroes_.pop_back();
+    return;
+  }
+  auto index = selected_hero_idx_;
+  nextHero();
+  players_heroes_.erase(players_heroes_.begin() + index);
+}
+bool Player::isDead() { return players_heroes_.size() == 0; }

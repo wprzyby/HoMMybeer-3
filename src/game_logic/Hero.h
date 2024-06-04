@@ -46,7 +46,7 @@ class Hero {
         hero_coords_(std::move(spawn_field_coords)),
         energy_(starting_energy),
         max_energy_(starting_energy),
-        faction_(faction){};
+        faction_(faction) {}
   std::string getHeroName() const { return name_; };
   FieldCoords getHeroCoords() const { return hero_coords_; };
   void setMovePath(Path new_path, MoveCosts move_costs) {
@@ -61,6 +61,7 @@ class Hero {
     return units_;
   }
   void addUnit(const UnitBlock& unit);
+  void setUnits(const std::vector<UnitBlock>& new_units) { units_ = new_units; }
   std::pair<Path, int> getPathInParts() const;
   Faction getFaction() const { return faction_; }
 };

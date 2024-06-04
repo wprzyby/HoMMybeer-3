@@ -10,6 +10,11 @@ add_library(game_engine STATIC
                     views/PathView.cc
                     MainWindowController.cc
                     views/TownView.cc
-                    TownWindowController.cc) 
+                    TownWindowController.cc
+                    BattleWindowController.cc
+                    views/BattlegroundView.cc
+                    views/HexGridView.cc
+                    views/BattleUnitsView.cc) 
 target_link_libraries(game_engine PUBLIC game_logic sfml-graphics)
 target_include_directories(game_engine PUBLIC . views)
+                    

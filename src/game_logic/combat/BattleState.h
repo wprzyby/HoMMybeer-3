@@ -14,8 +14,7 @@
 #include <random>
 
 #include "Battleground.h"
-#include "common.h"
-
+#include "combat_common.h"
 
 namespace combat {
 
@@ -26,13 +25,13 @@ class BattleState {
     ATTACKING,
   };
 
-  UnitContainer hero_units_;
-  UnitQueue unit_move_queue_;
-  Battleground battleground_;
-  UnitIdentifier current_unit_id_;
-  HeroRole currently_moving_;
-  RoundPhase round_phase_;
-  std::optional<HeroRole> winner_;
+  UnitContainer hero_units_{};
+  UnitQueue unit_move_queue_{};
+  Battleground battleground_{};
+  UnitIdentifier current_unit_id_{HeroRole::ATTACKER, 0U};
+  HeroRole currently_moving_{HeroRole::ATTACKER};
+  RoundPhase round_phase_{RoundPhase::MOVING};
+  std::optional<HeroRole> winner_{std::nullopt};
 
  private:
   static std::optional<HeroRole> checkForWinner(
@@ -43,8 +42,11 @@ class BattleState {
   [[nodiscard]] BattleState attackWithCurrentUnit(
       HexFieldCoords defender_location) const;
   [[nodiscard]] BattleState passRound() const;
+  static void passRound(BattleState& state);
+  static void setupUnitMoveQueue(BattleState& state);
 
  public:
+  BattleState() = default;
   BattleState(UnitContainer hero_units, UnitQueue unit_move_queue,
               Battleground battleground, UnitIdentifier current_unit_id,
               HeroRole currently_moving, RoundPhase round_phase,
@@ -56,6 +58,7 @@ class BattleState {
         currently_moving_(currently_moving),
         round_phase_(round_phase),
         winner_(winner) {}
+
   [[nodiscard]] static UnitQueue setupUnitMoveQueue(
       const std::vector<UnitIdentifier>& unit_ids, const UnitContainer& units);
   [[nodiscard]] std::set<HexFieldCoords> getPossibleMoves() const;

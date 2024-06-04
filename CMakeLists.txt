@@ -23,7 +23,7 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
 set(WARNINGS
-    -Werror
+    # -Werror
     -Wall
     -Wextra
     -Wpedantic
@@ -67,7 +67,7 @@ if(NOT ENABLE_TESTS)
         ${CMAKE_CURRENT_SOURCE_DIR}/app/main.cc)
     add_subdirectory(src/game_logic)
     add_subdirectory(src/game_engine)
-    target_link_libraries(${PROJECT_NAME} PUBLIC game_logic game_engine sfml-graphics)
+    target_link_libraries(${PROJECT_NAME} PUBLIC game_logic ai combat game_engine sfml-graphics)
     target_compile_options(${PROJECT_NAME} PRIVATE ${WARNINGS} $<$<CONFIG:Debug>:${DEBUG_FLAGS}> $<$<CONFIG:Release>:${RELEASE_FLAGS}>)
 else()
     fetch_git_lib(

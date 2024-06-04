@@ -1,7 +1,7 @@
 #include <Battleground.h>
 #include <gtest/gtest.h>
 
-#include "common.h"
+#include "combat_common.h"
 
 using namespace combat;
 

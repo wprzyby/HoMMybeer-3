@@ -6,11 +6,12 @@
  */
 #include "BattleManager.h"
 
+#include <stdexcept>
 #include <vector>
 
 #include "BattleState.h"
 #include "Battleground.h"
-#include "common.h"
+#include "combat_common.h"
 
 namespace combat {
 
@@ -48,19 +49,25 @@ BattleState BattleManager::setupInitialState(
   units[HeroRole::DEFENDER] = defender.getUnits();
   UnitContainer unit_container(units);
   Battleground battleground = Battleground(battleground_size);
+  if (attacker.getUnits().size() == 0) {
+    throw std::runtime_error("Attacker has no units");
+  }
   placeUnitsOnBattleground(battleground, unit_container);
   UnitQueue initial_unit_queue = BattleState::setupUnitMoveQueue(
       getAllUnitIds(unit_container), unit_container);
   auto initial_unit = initial_unit_queue.front();
   initial_unit_queue.pop_front();
-
+  std::optional<HeroRole> winner{std::nullopt};
+  if (defender.getUnits().size() == 0) {
+    winner = HeroRole::ATTACKER;
+  }
   return BattleState{unit_container,                   //
                      initial_unit_queue,               //
                      battleground,                     //
                      initial_unit,                     //
                      initial_unit.first,               //
                      BattleState::RoundPhase::MOVING,  //
-                     {}};
+                     winner};
 }
 
 std::set<HexFieldCoords> BattleManager::getPossibleMoves() const {
@@ -70,7 +77,5 @@ std::set<HexFieldCoords> BattleManager::getPossibleMoves() const {
 void BattleManager::makeMove(std::optional<HexFieldCoords> move_target) {
   state_ = state_.makeMove(move_target);
 }
-
-void BattleManager::passMove() { state_ = state_.makeMove(std::nullopt); }
 
 }  // namespace combat

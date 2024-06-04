@@ -27,6 +27,7 @@ enum class SessionState {
   REFRESH,
   START_MENU,
   LOAD_CASTLE,
+  LOAD_BATTLE,
   IN_BATTLE,
   IN_CASTLE  // TODO: fill if necessary
 };
@@ -47,6 +48,8 @@ class Session {
   static Session* session_;
   inline static SessionState session_state_;
   inline static Faction current_town_;
+  std::pair<int, int> attacked_hero_info_;
+  TerrainType battle_terrain_type_;
 
  public:
   Session(Session& other) = delete;
@@ -60,6 +63,12 @@ class Session {
   };
   static void setTown(Faction faction) { current_town_ = faction; }
   static Faction getTown() { return current_town_; }
+  std::pair<int, int> getAttackedHeroInfo() const { return attacked_hero_info_; }
+  TerrainType getBattleTerrainType() const {return battle_terrain_type_;}
+  void setAttackedHeroInfo(std::pair<int, int> hero_info) {
+    attacked_hero_info_ = hero_info;
+  };
+  void setBattleTerrainType(TerrainType type) { battle_terrain_type_ = type; };
   void newGame(
       const Map& game_map, std::vector<Player> players,
       Difficulty difficulty = Difficulty::NORMAL,

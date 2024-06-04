@@ -1,0 +1,99 @@
+{
+    "battleground_backgrounds": {
+        "dirt": "assets/battleground_backgrounds/BattleBackgroundDirt.png",
+        "grass": "assets/battleground_backgrounds/BattleBackgroundGrass.png",
+        "snow": "assets/battleground_backgrounds/BattleBackgroundSnow.png",
+        "stone": "assets/battleground_backgrounds/BattleBackgroundStone.png"
+    },
+    "background_texture_size": [
+        800,
+        512
+    ],
+    "hex_tile_texture": {
+        "file": "assets/HexTiles.png",
+        "outer_radius": 25.0,
+        "origin": [
+            32.0,
+            32.0
+        ],
+        "horizontal_distance_between_types": 63.0,
+        "vertices": [
+            [
+                31.0,
+                0.0
+            ],
+            [
+                60.0,
+                16.0
+            ],
+            [
+                60.0,
+                48.0
+            ],
+            [
+                31.0,
+                64.0
+            ],
+            [
+                4.0,
+                48.0
+            ],
+            [
+                4.0,
+                17.0
+            ]
+        ]
+    },
+    "battle_view_size": [
+        800,
+        512
+    ],
+    "control_bar_height": 50,
+    "hex_grid_origin_offset": [
+        60,
+        100
+    ],
+    "units_texture_file": "assets/Units.png",
+    "single_unit_texture_size": [
+        100,
+        100
+    ],
+    "units_texture_origins": {
+        "Pikeman": [
+            0,
+            0
+        ],
+        "Archer": [
+            100,
+            0
+        ],
+        "Griffin": [
+            200,
+            0
+        ],
+        "Imp": [
+            300,
+            0
+        ],
+        "Gog": [
+            400,
+            0
+        ],
+        "Hell Hound": [
+            500,
+            0
+        ],
+        "Gnoll": [
+            0,
+            100
+        ],
+        "Lizardman": [
+            100,
+            100
+        ],
+        "Serpent Fly": [
+            200,
+            100
+        ]
+    }
+}

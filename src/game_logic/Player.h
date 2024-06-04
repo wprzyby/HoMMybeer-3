@@ -42,12 +42,14 @@ class Player {
   ~Player();
   [[nodiscard]] const Hero* getHero(
       int idx) const;  // TODO: overload with ex name
+  Hero* getHeroToModify(int idx);
   Hero* getCurrentHero() { return &players_heroes_[selected_hero_idx_]; }
   [[nodiscard]] const Hero* getCurrentHero() const {
     return &players_heroes_[selected_hero_idx_];
   }
   void addHero(std::string name, FieldCoords spawn_field_coords,
-               Faction faction, int starting_energy = 100);
+               Faction faction, int starting_energy);
+  void addHero(std::string name, FieldCoords spawn_field_coords, Faction faction);
   void addHero(const Hero& hero) { players_heroes_.push_back(hero); };
   void weeklyIncome();
   bool updateResourceQuantity(ResourceType resource_type, int delta);
@@ -62,6 +64,9 @@ class Player {
   }
   void nextHero();
   Faction getFaction() const { return faction_; }
+  void setCurrentHeroUnits(const std::vector<UnitBlock>& units);
+  void setHeroUnits(int hero_idx, const std::vector<UnitBlock>& units);
+  bool isDead();
 };
 
 #endif

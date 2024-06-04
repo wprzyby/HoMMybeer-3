@@ -18,6 +18,7 @@
 
 #include "Hero.h"
 #include "MapView.h"
+#include "UnitBlockGenerator.hpp"
 
 void MapWindowController::scrollGameView(const sf::Vector2i& translation,
                                          const Game& game) {
@@ -101,10 +102,13 @@ void MapWindowController::repositionCamera(const Game& game) {
 }
 
 void MapWindowController::selfInit() {
+  auto unit_config = Config::getInstance()->getUnitConfig();
+  UnitBlockGenerator unit_generator(unit_config);
+
   MapInfo map_info = generateLargeExampleMap();
   std::vector<Player> players{
       Player(false, Faction::CASTLE, map_info.starting_locations[0]),
-      Player(false, Faction::INFERNO, FieldCoords{45, 47})};
+      Player(false, Faction::INFERNO, FieldCoords{5, 7})};
   std::vector<std::shared_ptr<MapObject>> static_map_objects =
       generateExampleStaticObjects();
   std::vector<std::shared_ptr<MapObject>> pickable_map_objects =
@@ -194,7 +198,21 @@ void MapWindowController::update(sf::Event& event, SessionState session_state,
                        static_cast<double>(MapView::MAP_TILE_SIZE.y)));
         return retval;
       };
-      game.executeAction(clicked_to_field_coords(where_clicked));
+      auto field_coords = clicked_to_field_coords(where_clicked);
+      auto hero_clicked = findHeroClicked(field_coords, game);
+      if (hero_clicked.has_value()) {
+        if (game.getCurrentPlayer()->getCurrentHero()->getUnits().size() > 0 and
+            Field::isAdjacent(
+                field_coords,
+                game.getCurrentPlayer()->getCurrentHero()->getHeroCoords())) {
+          Session::getInstance()->setSessionState(SessionState::LOAD_BATTLE);
+          Session::getInstance()->setAttackedHeroInfo(hero_clicked.value());
+          Session::getInstance()->setBattleTerrainType(
+              game.getMap()->getField(field_coords).value()->getTerrainType());
+        }
+        return;
+      }
+      game.executeAction(field_coords);
       changeMapContents(game);
     }
   }
@@ -209,4 +227,17 @@ void MapWindowController::draw(sf::RenderTarget& target,
   target.draw(controlls_view_);
   target.draw(resources_view_);
   target.draw(border_view_);
+}
+std::optional<std::pair<int, int>> MapWindowController::findHeroClicked(
+    FieldCoords field_clicked, const Game& game) {
+  for (auto player_idx : std::views::iota(0, game.numPlayers())) {
+    for (auto hero_idx :
+         std::views::iota(0, game.getPlayer(player_idx)->numHeroes())) {
+      if (game.getPlayer(player_idx)->getHero(hero_idx)->getHeroCoords() ==
+          field_clicked) {
+        return std::pair{player_idx, hero_idx};
+      }
+    }
+  }
+  return {};
 }

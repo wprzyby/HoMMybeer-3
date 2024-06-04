@@ -10,7 +10,7 @@
 
 #include "BattleState.h"
 #include "Battleground.h"
-#include "common.h"
+#include "combat_common.h"
 
 namespace combat {
 class BattleManager {
@@ -22,9 +22,15 @@ class BattleManager {
                                        BattlegroundSize battleground_size);
 
  public:
+  BattleManager() = default;
   BattleManager(const Hero& attacker, const Hero& defender,
                 BattlegroundSize battleground_size = Battleground::DEFAULT_SIZE)
       : state_(setupInitialState(attacker, defender, battleground_size)) {}
+  void setupBattle(
+      const Hero& attacker, const Hero& defender,
+      BattlegroundSize battleground_size = Battleground::DEFAULT_SIZE) {
+    state_ = setupInitialState(attacker, defender, battleground_size);
+  }
   BattleManager(BattleManager&) = delete;
   BattleManager(BattleManager&&) = delete;
   BattleManager operator=(BattleManager&&) = delete;

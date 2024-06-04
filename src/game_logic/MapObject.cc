@@ -30,7 +30,7 @@ GeologicalObject::GeologicalObject(FieldCoords origin, Game* parent,
     : MapObject(origin, parent, {}),
       struct_type_(struct_type),
       variant_(variant) {
-  json metadata = Config::getInstance()->getMetadata();
+  json metadata = Config::getInstance()->getObjectsMetadata();
   metadata = metadata["geological"];
   metadata = metadata[Config::enumToStringTranslate(struct_type)]
                      ["spaces_occupied"][to_string(variant_)];
@@ -94,9 +94,10 @@ ResourceGenerator::ResourceGenerator(FieldCoords origin, Game* parent,
       weekly_income_(weekly_income),
       owner_id_(-1),
       resource_type_(resource_type) {
-  json metadata = Config::getInstance()->getMetadata();
-  metadata = metadata["resources"]["Mines"]["spaces_occupied"]
-                     [Config::enumToStringTranslate(resource_type)];
+  json metadata = Config::getInstance()->getObjectsMetadata();
+  metadata =
+      metadata["resources"]["Mines"]["spaces_occupied"]
+              [Config::getInstance()->enumToStringTranslate(resource_type)];
   for (auto coord : metadata) {
     space_taken_.emplace_back(coord[0], coord[1]);
   }
@@ -117,7 +118,7 @@ std::optional<bool> ResourceGenerator::objectAction() {
 
 City::City(FieldCoords origin, Game* parent, Faction type, int owner_id)
     : MapObject(origin, parent, {}), owner_id_(owner_id), type_(type) {
-  json metadata = Config::getInstance()->getMetadata();
+  json metadata = Config::getInstance()->getObjectsMetadata();
   metadata = metadata["cities"]["Cities"]["spaces_occupied"]
                      [Config::getInstance()->enumToStringTranslate(type)];
   for (auto coord : metadata) {

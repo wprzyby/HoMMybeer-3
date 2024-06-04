@@ -4,7 +4,7 @@
 #include <queue>
 #include <set>
 
-#include "common.h"
+#include "combat_common.h"
 
 namespace combat {
 

@@ -69,13 +69,13 @@ void ObjectsView::setObjects(std::vector<const MapObject*> objects,
     std::map<std::string, std::string> specs = object->getSpecs();
     sf::Sprite sprite(ObjectsView::textures_.at(specs.at("SubType")));
     std::vector<int> texture_size_inp = Config::getInstance()
-                                            ->getMetadata()
+                                            ->getObjectsMetadata()
                                             .at(specs.at("ObjectType"))
                                             .at(specs.at("SubType"))
                                             .at("texture_size")
                                             .at(specs.at("Variant"));
     std::vector<int> texture_origin_inp = Config::getInstance()
-                                              ->getMetadata()
+                                              ->getObjectsMetadata()
                                               .at(specs.at("ObjectType"))
                                               .at(specs.at("SubType"))
                                               .at("starts_at")
@@ -85,7 +85,7 @@ void ObjectsView::setObjects(std::vector<const MapObject*> objects,
     if ((specs.at("SubType") == "Mines" || specs.at("SubType") == "Cities") &&
         object->getOwner() != -1) {
       int texture_row_height = Config::getInstance()
-                                   ->getMetadata()
+                                   ->getObjectsMetadata()
                                    .at(specs.at("ObjectType"))
                                    .at(specs.at("SubType"))
                                    .at("row_height");

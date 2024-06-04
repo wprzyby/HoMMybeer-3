@@ -1,5 +1,5 @@
 /**
- * @file common.h
+ * @file combat_common.h
  * @author Wojciech Przybylski
  * @brief Definitions shared by multiple files within the combat library
  * @copyright Copyright (c) 2024
@@ -44,6 +44,12 @@ class UnitContainer {
       data_.insert({role, {}});
     }
     data_.at(role).push_back(unit);
+  }
+  const std::map<HeroRole, std::vector<UnitBlock>>& get_underlying() const {
+    return data_;
+  }
+  const std::vector<UnitBlock>& at_underlying(HeroRole role) const {
+    return data_.at(role);
   }
 };
 

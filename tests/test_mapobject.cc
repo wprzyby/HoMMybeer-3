@@ -18,7 +18,7 @@
 TEST(mapObjectTests, mountainObjectInitializationTest) {
   Config* conf = Config::getInstance();
   std::string path = getProjectPath();
-  conf->loadData(path + "/assets/ObjectsMetadata.json");
+  conf->loadObjectsData(path + "/assets/ObjectsMetadata.json");
   GeologicalObject mountain = GeologicalObject(
       FieldCoords{0, 0}, nullptr, GeologicalStructureType::MOUNTAIN, 0);
 
