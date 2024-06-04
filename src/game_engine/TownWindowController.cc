@@ -51,7 +51,21 @@ void TownWindowController::update(sf::Event& event, SessionState session_state,
         }
         if (town_view_.buyUnitClicked(sf::Vector2f(where_clicked))
                 .has_value()) {
-          return;
+          if (game.getCurrentPlayer()->updateResourceQuantity(
+                  ResourceType::GOLD,
+                  -UNIT_COSTS.at(
+                      town_view_.buyUnitClicked(sf::Vector2f(where_clicked))
+                          .value()))) {
+            game.getCurrentPlayer()->getCurrentHero()->addUnit(
+                unit_generator_
+                    .getUnitBlock(
+                        Config::factionToUnitOriginTranslate(
+                            Session::getTown()),
+                        town_view_.buyUnitClicked(sf::Vector2f(where_clicked))
+                            .value(),
+                        1)
+                    .value());
+          }
         }
       }
     }

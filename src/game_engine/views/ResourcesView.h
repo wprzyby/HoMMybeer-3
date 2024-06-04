@@ -27,6 +27,7 @@ class ResourcesView : public sf::Drawable, public sf::Transformable {
   inline static sf::Texture icons_texture_;
   std::vector<sf::Sprite> icons_;
   std::vector<sf::Text> amounts_;
+  std::vector<sf::Text> units_;
   sf::Text day_;
   sf::Vector2f window_size_;
   sf::Vector2f game_window_size_;
@@ -42,6 +43,7 @@ class ResourcesView : public sf::Drawable, public sf::Transformable {
         font_(font) {}
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
   void setResources(const Player* player, int day);
+  void setUnitAmounts(const Hero* hero);
   static bool loadtileset(std::string path) {
     return icons_texture_.loadFromFile(path);
   }

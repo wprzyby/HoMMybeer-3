@@ -13,9 +13,13 @@
 #include <ResourcesView.h>
 
 #include <SFML/Graphics/Text.hpp>
+#include <algorithm>
 #include <format>
+#include <map>
+#include <vector>
 
 #include "Player.h"
+#include "UnitBlock.hpp"
 
 void ResourcesView::setResources(const Player* player, int day) {
   icons_.clear();
@@ -71,6 +75,36 @@ void ResourcesView::setResources(const Player* player, int day) {
   day_.setCharacterSize(25);
 }
 
+void ResourcesView::setUnitAmounts(const Hero* hero) {
+  units_.clear();
+  sf::Text text{"Unit counts: ", font_};
+  text.setCharacterSize(25);
+  text.setPosition(game_window_offset_.x,
+                   (1.4 * game_window_offset_.y) + game_window_size_.y + 30);
+  units_.emplace_back(text);
+  for (int i = 0; i < 3; ++i) {
+    std::map<int, int> count_map = {{1, 0}, {2, 0}, {3, 0}};
+    Faction curr_faction = static_cast<Faction>(i);
+    UnitOrigin curr_org = Config::factionToUnitOriginTranslate(curr_faction);
+    auto unit_family = hero->getUnits();
+    for (auto block : unit_family) {
+      if (block.type == curr_org) {
+        count_map.at(block.level) = block.unit_count;
+      }
+    }
+    sf::Text text{
+        std::format("{} |{}|{}|{}|",
+                    Config::enumToStringTranslate(curr_faction),
+                    count_map.at(1), count_map.at(2), count_map.at(3)),
+        font_};
+    text.setCharacterSize(25);
+    text.setPosition(game_window_offset_.x + 6 * MapView::MAP_TILE_SIZE.x +
+                         (5 * MapView::MAP_TILE_SIZE.x * i),
+                     (1.4 * game_window_offset_.y) + game_window_size_.y + 30);
+    units_.emplace_back(text);
+  }
+}
+
 void ResourcesView::draw(sf::RenderTarget& target,
                          sf::RenderStates states) const {
   target.draw(background_, states);
@@ -78,6 +112,9 @@ void ResourcesView::draw(sf::RenderTarget& target,
     target.draw(icon);
   }
   for (const auto& text : amounts_) {
+    target.draw(text);
+  }
+  for (const auto& text : units_) {
     target.draw(text);
   }
   target.draw(day_);

@@ -11,6 +11,8 @@
 #include <memory>
 #include <random>
 
+#include "Hero.h"
+
 using FieldArray_t = std::vector<std::vector<Field>>;
 
 MapInfo generateGrassMap(MapSize map_size, int num_of_players) {
@@ -42,7 +44,8 @@ MapInfo generateGrassMap(MapSize map_size, int num_of_players) {
 MapInfo generateLargeExampleMap() {
   int width = static_cast<int>(MapSize::L);
 
-  std::vector<FieldCoords> starting_locations = {FieldCoords{7, 3}};
+  std::vector<FieldCoords> starting_locations = {
+      FieldCoords{7, 3}, FieldCoords{44, 47}, FieldCoords{38, 13}};
   // defining objects
 
   // defining field types
@@ -196,6 +199,19 @@ std::vector<std::shared_ptr<MapObject>> generateExamplePickableObjects() {
                                          ResourceType::GOLD, 1000),
       std::make_shared<PickableResource>(FieldCoords{19, 25}, nullptr,
                                          ResourceType::WOOD, 5),
-  };
+      std::make_shared<PickableResource>(FieldCoords{28, 19}, nullptr,
+                                         ResourceType::GEMS, 5),
+      std::make_shared<PickableResource>(FieldCoords{13, -1}, nullptr,
+                                         ResourceType::MERCURY, 5),
+      std::make_shared<PickableResource>(FieldCoords{0, 47}, nullptr,
+                                         ResourceType::GOLD, 1500),
+      std::make_shared<PickableResource>(FieldCoords{0, 48}, nullptr,
+                                         ResourceType::GOLD, 3000),
+      std::make_shared<PickableResource>(FieldCoords{1, 48}, nullptr,
+                                         ResourceType::GOLD, 2000),
+      std::make_shared<PickableResource>(FieldCoords{10, 40}, nullptr,
+                                         ResourceType::SULFUR, 5),
+      std::make_shared<PickableResource>(FieldCoords{16, 43}, nullptr,
+                                         ResourceType::ORE, 5)};
   return starting_objects;
 }

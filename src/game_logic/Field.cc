@@ -43,6 +43,10 @@ bool Field::deleteObject() {
 }
 
 bool Field::isAdjacent(FieldCoords first, FieldCoords second) {
+  if (first.first == second.first && first.second == second.second) {
+    return false;
+  }
+
   return ((std::abs(first.first - second.first) == 1 ||
            std::abs(first.first - second.first) == 0) &&
           (std::abs(first.second - second.second) == 1 ||

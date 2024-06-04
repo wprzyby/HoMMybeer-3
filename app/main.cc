@@ -72,7 +72,8 @@ int main() {
                               &battle_window_controller, &town_controller});
   // create the window
   sf::RenderWindow window(sf::VideoMode(MAIN_WINDOW_SIZE.x, MAIN_WINDOW_SIZE.y),
-                          "HoMMyBeer 3");
+                          "HoMMyBeer 3",
+                          sf::Style::Titlebar | sf::Style::Close);
 
   window.setKeyRepeatEnabled(false);
 

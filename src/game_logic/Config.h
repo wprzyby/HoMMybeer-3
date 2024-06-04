@@ -20,7 +20,7 @@
 
 enum class GeologicalStructureType { MOUNTAIN, LAKE, BUSH, TREE };
 
-enum class Faction { CASTLE, INFERNO, FORTRESS };
+enum class Faction { CASTLE = 0, INFERNO, FORTRESS };
 
 enum class ResourceType { GOLD = 0, SULFUR, GEMS, ORE, WOOD, CRYSTAL, MERCURY };
 
@@ -52,8 +52,8 @@ class Config {
       STARTING_UNIT_COUNTS = {15, 10, 5};
 
  public:
-  Config(Config &other) = delete;
-  void operator=(const Config &other) = delete;
+  Config(Config& other) = delete;
+  void operator=(const Config& other) = delete;
   ~Config();
   static Config* getInstance();
   void loadTownData(std::string metadata_path = "./TownsMetadata.json");
@@ -86,6 +86,10 @@ class Config {
   }
   std::string enumToStringTranslate(TerrainType enum_to_translate) {
     return terrain_type_translator_.at(enum_to_translate);
+  }
+
+  static UnitOrigin factionToUnitOriginTranslate(Faction faction) {
+    return faction_to_unit_origin_.at(faction);
   }
 };
 #endif

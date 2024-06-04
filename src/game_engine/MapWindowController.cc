@@ -73,6 +73,7 @@ void MapWindowController::changeMapContents(const Game& game) {
   objects_view_.setPosition(sf::Vector2f(game_window_offset_));
   path_view_.setPosition(sf::Vector2f(game_window_offset_));
   resources_view_.setResources(game.getCurrentPlayer(), game.getWeekday());
+  resources_view_.setUnitAmounts(game.getCurrentPlayer()->getCurrentHero());
 }
 
 void MapWindowController::repositionCamera(const Game& game) {
@@ -108,7 +109,7 @@ void MapWindowController::selfInit() {
   MapInfo map_info = generateLargeExampleMap();
   std::vector<Player> players{
       Player(false, Faction::CASTLE, map_info.starting_locations[0]),
-      Player(false, Faction::INFERNO, FieldCoords{5, 7})};
+      Player(false, Faction::INFERNO, map_info.starting_locations[1])};
   std::vector<std::shared_ptr<MapObject>> static_map_objects =
       generateExampleStaticObjects();
   std::vector<std::shared_ptr<MapObject>> pickable_map_objects =
@@ -168,12 +169,16 @@ void MapWindowController::update(sf::Event& event, SessionState session_state,
       sf::Vector2i where_clicked{event.mouseButton.x, event.mouseButton.y};
       if (controlls_view_.nextHeroClicked(sf::Vector2f(where_clicked))) {
         game.getCurrentPlayer()->nextHero();
+        resources_view_.setUnitAmounts(
+            game.getCurrentPlayer()->getCurrentHero());
         repositionCamera(game);
       }
       if (controlls_view_.nextTurnClicked(sf::Vector2f(where_clicked))) {
         game.nextPlayer();
         resources_view_.setResources(game.getCurrentPlayer(),
                                      game.getWeekday());
+        resources_view_.setUnitAmounts(
+            game.getCurrentPlayer()->getCurrentHero());
         repositionCamera(game);
       }
       if (controlls_view_.exitClicked(sf::Vector2f(where_clicked))) {
