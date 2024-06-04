@@ -66,13 +66,10 @@ int main() {
                             {"Mines", path + "/assets/Mines.png"}});
   MapWindowController map_controller = MapWindowController(
       GAME_WINDOW_SIZE, GAME_WINDOW_OFFSET, MAIN_WINDOW_SIZE);
-  BattlegroundView battleground_view;
-  TownWindowController town_controller =
-      TownWindowController(MAIN_WINDOW_SIZE, UnitConfig());
-BattleWindowController battle_window_controller(
-               GAME_WINDOW_SIZE, &battleground_view);
-  EventHandler event_handler(
-      {&map_controller, &main_controller, &battle_window_controller, &town_controller});
+  TownWindowController town_controller = TownWindowController(MAIN_WINDOW_SIZE);
+  BattleWindowController battle_window_controller(GAME_WINDOW_SIZE);
+  EventHandler event_handler({&map_controller, &main_controller,
+                              &battle_window_controller, &town_controller});
   // create the window
   sf::RenderWindow window(sf::VideoMode(MAIN_WINDOW_SIZE.x, MAIN_WINDOW_SIZE.y),
                           "HoMMyBeer 3");
@@ -118,7 +115,7 @@ BattleWindowController battle_window_controller(
         break;
 
       case SessionState::IN_BATTLE:
-        window.draw(battleground_view);
+        window.draw(battle_window_controller);
         break;
 
       case SessionState::IN_CASTLE:

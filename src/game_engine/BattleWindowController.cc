@@ -19,10 +19,10 @@ void BattleWindowController::update(sf::Event& event,
                                     ->getHero(attacked_hero_info.second);
     battle_manager_.setupBattle(*game.getCurrentPlayer()->getCurrentHero(),
                                 *attacked_hero);
-    battleground_view_->setupBattle(
+    battleground_view_.setupBattle(
         combat::Battleground::DEFAULT_SIZE,
         Session::getInstance()->getBattleTerrainType());
-    battleground_view_->loadState(battle_manager_.getState());
+    battleground_view_.loadState(battle_manager_.getState());
     Session::getInstance()->setSessionState(SessionState::IN_BATTLE);
     return;
   }
@@ -31,13 +31,13 @@ void BattleWindowController::update(sf::Event& event,
       event.mouseButton.button != sf::Mouse::Left) {
     return;
   }
-  auto clicked_coords = battleground_view_->translateToHexCoords(
+  auto clicked_coords = battleground_view_.translateToHexCoords(
       event.mouseButton.x, event.mouseButton.y);
   if (not clicked_coords.has_value()) {
     return;
   }
   battle_manager_.makeMove(clicked_coords.value());
-  battleground_view_->loadState(battle_manager_.getState());
+  battleground_view_.loadState(battle_manager_.getState());
   if (battle_manager_.getState().winner_.has_value()) {
     handleEndOfBattle(game);
   }
@@ -67,5 +67,10 @@ void BattleWindowController::handleEndOfBattle(Game& game) {
     Session::getInstance()->setSessionState(SessionState::START_MENU);
     return;
   }
-  Session::getInstance()->setSessionState(SessionState::IN_GAME);
+  Session::getInstance()->setSessionState(SessionState::REFRESH);
+}
+
+void BattleWindowController::draw(sf::RenderTarget& target,
+                                  sf::RenderStates states) const {
+  target.draw(battleground_view_, states);
 }

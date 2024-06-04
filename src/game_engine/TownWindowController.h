@@ -31,12 +31,12 @@ class TownWindowController : public Controller, public sf::Drawable {
       {1, 60}, {2, 100}, {3, 200}};
 
   inline static sf::Font font_;
+  UnitBlockGenerator<UnitConfig> setupUnitGenerator();
 
  public:
-  explicit TownWindowController(sf::Vector2u main_window_size,
-                                const UnitConfig& unit_config)
+  explicit TownWindowController(sf::Vector2u main_window_size)
       : town_view_(TownView(main_window_size, font_)),
-        unit_generator_(unit_config) {}
+        unit_generator_(setupUnitGenerator()) {}
   void update(sf::Event& event, SessionState session_state,
               Game& game) override;
   static bool loadFont(const std::string& path) {

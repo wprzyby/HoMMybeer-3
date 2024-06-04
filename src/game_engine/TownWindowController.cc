@@ -16,6 +16,12 @@
 #include "Config.h"
 #include "Hero.h"
 #include "Session.h"
+#include "UnitBlockGenerator.hpp"
+
+UnitBlockGenerator<UnitConfig> TownWindowController::setupUnitGenerator() {
+  auto config = Config::getInstance()->getUnitConfig();
+  return UnitBlockGenerator(config);
+}
 
 void TownWindowController::update(sf::Event& event, SessionState session_state,
                                   Game& game) {
