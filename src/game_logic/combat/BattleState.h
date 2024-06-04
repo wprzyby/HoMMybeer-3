@@ -14,7 +14,7 @@
 #include <random>
 
 #include "Battleground.h"
-#include "combat_common.h"
+#include "combat_utils.h"
 
 namespace combat {
 
@@ -25,9 +25,9 @@ class BattleState {
     ATTACKING,
   };
 
-  UnitContainer hero_units_{};
-  UnitQueue unit_move_queue_{};
-  Battleground battleground_{};
+  UnitContainer hero_units_;
+  UnitQueue unit_move_queue_;
+  Battleground battleground_;
   UnitIdentifier current_unit_id_{HeroRole::ATTACKER, 0U};
   HeroRole currently_moving_{HeroRole::ATTACKER};
   RoundPhase round_phase_{RoundPhase::MOVING};
@@ -68,10 +68,10 @@ class BattleState {
 
 class DamageRng {
  public:
-  int getRandIntInclusive(int from, int to) {
+  int getRandIntInclusive(int lower_bound, int upper_bound) {
     static std::random_device rd;
     static std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(from, to);
+    std::uniform_int_distribution<> distr(lower_bound, upper_bound);
     return distr(gen);
   }
 };

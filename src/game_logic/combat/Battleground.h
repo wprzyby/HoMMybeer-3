@@ -11,10 +11,9 @@
 #include <algorithm>
 #include <optional>
 #include <set>
-#include <utility>
 #include <vector>
 
-#include "combat_common.h"
+#include "combat_utils.h"
 
 /**
  * using the Hexagonal Efficient Coordinate System coordinate system, described

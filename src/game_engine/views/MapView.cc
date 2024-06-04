@@ -1,11 +1,11 @@
 /**
  * @file MapView.cc
  * @author Wojciech Przybylski
- * @brief Method definitions for MapView class
+ * @brief View for drawing the map
  * @copyright Copyright (c) 2024
  */
 
-#include <MapView.h>
+#include "MapView.h"
 
 #include <cmath>
 
@@ -15,7 +15,7 @@ bool MapView::loadTileset(const std::string& tileset_path) {
   return tileset_.loadFromFile(tileset_path);
 }
 
-void MapView::setMap(FieldArray_t field_array, sf::Vector2u field_offset,
+void MapView::setMap(FieldArray field_array, sf::Vector2u field_offset,
                      sf::Vector2u tile_size) {
   int width = (VISIBLE_MAP_WIDTH + 1);
 
@@ -23,44 +23,50 @@ void MapView::setMap(FieldArray_t field_array, sf::Vector2u field_offset,
   vertices_.resize(static_cast<long long>(width * width) * TRIANGLES_IN_SQUARE *
                    CORNERS_IN_TRIANGLE);
 
-  for (int i = 0; i < width; ++i) {
-    for (int j = 0; j < width; ++j) {
+  // creating tile map vertex array according to an SFML guide that can be found
+  // here: https://www.sfml-dev.org/tutorials/2.6/graphics-vertex-array.php
+  for (int row : std::views::iota(0, width)) {
+    for (int column : std::views::iota(0, width)) {
       int tile_number = static_cast<int>(
-          field_array[j + field_offset.y][i + field_offset.x].getTerrainType());
+          field_array[column + field_offset.y][row + field_offset.x]
+              .getTerrainType());
 
       // find its position in the tileset texture
-      int tu = tile_number % (tileset_.getSize().x / tile_size.x);
-      int tv = tile_number / (tileset_.getSize().x / tile_size.x);
+      int texture_row = tile_number % (tileset_.getSize().x / tile_size.x);
+      int texture_column = tile_number / (tileset_.getSize().x / tile_size.x);
 
       // get a pointer to the triangles' vertices of the current tile
-      sf::Vertex* triangles = &vertices_[(i + j * width) * TRIANGLES_IN_SQUARE *
-                                         CORNERS_IN_TRIANGLE];
+      sf::Vertex* triangles =
+          &vertices_[(row + column * width) * TRIANGLES_IN_SQUARE *
+                     CORNERS_IN_TRIANGLE];
 
       // define the 6 corners of the two triangles
-      triangles[0].position = sf::Vector2f(i * tile_size.x, j * tile_size.y);
+      triangles[0].position =
+          sf::Vector2f(row * tile_size.x, column * tile_size.y);
       triangles[1].position =
-          sf::Vector2f((i + 1) * tile_size.x, j * tile_size.y);
+          sf::Vector2f((row + 1) * tile_size.x, column * tile_size.y);
       triangles[2].position =
-          sf::Vector2f(i * tile_size.x, (j + 1) * tile_size.y);
+          sf::Vector2f(row * tile_size.x, (column + 1) * tile_size.y);
       triangles[3].position =
-          sf::Vector2f(i * tile_size.x, (j + 1) * tile_size.y);
+          sf::Vector2f(row * tile_size.x, (column + 1) * tile_size.y);
       triangles[4].position =
-          sf::Vector2f((i + 1) * tile_size.x, j * tile_size.y);
+          sf::Vector2f((row + 1) * tile_size.x, column * tile_size.y);
       triangles[5].position =
-          sf::Vector2f((i + 1) * tile_size.x, (j + 1) * tile_size.y);
+          sf::Vector2f((row + 1) * tile_size.x, (column + 1) * tile_size.y);
 
       // define the 6 matching texture coordinates
-      triangles[0].texCoords = sf::Vector2f(tu * tile_size.x, tv * tile_size.y);
-      triangles[1].texCoords =
-          sf::Vector2f((tu + 1) * tile_size.x, tv * tile_size.y);
-      triangles[2].texCoords =
-          sf::Vector2f(tu * tile_size.x, (tv + 1) * tile_size.y);
-      triangles[3].texCoords =
-          sf::Vector2f(tu * tile_size.x, (tv + 1) * tile_size.y);
-      triangles[4].texCoords =
-          sf::Vector2f((tu + 1) * tile_size.x, tv * tile_size.y);
-      triangles[5].texCoords =
-          sf::Vector2f((tu + 1) * tile_size.x, (tv + 1) * tile_size.y);
+      triangles[0].texCoords =
+          sf::Vector2f(texture_row * tile_size.x, texture_column * tile_size.y);
+      triangles[1].texCoords = sf::Vector2f((texture_row + 1) * tile_size.x,
+                                            texture_column * tile_size.y);
+      triangles[2].texCoords = sf::Vector2f(texture_row * tile_size.x,
+                                            (texture_column + 1) * tile_size.y);
+      triangles[3].texCoords = sf::Vector2f(texture_row * tile_size.x,
+                                            (texture_column + 1) * tile_size.y);
+      triangles[4].texCoords = sf::Vector2f((texture_row + 1) * tile_size.x,
+                                            texture_column * tile_size.y);
+      triangles[5].texCoords = sf::Vector2f((texture_row + 1) * tile_size.x,
+                                            (texture_column + 1) * tile_size.y);
     }
   }
 }

@@ -1,5 +1,5 @@
 /**
- * @file combat_common.h
+ * @file combat_utils.h
  * @author Wojciech Przybylski
  * @brief Definitions shared by multiple files within the combat library
  * @copyright Copyright (c) 2024
@@ -9,11 +9,6 @@
 #define SRC_GAME_LOGIC_COMBAT_COMMON_H
 
 #include <Hero.h>
-
-#include <deque>
-#include <map>
-#include <utility>
-#include <vector>
 
 namespace combat {
 

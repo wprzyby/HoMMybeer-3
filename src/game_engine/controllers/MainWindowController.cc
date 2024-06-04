@@ -1,15 +1,12 @@
 /**
  * @file MainWindowController.cc
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-04
- *
+ * @author Piotr Kluba
+ * @brief Controller managing the window when the game is in the main menu
  * @copyright Copyright (c) 2024
- *
  */
 
-#include <MainWindowController.h>
+#include "MainWindowController.h"
+
 #include <Session.h>
 
 void MainWindowController::update(sf::Event& event, SessionState session_state,

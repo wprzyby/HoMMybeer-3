@@ -1,3 +1,10 @@
+/**
+ * @file BattlegroundView.cc
+ * @author Wojciech Przybylski
+ * @brief View aggregating all drawing functionality related to the battleground
+ * @copyright Copyright (c) 2024
+ */
+
 #include "BattlegroundView.h"
 
 #include <Config.h>
@@ -5,8 +12,10 @@
 #include <SFML/Graphics.hpp>
 #include <stdexcept>
 
-#include "combat_common.h"
-#include "common.h"
+#include "combat_utils.h"
+#include "game_logic_utils.h"
+
+const sf::Color BattlegroundView::CONTROL_BAR_COLOR = sf::Color(128, 64, 0);
 
 BattlegroundView::BattlegroundView(combat::BattlegroundSize battleground_size,
                                    TerrainType terrain_type) {
@@ -83,7 +92,7 @@ bool BattlegroundView::loadBackground(const std::string& background_path) {
   }
   bottom_bar_ = sf::RectangleShape(
       sf::Vector2f(background_texture_size_.x, control_bar_height_));
-  bottom_bar_.setFillColor(sf::Color(128, 64, 0));
+  bottom_bar_.setFillColor(CONTROL_BAR_COLOR);
   bottom_bar_.setPosition(0, background_texture_size_.y);
   background_sprite_.setTexture(background_texture_);
   background_sprite_.setTextureRect(sf::IntRect(

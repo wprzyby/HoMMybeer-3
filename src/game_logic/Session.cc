@@ -3,11 +3,7 @@
  * @author Piotr Kluba
  * @brief The base class responsible for managing the state of a current app
  * instance
- * @version 0.1
- * @date 2024-04-15
- *
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <Session.h>
@@ -16,25 +12,19 @@
 #include <iostream>
 #include <utility>
 
-using namespace std;
-
 Session* Session::session_ = nullptr;
 
 Session::Session() : game(Game({}, Map({}))) {
   session_state_ = SessionState::START_MENU;
-  time_t t = time(0);
-  cout << "Session created at: " << asctime(localtime(&t));
+  time_t creation_timestamp = time(nullptr);
+  std::cout << "Session created at: " << asctime(localtime(&creation_timestamp));
 }
 
-Session::~Session() {
-  if (session_ != nullptr) {
-    delete session_;
-  }
-}
+Session::~Session() { delete session_; }
 
-void Session::saveGameToFile(string filepath) {}
+void Session::saveGameToFile(const std::string& filepath) {}
 
-void Session::loadGameFromFile(string filepath) {}
+void Session::loadGameFromFile(const std::string& filepath) {}
 
 Session* Session::getInstance() {
   if (session_ == nullptr) {

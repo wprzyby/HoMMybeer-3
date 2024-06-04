@@ -1,3 +1,10 @@
+/**
+ * @file BattleUnitsView.h
+ * @author Wojciech Przybylski
+ * @brief View which draws all units on the battleground
+ * @copyright Copyright (c) 2024
+ */
+
 #ifndef SRC_GAME_ENGINE_VIEWS_BATTLE_UNITS_VIEW_H
 #define SRC_GAME_ENGINE_VIEWS_BATTLE_UNITS_VIEW_H
 

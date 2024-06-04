@@ -1,7 +1,7 @@
 /**
  * @file test_unit_block.cc
  * @author Wojciech Przybylski
- * @brief
+ * @brief Unit tests for UnitBlock class
  * @copyright Copyright (c) 2024
  */
 

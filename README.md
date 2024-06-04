@@ -6,13 +6,13 @@ A simplified version of the acclaimed Heroes of Might and Magic III game, develo
 
 ## Project status
 
-The project is currently in the prototyping phase. We are in the process of creating basic functionality and establishing a concrete project structure.
+The project has finished, it now offers most of the aimed for basic functionality of the game, while retaining potential for future expansion of functionality.
 
 ## How to build and run
 
 ### Automated script (Ubuntu)
 
-For building and running the demo in the release version on Ubuntu, run the _install-requirements.sh_ script found in the _scripts_ directory and then run the provided _build-and-run-demo.sh_ script. For building different configurations and further information about the dependencies and used utilities, see the instructions below.
+For building and running the game in the release version on Ubuntu, run the _install-requirements.sh_ script found in the _scripts_ directory and then run the provided _build-and-run-game.sh_ script. For building different configurations and further information about the dependencies and used utilities, see the instructions below.
 
 ### Installing requirements
 The project is built using _CMake_ and - by default - the _Ninja_ generator. The generator can be changed by adjusting the CMake presets found in _CMakePresets.json_, though other generators were not tested. The C++ compiler of choice during development was the GNU compiler and so that is also what we would recommend.
@@ -65,8 +65,9 @@ Unfortunately, as of now, copying the dynamic libraries provided by SFML to the 
 
 To run the tests you simply have to select test-release or test-debug configure preset, build the project and run the tests with:
 ```bash
-./build/test-release/bin/tests
+ctest --preset default
 ```
+You can also take advantage of _ctest_ functionality, such as using regular expressions to find the tests of interest.
 
 ## Setting up the development environment (Windows and VS Code)
 
@@ -75,6 +76,10 @@ To run the tests you simply have to select test-release or test-debug configure 
 - Configure project with CMake Tools - Press 'Yes' when prompted to configure project or open the command palette (standard shortcut: _ctrl+shift+P_) and find "_CMake: Select Configure Preset_".
 - Make sure that you have autoformatting enabled (for example on file save) in settings. The formatting provider should be clang-format.
 - Furthermore, you can specify some useful user settings for the workspace, for example your name to be filled by Doxygen when creating a file comment.
+
+## User instruction
+
+For instructions on how to play the game, refer to the complete PDF documentation found in the _doc/_ directory
 
 ## Contributing
 

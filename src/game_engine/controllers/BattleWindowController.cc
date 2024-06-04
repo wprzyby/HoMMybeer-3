@@ -1,10 +1,19 @@
+/**
+ * @file BattleWindowController.cc
+ * @author Wojciech Przybylski
+ * @brief Controller managing the window when the game is in battle state
+ * @copyright Copyright (c) 2024
+ */
+
 #include "BattleWindowController.h"
+
+#include <MiniMaxFighter.h>
+#include <Session.h>
+#include <combat_evaluation.h>
 
 #include <chrono>
 #include <thread>
 
-#include "Session.h"
-#include "ai/combat_evaluation.h"
 
 const std::function<float(const combat::BattleState&, combat::HeroRole)>
     BattleWindowController::MINI_MAX_STATE_EVAL = combat::ai::complexEvaluate;
@@ -37,7 +46,7 @@ void BattleWindowController::update(sf::Event& event,
     return;
   }
   if (session_state == SessionState::BATTLE_AI_REFRESH) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    std::this_thread::sleep_for(std::chrono::milliseconds(AI_PLAYER_MOVE_DELAY));
     auto move = mini_max_fighter_.makeMove(
         battle_manager_.getState(),
         battle_manager_.getState().currently_moving_);

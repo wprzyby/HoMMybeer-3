@@ -1,22 +1,14 @@
 /**
  * @file MainView.h
- * @author Piotr Kluba (you@domain.com)
- * @brief
- * @date 2024-06-04
- *
+ * @author Piotr Kluba
+ * @brief View for drawing the main menu
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef SRC_GAME_ENGINE_VIEWS_MAIN_VIEW_H_
-#define SRC_GAME_ENGINE_VIEWS_MAIN_VIEW_H_
+#ifndef SRC_GAME_ENGINE_VIEWS_MAIN_VIEW_H
+#define SRC_GAME_ENGINE_VIEWS_MAIN_VIEW_H
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Rect.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/VertexArray.hpp>
-#include <SFML/System/Vector2.hpp>
 
 class MainView : public sf::Drawable, public sf::Transformable {
   sf::Vector2u main_window_size_;
@@ -24,14 +16,14 @@ class MainView : public sf::Drawable, public sf::Transformable {
   inline static sf::Texture texture_;
 
  public:
-  MainView(sf::Vector2u main_window_size)
+  explicit MainView(sf::Vector2u main_window_size)
       : main_window_size_(main_window_size) {}
 
   void draw(sf::RenderTarget& target,
             sf::RenderStates /*states*/) const override {
     target.draw(background_);
   }
-  static bool loadtileset(std::string path) {
+  static bool loadTileset(const std::string& path) {
     return texture_.loadFromFile(path);
   }
   void setMain() {
@@ -41,4 +33,4 @@ class MainView : public sf::Drawable, public sf::Transformable {
         sf::IntRect({0, 0}, sf::Vector2i(main_window_size_)));
   }
 };
-#endif
+#endif // SRC_GAME_ENGINE_VIEWS_MAIN_VIEW_H

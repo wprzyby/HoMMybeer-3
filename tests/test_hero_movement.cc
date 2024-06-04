@@ -1,22 +1,17 @@
 /**
  * @file test_hero_movement.cc
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-01
- *
+ * @author Piotr Kluba
+ * @brief Unit tests for hero movement related functionality
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <Game.h>
-#include <common.h>
+#include <game_logic_utils.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <testUtils.h>
 
 #include "Config.h"
-
 
 TEST(heroMovementTests, basicHeroMovementTest) {
   Game game = createBasicGame();

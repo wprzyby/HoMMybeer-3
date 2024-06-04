@@ -3,14 +3,10 @@
  * @author Piotr Kluba
  * @brief The base class responsible for managing the state of a current app
  * instance
- * @version 0.1
- * @date 2024-04-15
- *
  * @copyright Copyright (c) 2024
- *
  */
-#ifndef SRC_GAME_LOGIC_SESSION_H_
-#define SRC_GAME_LOGIC_SESSION_H_
+#ifndef SRC_GAME_LOGIC_SESSION_H
+#define SRC_GAME_LOGIC_SESSION_H
 
 #include <Config.h>
 #include <Game.h>
@@ -43,14 +39,14 @@ struct Save {
 
 class Session {
  private:
-  void saveGameToFile(std::string filepath);
+  void saveGameToFile(const std::string& filepath);
   Session();
-  void loadGameFromFile(std::string filepath);
+  void loadGameFromFile(const std::string& filepath);
   static Session* session_;
   inline static SessionState session_state_;
   inline static Faction current_town_;
   std::pair<int, int> attacked_hero_info_;
-  TerrainType battle_terrain_type_;
+  TerrainType battle_terrain_type_{TerrainType::GRASS};
 
  public:
   Session(Session& other) = delete;
@@ -64,8 +60,10 @@ class Session {
   };
   static void setTown(Faction faction) { current_town_ = faction; }
   static Faction getTown() { return current_town_; }
-  std::pair<int, int> getAttackedHeroInfo() const { return attacked_hero_info_; }
-  TerrainType getBattleTerrainType() const {return battle_terrain_type_;}
+  std::pair<int, int> getAttackedHeroInfo() const {
+    return attacked_hero_info_;
+  }
+  TerrainType getBattleTerrainType() const { return battle_terrain_type_; }
   void setAttackedHeroInfo(std::pair<int, int> hero_info) {
     attacked_hero_info_ = hero_info;
   };
@@ -77,4 +75,4 @@ class Session {
   Game game;
 };
 
-#endif
+#endif  // SRC_GAME_LOGIC_SESSION_H

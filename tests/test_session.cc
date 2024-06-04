@@ -1,16 +1,12 @@
 /**
  * @file test_session.cc
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-01
- *
+ * @author Piotr Kluba
+ * @brief Unit tests for Session class
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <Session.h>
-#include <common.h>
+#include <game_logic_utils.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <testUtils.h>

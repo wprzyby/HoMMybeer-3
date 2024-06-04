@@ -1,16 +1,12 @@
 /**
  * @file PathView.h
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-03
- *
+ * @author Piotr Kluba
+ * @brief View for drawing the proposed movement path of the hero on the map
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef SRC_GAME_ENGINE_VIEWS_PATH_VIEW_H_
-#define SRC_GAME_ENGINE_VIEWS_PATH_VIEW_H_
+#ifndef SRC_GAME_ENGINE_VIEWS_PATH_VIEW_H
+#define SRC_GAME_ENGINE_VIEWS_PATH_VIEW_H
 
 #include <Hero.h>
 
@@ -28,4 +24,4 @@ class PathView : public sf::Drawable, public sf::Transformable {
   sf::VertexArray vertices_;
 };
 
-#endif
+#endif  // SRC_GAME_ENGINE_VIEWS_PATH_VIEW_H

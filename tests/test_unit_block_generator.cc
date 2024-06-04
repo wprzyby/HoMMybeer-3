@@ -1,3 +1,9 @@
+/**
+ * @file test_unit_block_generator.cc
+ * @author Wojciech Przybylski
+ * @brief Tests for UnitBlockGenerator class
+ * @copyright Copyright (c) 2024
+ */
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 

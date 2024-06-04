@@ -1,20 +1,14 @@
 /**
  * @file PathView.cc
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-03
- *
+ * @author Piotr Kluba
+ * @brief View for drawing the proposed movement path of the hero on the map
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <MapView.h>
 #include <PathView.h>
 
-#include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/PrimitiveType.hpp>
-#include <SFML/Graphics/Vertex.hpp>
+#include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <utility>
 

@@ -1,27 +1,26 @@
 /**
  * @file testUtils.cc
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-01
- *
+ * @author Piotr Kluba
+ * @brief Utilities used in testing
  * @copyright Copyright (c) 2024
- *
  */
 
 #include "testUtils.h"
 
 #include <MapObject.h>
-#include <MapUtils.h>
 #include <Player.h>
-#include <common.h>
+#include <game_logic_utils.h>
+#include <map_generation.h>
 
 #include <iostream>
 #include <string>
 
 Game createBasicGame() {
   std::string path = getProjectPath();
-  Config::getInstance()->loadObjectsData(path + "/assets/ObjectsMetadata.json");
+  Config::getInstance()->loadObjectsData(path +
+                                         "/metadata/ObjectsMetadata.json");
+  Config::getInstance()->loadUnitConfig(path + "/metadata/UnitConfig.json");
+
   MapInfo map_info = generateGrassMap(MapSize::L, 1);
   std::vector<Player> players{
       Player(false, Faction::CASTLE, FieldCoords{1, 1})};
@@ -30,7 +29,9 @@ Game createBasicGame() {
 
 Game createExampleGame() {
   std::string path = getProjectPath();
-  Config::getInstance()->loadObjectsData(path + "/assets/ObjectsMetadata.json");
+  Config::getInstance()->loadUnitConfig(path + "/metadata/UnitConfig.json");
+  Config::getInstance()->loadObjectsData(path +
+                                         "/metadata/ObjectsMetadata.json");
   MapInfo map_info = generateLargeExampleMap();
   std::vector<Player> players{
       Player(false, Faction::CASTLE, map_info.starting_locations[0])};

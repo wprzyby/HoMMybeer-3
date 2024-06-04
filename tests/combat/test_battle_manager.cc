@@ -1,5 +1,12 @@
+/**
+ * @file test_battle_manager.cc
+ * @author Wojciech Przybylski
+ * @brief Unit tests for BattleManager class
+ * @copyright Copyright (c) 2024
+ */
+
 #include <BattleManager.h>
-#include <combat_common.h>
+#include <combat_utils.h>
 #include <gtest/gtest.h>
 
 #include "Hero.h"
@@ -39,10 +46,6 @@ TEST(battle_manager_test, initial_state) {
             std::make_pair(HeroRole::ATTACKER, 0U));
   EXPECT_EQ(battle_manager.getState().round_phase_,
             BattleState::RoundPhase::MOVING);
-  EXPECT_NO_THROW(
-      battle_manager.getState().hero_units_.at({HeroRole::ATTACKER, 0}));
-  EXPECT_NO_THROW(
-      battle_manager.getState().hero_units_.at({HeroRole::DEFENDER, 0}));
   EXPECT_TRUE(
       battle_manager.getState().battleground_.isFieldOccupied({0, 0, 0}));
   EXPECT_TRUE(

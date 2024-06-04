@@ -1,9 +1,10 @@
 /**
  * @file BattleManager.cc
  * @author Wojciech Przybylski
- * @brief
+ * @brief Class for managing the state of combat
  * @copyright Copyright (c) 2024
  */
+ 
 #include "BattleManager.h"
 
 #include <stdexcept>
@@ -11,31 +12,31 @@
 
 #include "BattleState.h"
 #include "Battleground.h"
-#include "combat_common.h"
+#include "combat_utils.h"
 
 namespace combat {
 
 void BattleManager::placeUnitsOnBattleground(Battleground& battleground,
                                              const UnitContainer& units) {
   // placing attacker units on the left side edge of the battleground
-  for (unsigned int i : std::views::iota(0U, units.size().first)) {
-    auto first_coord = i % 2;
-    auto second_coord = i / 2;
+  for (unsigned int attacker_unit_idx : std::views::iota(0U, units.size().first)) {
+    auto first_coord = attacker_unit_idx % 2;
+    auto second_coord = attacker_unit_idx / 2;
     auto third_coord = 0;
     if (not battleground.placeUnit({first_coord, second_coord, third_coord},
-                                   {HeroRole::ATTACKER, i})) {
+                                   {HeroRole::ATTACKER, attacker_unit_idx})) {
       throw std::exception();  // TODO: make own exception
     }
   }
   // placing defender units on the right side edge of the battleground
-  for (unsigned int i : std::views::iota(0U, units.size().second)) {
-    auto first_coord = i % 2;
-    auto second_coord = i / 2;
+  for (unsigned int defender_unit_idx : std::views::iota(0U, units.size().second)) {
+    auto first_coord = defender_unit_idx % 2;
+    auto second_coord = defender_unit_idx / 2;
     auto third_coord = first_coord == 0
                            ? battleground.getSize().even_rows_size - 1
                            : battleground.getSize().odd_rows_size - 1;
     if (not battleground.placeUnit({first_coord, second_coord, third_coord},
-                                   {HeroRole::DEFENDER, i})) {
+                                   {HeroRole::DEFENDER, defender_unit_idx})) {
       throw std::exception();  // TODO: make own exception
     }
   }

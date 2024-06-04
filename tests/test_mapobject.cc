@@ -1,16 +1,12 @@
 /**
  * @file test_mapobject.cc
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-01
- *
+ * @author Piotr Kluba
+ * @brief Unit tests for map objects
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <MapObject.h>
-#include <common.h>
+#include <game_logic_utils.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <testUtils.h>
@@ -18,7 +14,7 @@
 TEST(mapObjectTests, mountainObjectInitializationTest) {
   Config* conf = Config::getInstance();
   std::string path = getProjectPath();
-  conf->loadObjectsData(path + "/assets/ObjectsMetadata.json");
+  conf->loadObjectsData(path + "/metadata/ObjectsMetadata.json");
   GeologicalObject mountain = GeologicalObject(
       FieldCoords{0, 0}, nullptr, GeologicalStructureType::MOUNTAIN, 0);
 

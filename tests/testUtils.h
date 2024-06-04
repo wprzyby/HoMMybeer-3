@@ -1,20 +1,16 @@
 /**
  * @file testUtils.h
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-01
- *
+ * @author Piotr Kluba
+ * @brief Utilities used in testing
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef TESTS_TESTUTILS_H_
-#define TESTS_TESTUTILS_H_
+#ifndef TESTS_TEST_UTILS_H
+#define TESTS_TEST_UTILS_H
 
 #include <Game.h>
 
 Game createBasicGame();
 Game createExampleGame();
 
-#endif
+#endif  // TESTS_TEST_UTILS_H

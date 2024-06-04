@@ -12,3 +12,5 @@ retv
 tileset
 tparam
 Wojciech
+SFML
+hommybeer

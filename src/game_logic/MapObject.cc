@@ -3,7 +3,6 @@
  * @author Piotr Kluba
  * @brief Contains the functionality associated with all objects on the map
  * @copyright Copyright (c) 2024
- *
  */
 #include <MapObject.h>
 #include <Session.h>
@@ -11,13 +10,12 @@
 #include <json.hpp>
 #include <string>
 
-using namespace std;
 using json = nlohmann::json;
 
 int MapObject::current_id_ = 0;
 
-const vector<FieldCoords> MapObject::occupiedFields() const {
-  vector<FieldCoords> retv(space_taken_.size());
+std::vector<FieldCoords> MapObject::occupiedFields() const {
+  std::vector<FieldCoords> retv(space_taken_.size());
   for (int i = 0; i < space_taken_.size(); ++i) {
     retv[i] = (origin_ + space_taken_[i]);
   }
@@ -33,7 +31,7 @@ GeologicalObject::GeologicalObject(FieldCoords origin, Game* parent,
   json metadata = Config::getInstance()->getObjectsMetadata();
   metadata = metadata["geological"];
   metadata = metadata[Config::enumToStringTranslate(struct_type)]
-                     ["spaces_occupied"][to_string(variant_)];
+                     ["spaces_occupied"][std::to_string(variant_)];
   for (auto coord : metadata) {
     space_taken_.emplace_back(coord[0], coord[1]);
   }
@@ -45,7 +43,7 @@ std::map<std::string, std::string> GeologicalObject::getSpecs() const {
   std::map<std::string, std::string> retmap;
   retmap["ObjectType"] = "geological";
   retmap["SubType"] = Config::enumToStringTranslate(struct_type_);
-  retmap["Variant"] = to_string(variant_);
+  retmap["Variant"] = std::to_string(variant_);
   return retmap;
 }
 

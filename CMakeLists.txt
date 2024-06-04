@@ -23,7 +23,7 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
 set(WARNINGS
-    # -Werror
+    -Werror
     -Wall
     -Wextra
     -Wpedantic
@@ -57,17 +57,21 @@ set(RELEASE_FLAGS
     CACHE INTERNAL ""
 )
 
+set(LOGIC_LIBS game_logic_base combat ai generators)
+set(GRAPHICS_LIBS game_engine_controllers game_engine_views sfml-graphics)
+
 if(NOT ENABLE_TESTS)
     fetch_git_lib(
             SFML
             https://github.com/SFML/SFML.git
             2.6.0
     )
+    
     add_executable(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/app/main.cc)
     add_subdirectory(src/game_logic)
     add_subdirectory(src/game_engine)
-    target_link_libraries(${PROJECT_NAME} PUBLIC game_logic ai combat game_engine sfml-graphics)
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${LOGIC_LIBS} ${GRAPHICS_LIBS})
     target_compile_options(${PROJECT_NAME} PRIVATE ${WARNINGS} $<$<CONFIG:Debug>:${DEBUG_FLAGS}> $<$<CONFIG:Release>:${RELEASE_FLAGS}>)
 else()
     fetch_git_lib(

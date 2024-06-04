@@ -1,3 +1,10 @@
+/**
+ * @file TownView.cc
+ * @author Wojciech Przybylski, Piotr Kluba
+ * @brief View for drawing the insides of the town
+ * @copyright Copyright (c) 2024
+ */
+
 #include "TownView.h"
 
 #include <SFML/Graphics/Rect.hpp>
@@ -7,7 +14,7 @@
 #include <string>
 
 #include "Config.h"
-#include "common.h"
+#include "game_logic_utils.h"
 
 const sf::Vector2f TownView::BUTTON_SIZE = {150, 80};
 const sf::Vector2f TownView::LEFT_BUTTON_POSITION = {100, 400};

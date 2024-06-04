@@ -1,7 +1,8 @@
 /**
  * @file BattleState.cc
  * @author Wojciech Przybylski
- * @brief
+ * @brief Class defining the state of combat at a given moment, meant to
+ * be used as an immutable
  * @copyright Copyright (c) 2024
  */
 #include "BattleState.h"
@@ -12,15 +13,16 @@
 #include <vector>
 
 #include "Battleground.h"
-#include "combat_common.h"
+#include "combat_utils.h"
 
 namespace combat {
 
 std::optional<HeroRole> BattleState::checkForWinner(
     const Battleground& battleground) {
   auto alive_units = battleground.getAliveUnitsIds();
-  auto is_different_role = [](UnitIdentifier a, UnitIdentifier b) {
-    return a.first != b.first;
+  auto is_different_role = [](UnitIdentifier first_unit_id,
+                              UnitIdentifier second_unit_id) {
+    return first_unit_id.first != second_unit_id.first;
   };
   bool is_battle_over =
       std::adjacent_find(alive_units.begin(), alive_units.end(),
@@ -36,8 +38,9 @@ UnitQueue BattleState::setupUnitMoveQueue(
   if (unit_ids.empty()) {
     return {};
   }
-  auto is_unit_faster = [&](UnitIdentifier a, UnitIdentifier b) {
-    return units.at(a).speed > units.at(b).speed;
+  auto is_unit_faster = [&](UnitIdentifier first_unit_id,
+                            UnitIdentifier second_unit_id) {
+    return units.at(first_unit_id).speed > units.at(second_unit_id).speed;
   };
   UnitQueue ret_val{};
   for (auto elem : unit_ids) {
@@ -48,8 +51,10 @@ UnitQueue BattleState::setupUnitMoveQueue(
 }
 
 void BattleState::setupUnitMoveQueue(BattleState& state) {
-  auto is_unit_faster = [&](UnitIdentifier a, UnitIdentifier b) {
-    return state.hero_units_.at(a).speed > state.hero_units_.at(b).speed;
+  auto is_unit_faster = [&](UnitIdentifier first_unit_id,
+                            UnitIdentifier second_unit_id) {
+    return state.hero_units_.at(first_unit_id).speed >
+           state.hero_units_.at(second_unit_id).speed;
   };
   auto alive_unit_ids = state.battleground_.getAliveUnitsIds();
   for (auto elem : alive_unit_ids) {

@@ -1,8 +1,8 @@
 /**
  * @file main.cc
- * @author Wojciech Przybylski
+ * @author Wojciech Przybylski, Piotr Kluba
  * @brief Main game loop
- * @copyright Wojciech Przybylski (c) 2024
+ * @copyright Copyright (c) 2024
  *
  */
 
@@ -16,7 +16,6 @@
 #include <HeroView.h>
 #include <MainView.h>
 #include <MainWindowController.h>
-#include <MapUtils.h>
 #include <MapView.h>
 #include <MapWindowController.h>
 #include <ObjectsView.h>
@@ -26,14 +25,11 @@
 #include <TownView.h>
 #include <TownWindowController.h>
 #include <UnitConfig.h>
-#include <common.h>
+#include <game_logic_utils.h>
+#include <map_generation.h>
 
 #include <SFML/Graphics.hpp>
-#include <SFML/System/Vector2.hpp>
-#include <SFML/Window/Event.hpp>
 #include <cmath>
-
-#include "BattlegroundView.h"
 
 const static sf::Vector2u MAIN_WINDOW_SIZE = sf::Vector2u{800, 600};
 const static sf::Vector2u GAME_WINDOW_SIZE = sf::Vector2u{512, 512};
@@ -45,25 +41,25 @@ int main() {
   Config* conf = Config::getInstance();
 
   std::string path = getProjectPath();
-  conf->loadTownData(path + "/assets/TownsMetadata.json");
-  conf->loadObjectsData(path + "/assets/ObjectsMetadata.json");
-  conf->loadBattleData(path + "/assets/BattlegroundMetadata.json");
-  conf->loadUnitConfig(path + "/assets/UnitConfig.json");
+  conf->loadTownData(path + "/metadata/TownsMetadata.json");
+  conf->loadObjectsData(path + "/metadata/ObjectsMetadata.json");
+  conf->loadBattleData(path + "/metadata/BattlegroundMetadata.json");
+  conf->loadUnitConfig(path + "/metadata/UnitConfig.json");
 
-  MapWindowController::loadFont(path + "/assets/OldLondon.ttf");
-  TownWindowController::loadFont(path + "/assets/Augusta.ttf");
-  MainView::loadtileset(path + "/assets/MainPage.png");
+  MapWindowController::loadFont(path + "/assets/fonts/OldLondon.ttf");
+  TownWindowController::loadFont(path + "/assets/fonts/Augusta.ttf");
+  MainView::loadTileset(path + "/assets/MainPage.png");
   MainWindowController main_controller(MAIN_WINDOW_SIZE);
-  MapView::loadTileset(path + "/assets/Terrains.png");
-  HeroView::loadTileSet(path + "/assets/Heroes.png");
+  MapView::loadTileset(path + "/assets/map/Terrains.png");
+  HeroView::loadTileSet(path + "/assets/map/Heroes.png");
   BorderView border_view{sf::Vector2f(GAME_WINDOW_OFFSET),
                          sf::Vector2f(GAME_WINDOW_SIZE)};
-  ResourcesView::loadtileset(path + "/assets/Resources.png");
-  ObjectsView::loadTileSet({{"Cities", path + "/assets/Cities.png"},
-                            {"Mountain", path + "/assets/Mountains.png"},
-                            {"Tree", path + "/assets/Trees.png"},
-                            {"Resources", path + "/assets/Resources.png"},
-                            {"Mines", path + "/assets/Mines.png"}});
+  ResourcesView::loadTileset(path + "/assets/map/Resources.png");
+  ObjectsView::loadTileSet({{"Cities", path + "/assets/map/Cities.png"},
+                            {"Mountain", path + "/assets/map/Mountains.png"},
+                            {"Tree", path + "/assets/map/Trees.png"},
+                            {"Resources", path + "/assets/map/Resources.png"},
+                            {"Mines", path + "/assets/map/Mines.png"}});
   MapWindowController map_controller = MapWindowController(
       GAME_WINDOW_SIZE, GAME_WINDOW_OFFSET, MAIN_WINDOW_SIZE);
   TownWindowController town_controller = TownWindowController(MAIN_WINDOW_SIZE);
@@ -91,10 +87,6 @@ int main() {
     if (Session::getSessionState() == SessionState::BATTLE_AI_REFRESH) {
       event_handler.handle(event, Session::getSessionState(), session->game);
     }
-    // if (Session::getSessionState() == SessionState::LOAD_CASTLE) {
-    //   event_handler.handle(event, Session::getSessionState(), session->game);
-    //   Session::setSessionState(SessionState::IN_CASTLE);
-    // }
     if (Session::getSessionState() == SessionState::REFRESH) {
       event_handler.handle(event, Session::getSessionState(), session->game);
       Session::setSessionState(SessionState::IN_GAME);
@@ -111,7 +103,7 @@ int main() {
     // clear the window with black color
     window.clear(sf::Color::Black);
 
-    // draw things
+    // drawing depending on state
 
     switch (Session::getSessionState()) {
       case SessionState::IN_GAME:
@@ -119,9 +111,6 @@ int main() {
         break;
 
       case SessionState::IN_BATTLE:
-        window.draw(battle_window_controller);
-        break;
-
       case SessionState::BATTLE_AI_REFRESH:
         window.draw(battle_window_controller);
         break;
@@ -135,12 +124,8 @@ int main() {
         break;
 
       case SessionState::LOAD_GAME:
-        break;
-
       case SessionState::LOAD_CASTLE:
-        break;
       case SessionState::REFRESH:
-        break;
       case SessionState::LOAD_BATTLE:
         break;
     }

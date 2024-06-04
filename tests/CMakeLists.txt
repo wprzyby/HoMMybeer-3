@@ -13,7 +13,6 @@ add_executable(tests
     testUtils.cc
 )
 target_include_directories(tests PRIVATE .)
-target_link_libraries(tests GTest::gtest_main GTest::gmock_main game_logic)
+target_link_libraries(tests GTest::gtest_main GTest::gmock_main ${LOGIC_LIBS})
 
 gtest_discover_tests(tests)
-

@@ -2,15 +2,11 @@
  * @file Hero.h
  * @author Piotr Kluba
  * @brief Functionality responsible for the single hero
- * @version 0.1
- * @date 2024-04-17
- *
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef SRC_GAME_LOGIC_HERO_H_
-#define SRC_GAME_LOGIC_HERO_H_
+#ifndef SRC_GAME_LOGIC_HERO_H
+#define SRC_GAME_LOGIC_HERO_H
 
 #include <UnitBlock.hpp>
 #include <stack>
@@ -47,15 +43,15 @@ class Hero {
         energy_(starting_energy),
         max_energy_(starting_energy),
         faction_(faction) {}
-  std::string getHeroName() const { return name_; };
-  FieldCoords getHeroCoords() const { return hero_coords_; };
+  [[nodiscard]] std::string getHeroName() const { return name_; };
+  [[nodiscard]] FieldCoords getHeroCoords() const { return hero_coords_; };
   void setMovePath(Path new_path, MoveCosts move_costs) {
     move_path_ = std::move(new_path);
     current_path_costs_ = std::move(move_costs);
   }
   void refillEnergy() { energy_ = max_energy_; }
-  bool moveAlong(Path updated_path, MoveCosts costs);
-  int getEnergy() const { return energy_; }
+  bool moveAlong(const Path& updated_path, MoveCosts costs);
+  [[nodiscard]] int getEnergy() const { return energy_; }
   // std::optional<Path> setMoveGoal(FieldCoords goal);
   [[nodiscard]] const std::vector<UnitBlock>& getUnits() const {
     return units_;
@@ -66,4 +62,4 @@ class Hero {
   Faction getFaction() const { return faction_; }
 };
 
-#endif
+#endif // SRC_GAME_LOGIC_HERO_H

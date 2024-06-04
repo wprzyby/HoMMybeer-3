@@ -2,19 +2,13 @@
  * @file Hero.cc
  * @author Piotr Kluba
  * @brief Functionality responsible for the single hero
- * @version 0.1
- * @date 2024-04-17
- *
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <Hero.h>
 #include <Session.h>
 
-using namespace std;
-
-bool Hero::moveAlong(Path updated_path, MoveCosts costs) {
+bool Hero::moveAlong(const Path& updated_path, MoveCosts costs) {
   if (updated_path != move_path_) {
     return false;
   }

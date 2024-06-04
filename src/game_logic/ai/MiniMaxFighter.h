@@ -1,3 +1,10 @@
+/**
+ * @file MiniMaxFighter.h
+ * @author Wojciech Przybylski
+ * @brief Class for making battle moves using the minimax algorithm
+ * @copyright Copyright (c) 2024
+ */
+
 #ifndef SRC_GAME_LOGIC_AI_MINI_MAX_FIGHTER_H
 #define SRC_GAME_LOGIC_AI_MINI_MAX_FIGHTER_H
 
@@ -7,7 +14,7 @@
 #include <utility>
 
 #include "combat/BattleState.h"
-#include "combat/combat_common.h"
+#include "combat/combat_utils.h"
 
 namespace combat::ai {
 using Move = std::optional<HexFieldCoords>;

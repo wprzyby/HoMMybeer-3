@@ -1,8 +1,14 @@
+/**
+ * @file TownView.h
+ * @author Wojciech Przybylski, Piotr Kluba
+ * @brief View for drawing the insides of the town
+ * @copyright Copyright (c) 2024
+ */
+
 #ifndef SRC_GAME_ENGINE_VIEWS_TOWN_VIEW_H
 #define SRC_GAME_ENGINE_VIEWS_TOWN_VIEW_H
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
 #include <optional>
 
 #include "Config.h"

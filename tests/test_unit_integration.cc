@@ -1,4 +1,12 @@
 /**
+ * @file test_unit_integration.cc
+ * @author Wojciech Przybylski
+ * @brief Tests to verify that it's possible to integrate UnitBlockGenerator
+ * with the go-to UnitConfig class
+ * @copyright Copyright (c) 2024
+ */
+
+/**
  * THIS TEST IS RELIANT ON CONTENTS OF FILE test_unit_config.json
  * CHANGES TO THAT FILE WILL NEED TO BE REFLECTED IN THE TEST
  */

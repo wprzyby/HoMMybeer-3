@@ -1,3 +1,10 @@
+/**
+ * @file MiniMaxFighter.cc
+ * @author Wojciech Przybylski
+ * @brief Class for making battle moves using the minimax algorithm
+ * @copyright Copyright (c) 2024
+ */
+
 #include "MiniMaxFighter.h"
 
 #include <algorithm>

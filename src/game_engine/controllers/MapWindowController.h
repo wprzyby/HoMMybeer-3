@@ -1,24 +1,21 @@
 /**
- * @file ViewController.h
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-01
- *
+ * @file MapWindowController.h
+ * @author Piotr Kluba
+ * @brief Controller managing the window when the player is viewing the map
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef SRC_GAME_ENGINE_MAP_WINDOW_CONTROLLER_H_
-#define SRC_GAME_ENGINE_MAP_WINDOW_CONTROLLER_H_
+#ifndef SRC_GAME_ENGINE_CONTROLLERS_MAP_WINDOW_CONTROLLER_H
+#define SRC_GAME_ENGINE_CONTROLLERS_MAP_WINDOW_CONTROLLER_H
 
 #include <BorderView.h>
-#include <Controller.h>
+#include <ControlsView.h>
 #include <Game.h>
 #include <HeroView.h>
 #include <MapView.h>
 #include <ObjectsView.h>
 #include <PathView.h>
+#include <ResourcesView.h>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
@@ -26,8 +23,7 @@
 #include <cmath>
 #include <string>
 
-#include "ControlsView.h"
-#include "views/ResourcesView.h"
+#include "Controller.h"
 
 class MapView;
 
@@ -42,7 +38,7 @@ class MapWindowController : public Controller, public sf::Drawable {
   HeroView hero_view_;
   ObjectsView objects_view_;
   PathView path_view_;
-  ControlsView controlls_view_;
+  ControlsView controls_view_;
   ResourcesView resources_view_;
   BorderView border_view_;
   inline static sf::Font font_;
@@ -68,9 +64,9 @@ class MapWindowController : public Controller, public sf::Drawable {
       : map_pixel_offset_(sf::Vector2u({0, 0})),
         game_window_size_(game_window_size),
         game_window_offset_(game_window_offset),
-        controlls_view_(ControlsView(sf::Vector2f(main_window_size),
-                                     sf::Vector2f(game_window_size),
-                                     sf::Vector2f(game_window_offset), font_)),
+        controls_view_(ControlsView(sf::Vector2f(main_window_size),
+                                    sf::Vector2f(game_window_size),
+                                    sf::Vector2f(game_window_offset), font_)),
         resources_view_(ResourcesView(sf::Vector2f(main_window_size),
                                       sf::Vector2f(game_window_size),
                                       sf::Vector2f(game_window_offset), font_)),
@@ -93,4 +89,4 @@ class MapWindowController : public Controller, public sf::Drawable {
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
-#endif
+#endif // SRC_GAME_ENGINE_CONTROLLERS_MAP_WINDOW_CONTROLLER_H

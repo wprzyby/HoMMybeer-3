@@ -1,11 +1,11 @@
 /**
  * @file MapUtils.cc
- * @author Wojciech Przybylski
- * @brief Method definitions for map utils
+ * @author Piotr Kluba, Wojciech Przybylski
+ * @brief Map generation functions
  * @copyright Copyright (c) 2024
  */
 
-#include <MapUtils.h>
+#include "map_generation.h"
 
 #include <algorithm>
 #include <memory>
@@ -13,15 +13,16 @@
 
 #include "Hero.h"
 
-using FieldArray_t = std::vector<std::vector<Field>>;
+using FieldArray = std::vector<std::vector<Field>>;
 
 MapInfo generateGrassMap(MapSize map_size, int num_of_players) {
   int width = static_cast<int>(map_size);
 
-  FieldArray_t field_array(width, std::vector<Field>(width));
-  for (int r = 0; r < width; r++) {
-    for (int c = 0; c < width; c++) {
-      field_array[r][c] = Field(c, r, TerrainType::GRASS, false, true);
+  FieldArray field_array(width, std::vector<Field>(width));
+  for (int row : std::views::iota(0, width)) {
+    for (int column : std::views::iota(0, width)) {
+      field_array[row][column] =
+          Field(column, row, TerrainType::GRASS, false, true);
     }
   }
 
@@ -34,8 +35,9 @@ MapInfo generateGrassMap(MapSize map_size, int num_of_players) {
   std::shuffle(numbers.begin(), numbers.end(), gen);
 
   std::vector<FieldCoords> starting_locations;
-  for (int i = 0; i < num_of_players; ++i) {
-    starting_locations.push_back({numbers[2 * i], numbers[2 * i + 1]});
+  for (int player_idx : std::views::iota(0, num_of_players)) {
+    starting_locations.emplace_back(numbers[2 * player_idx],
+                                    numbers[2 * player_idx + 1]);
   }
 
   return MapInfo{Map(field_array), num_of_players, starting_locations};
@@ -49,13 +51,13 @@ MapInfo generateLargeExampleMap() {
   // defining objects
 
   // defining field types
-  FieldArray_t field_array(width, std::vector<Field>(width));
-  for (int r = 0; r < width; r++) {
-    for (int c = 0; c < width; c++) {
-      field_array[r][c] = Field(c, r, TerrainType::GRASS, false, true);
+  FieldArray field_array(width, std::vector<Field>(width));
+  for (int row : std::views::iota(0, width)) {
+    for (int column : std::views::iota(0, width)) {
+      field_array[row][column] =
+          Field(column, row, TerrainType::GRASS, false, true);
     }
   }
-
   return MapInfo{Map(field_array), 1, starting_locations};
 }
 

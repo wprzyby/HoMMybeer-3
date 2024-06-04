@@ -1,15 +1,22 @@
+/**
+ * @file HexGridView.cc
+ * @author Wojciech Przybylski
+ * @brief View for drawing the hexagonal grid on top of the battleground
+ * background
+ * @copyright Copyright (c) 2024
+ */
+
 #include "HexGridView.h"
 
 #include <Config.h>
+#include <combat_utils.h>
+#include <game_logic_utils.h>
 
-#include <SFML/Graphics/PrimitiveType.hpp>
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics.hpp>
 #include <cmath>
 #include <string>
 
 #include "BattlegroundView.h"
-#include "combat_common.h"
-#include "common.h"
 
 HexGridView::HexGridView() {
   auto metadata = Config::getInstance()->getBattleMetadata();
@@ -21,32 +28,53 @@ HexGridView::HexGridView() {
   texture_origin_ = sf::Vector2f(texture_origin_data[0].get<float>(),
                                  texture_origin_data[1].get<float>());
   auto texture_vertices_data = metadata["vertices"];
-  for (auto i : std::views::iota(0U, HEX_NUMBER_OF_VERTICES)) {
-    texture_vertices_[i] =
-        sf::Vector2f(texture_vertices_data[i][0].get<float>(),
-                     texture_vertices_data[i][1].get<float>());
+  for (auto hex_vertex_idx : std::views::iota(0U, HEX_NUMBER_OF_VERTICES)) {
+    texture_vertices_.at(hex_vertex_idx) =
+        sf::Vector2f(texture_vertices_data[hex_vertex_idx][0].get<float>(),
+                     texture_vertices_data[hex_vertex_idx][1].get<float>());
   }
   loadTexture(getProjectPath() + "/" + metadata["file"].get<std::string>());
 }
-
+/**
+ * @brief Function that employs a search algorithm to translate cartesian
+ * coordinates of clicked pixel to specialized coordinate system used in the
+ * hexagonal grid
+ * @details The algorithm translated to the coordinate system specified here:
+ * https://en.wikipedia.org/wiki/Hexagonal_Efficient_Coordinate_System# The
+ * translation from hex coords to cartesian is trivial and uses matrix
+ * multiplication, but the reverse is not so. The approach that the below
+ * function follows is based on the fact that if the a coordinate is determined,
+ * the rest can be determined by a simple solvable system of equations. The
+ * algorithm thus searches every even row to check if it was clicked. It does so
+ * by determining a function that bounds the clicked y coordinate if it were to
+ * match the row. Then it checks if the coordinate is between the maximum upper
+ * bound and its negative counterpart (between the top and bottom "teeth" of the
+ * hexagon). If no even row is hit, it assumes that an odd row was hit,
+ * calculates the rest of the coordinates and checks if the found coordinate is
+ * viable.
+ * @param x_clicked
+ * @param y_clicked
+ * @return std::optional<combat::HexFieldCoords>
+ */
 std::optional<combat::HexFieldCoords> HexGridView::translateToHexCoords(
     int x_clicked, int y_clicked) const {
-  const static float HORIZONTAL_DISTANCE_BETWEEN_HEXES =
+  const static double HORIZONTAL_DISTANCE_BETWEEN_HEXES =
       hex_outer_radius_ * SQRT_3;
-  const static float VERTICAL_DISTANCE_BETWEEN_HEXES =
-      hex_outer_radius_ * 3.F / 2.F;
+  const static double VERTICAL_DISTANCE_BETWEEN_HEXES = hex_outer_radius_ * 1.5;
   bool is_even_row_hit = false;
-  for (auto i : std::views::iota(0U, battleground_size_.even_rows_count)) {
-    auto x = x_clicked % (static_cast<int>(hex_outer_radius_ * SQRT_3));
-    auto y = -y_clicked + hex_outer_radius_ * (1 + 3 * i);
-    bool slope_negative = x > hex_outer_radius_ * SQRT_3 / 2;
-    double y_upper_bound;
+  for (auto even_row_idx :
+       std::views::iota(0U, battleground_size_.even_rows_count)) {
+    auto x_translated =
+        x_clicked % (static_cast<int>(hex_outer_radius_ * SQRT_3));
+    auto y_translated = -y_clicked + hex_outer_radius_ * (1 + 3 * even_row_idx);
+    bool slope_negative = x_translated > hex_outer_radius_ * SIN_60_DEGREES;
+    double y_upper_bound{};
     if (slope_negative) {
-      y_upper_bound = -1 * x / SQRT_3 + hex_outer_radius_ * 1.5;
+      y_upper_bound = -1 * x_translated / SQRT_3 + hex_outer_radius_ * 1.5;
     } else {
-      y_upper_bound = x / SQRT_3 + hex_outer_radius_ / 2;
+      y_upper_bound = x_translated / SQRT_3 + hex_outer_radius_ / 2;
     }
-    if (y < y_upper_bound and y > -y_upper_bound) {
+    if (y_translated < y_upper_bound and y_translated > -y_upper_bound) {
       is_even_row_hit = true;
       break;
     }

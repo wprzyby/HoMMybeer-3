@@ -1,19 +1,15 @@
 /**
  * @file ResourcesView.h
- * @author Piotr Kluba (you@domain.com)
- * @brief Entity for displaying resources quantities and incomes
- * @date 2024-06-02
- *
+ * @author Piotr Kluba (.com)
+ * @brief View for displaying resources quantities and incomes
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <Config.h>
 #include <MapView.h>
 #include <ResourcesView.h>
 
-#include <SFML/Graphics/Text.hpp>
-#include <algorithm>
+#include <SFML/Graphics.hpp>
 #include <format>
 #include <map>
 #include <vector>
@@ -27,7 +23,7 @@ void ResourcesView::setResources(const Player* player, int day) {
   background_ = sf::RectangleShape(sf::Vector2f(
       {game_window_size_.x + game_window_offset_.x,
        window_size_.y - game_window_size_.y - game_window_offset_.y}));
-  background_.setFillColor(sf::Color(82, 38, 8));
+  background_.setFillColor(BACKGROUND_COLOR);
   background_.setPosition(
       sf::Vector2f({0, game_window_size_.y + game_window_offset_.y}));
 
@@ -72,7 +68,7 @@ void ResourcesView::setResources(const Player* player, int day) {
   day_.setPosition(game_window_offset_.x + MapView::MAP_TILE_SIZE.x +
                        (3 * MapView::MAP_TILE_SIZE.x * 7),
                    (1.2 * game_window_offset_.y) + game_window_size_.y);
-  day_.setCharacterSize(25);
+  day_.setCharacterSize(CHARACTER_SIZE);
 }
 
 void ResourcesView::setUnitAmounts(const Hero* hero) {
@@ -97,7 +93,7 @@ void ResourcesView::setUnitAmounts(const Hero* hero) {
                     Config::enumToStringTranslate(curr_faction),
                     count_map.at(1), count_map.at(2), count_map.at(3)),
         font_};
-    text.setCharacterSize(25);
+    text.setCharacterSize(CHARACTER_SIZE);
     text.setPosition(game_window_offset_.x + 6 * MapView::MAP_TILE_SIZE.x +
                          (5 * MapView::MAP_TILE_SIZE.x * i),
                      (1.4 * game_window_offset_.y) + game_window_size_.y + 30);

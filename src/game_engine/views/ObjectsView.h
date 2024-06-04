@@ -1,15 +1,12 @@
 /**
  * @file ObjectsView.h
  * @author Piotr Kluba
- * @brief Entity for drawing visible objects
- * @date 2024-06-02
- *
+ * @brief View for drawing visible map objects
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef SRC_GAME_ENGINE_VIEWS_OBJECTS_VIEW_H_
-#define SRC_GAME_ENGINE_VIEWS_OBJECTS_VIEW_H_
+#ifndef SRC_GAME_ENGINE_VIEWS_OBJECTS_VIEW_H
+#define SRC_GAME_ENGINE_VIEWS_OBJECTS_VIEW_H
 
 #include <Hero.h>
 #include <MapView.h>
@@ -34,4 +31,4 @@ class ObjectsView : public sf::Drawable, public sf::Transformable {
                   sf::Vector2u field_offset, sf::Vector2u tile_size);
 };
 
-#endif
+#endif // SRC_GAME_ENGINE_VIEWS_OBJECTS_VIEW_H

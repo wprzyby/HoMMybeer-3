@@ -1,26 +1,21 @@
 /**
  * @file TownViewController.h
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-04
- *
+ * @author Piotr Kluba
+ * @brief Controller managing the window when the player is inside the town
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef SRC_GAME_ENGINE_TOWN_WINDOW_CONTROLLER_H_
-#define SRC_GAME_ENGINE_TOWN_WINDOW_CONTROLLER_H_
+#ifndef SRC_GAME_ENGINE_CONTROLLERS_TOWN_WINDOW_CONTROLLER_H
+#define SRC_GAME_ENGINE_CONTROLLERS_TOWN_WINDOW_CONTROLLER_H
 
-#include <Controller.h>
 #include <MainView.h>
 #include <TownView.h>
 #include <UnitConfig.h>
 
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics.hpp>
 #include <UnitBlockGenerator.hpp>
+
+#include "Controller.h"
 
 class TownWindowController : public Controller, public sf::Drawable {
  private:
@@ -31,7 +26,7 @@ class TownWindowController : public Controller, public sf::Drawable {
       {1, 60}, {2, 100}, {3, 200}};
 
   inline static sf::Font font_;
-  UnitBlockGenerator<UnitConfig> setupUnitGenerator();
+  static UnitBlockGenerator<UnitConfig> setupUnitGenerator();
 
  public:
   explicit TownWindowController(sf::Vector2u main_window_size)
@@ -48,4 +43,4 @@ class TownWindowController : public Controller, public sf::Drawable {
   }
 };
 
-#endif
+#endif  // SRC_GAME_ENGINE_CONTROLLERS_TOWN_WINDOW_CONTROLLER_H

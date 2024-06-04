@@ -1,9 +1,16 @@
+/**
+ * @file BattleUnitsView.cc
+ * @author Wojciech Przybylski
+ * @brief View which draws all units on the battleground
+ * @copyright Copyright (c) 2024
+ */
+
 #include "BattleUnitsView.h"
 
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics.hpp>
 
-#include "Config.h"
-#include "common.h"
+#include <Config.h>
+#include <game_logic_utils.h>
 
 BattleUnitsView::BattleUnitsView() {
   auto* config = Config::getInstance();
@@ -17,7 +24,7 @@ BattleUnitsView::BattleUnitsView() {
                    metadata["single_unit_texture_size"][1].get<int>());
   auto texture_path = getProjectPath() + "/" +
                       metadata["units_texture_file"].get<std::string>();
-  if (not font_.loadFromFile(getProjectPath() + "/assets/arial.ttf")) {
+  if (not font_.loadFromFile(getProjectPath() + "/assets/fonts/arial.ttf")) {
     throw std::runtime_error("Could not load font");
   }
   loadTexture(texture_path);

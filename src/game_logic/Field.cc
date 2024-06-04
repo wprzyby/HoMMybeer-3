@@ -2,29 +2,24 @@
  * @file Field.cc
  * @author Piotr Kluba
  * @brief Functionality responsible for storing properties and managing single
- * fields in the gamemap
- * @version 0.1
- * @date 2024-04-16
- *
+ * fields in the game map
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <Field.h>
 
 #include <utility>
-using namespace std;
 
-FieldCoords operator+(const FieldCoords& l, const FieldCoords& r) {
-  return {l.first + r.first, l.second + r.second};
+FieldCoords operator+(const FieldCoords& left, const FieldCoords& right) {
+  return {left.first + right.first, left.second + right.second};
 }
 
-map<TerrainType, int> Field::resistance = {{TerrainType::GRASS, 10},
-                                           {TerrainType::DIRT, 10},
-                                           {TerrainType::SNOW, 20},
-                                           {TerrainType::STONE, 5}};
+const std::map<TerrainType, int> Field::RESISTANCE = {{TerrainType::GRASS, 10},
+                                                      {TerrainType::DIRT, 10},
+                                                      {TerrainType::SNOW, 20},
+                                                      {TerrainType::STONE, 5}};
 
-bool Field::setObject(shared_ptr<MapObject> object) {
+bool Field::setObject(std::shared_ptr<MapObject> object) {
   if (object_ != nullptr) {
     return false;
   }

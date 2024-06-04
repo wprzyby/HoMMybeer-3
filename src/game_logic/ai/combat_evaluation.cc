@@ -1,6 +1,13 @@
+/**
+ * @file combat_evaluation.cc
+ * @author Wojciech Przybylski
+ * @brief Battle state evaluation functions for use by the minimax player
+ * @copyright Copyright (c) 2024
+ */
+
 #include "combat_evaluation.h"
 
-#include "combat_common.h"
+#include "combat_utils.h"
 
 namespace combat::ai {
 
@@ -87,7 +94,6 @@ float complexEvaluate(const BattleState& state,
   } else if (is_next_unit_max_players) {
     score += damage_potential_diff;
   } else {
-    
     score += has_damage_potential_advantage ? damage_potential_diff * 0.5
                                             : damage_potential_diff * 3;
   }

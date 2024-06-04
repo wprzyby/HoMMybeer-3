@@ -1,18 +1,15 @@
 /**
  * @file HeroView.h
  * @author Piotr Kluba
- * @brief Drawable hero management class
- * @date 2024-04-19
- *
+ * @brief View drawing the hero on the map
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <Hero.h>
 #include <HeroView.h>
 #include <Session.h>
 
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics.hpp>
 
 const sf::Vector2f HeroView::HERO_POSITION_OFFSET = sf::Vector2f{32, 32};
 
@@ -56,16 +53,16 @@ void HeroView::setHeroes(std::vector<const Hero*> heroes,
       continue;
     }
     int hero_pose = 1;
-    int hero_number;
+    int hero_number{};
     switch (hero->getFaction()) {
       case Faction::CASTLE:
-        hero_number = 1;
+        hero_number = CASTLE_HERO_NUMBER;
         break;
       case Faction::INFERNO:
-        hero_number = 16;
+        hero_number = INFERNO_HERO_NUMBER;
         break;
       case Faction::FORTRESS:
-        hero_number = 14;
+        hero_number = FORTRESS_HERO_NUMBER;
         break;
     }
     sf::Sprite sprite(HeroView::heroes_texture_);

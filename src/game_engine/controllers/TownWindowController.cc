@@ -1,22 +1,18 @@
 /**
  * @file TownViewController.cc
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-04
- *
+ * @author Piotr Kluba
+ * @brief Controller managing the window when the player is inside the town
  * @copyright Copyright (c) 2024
- *
  */
 
-#include <TownWindowController.h>
+#include "TownWindowController.h"
 
-#include <SFML/System/Vector2.hpp>
+#include <Config.h>
+#include <Hero.h>
+#include <Session.h>
 
-#include "Config.h"
-#include "Hero.h"
-#include "Session.h"
-#include "UnitBlockGenerator.hpp"
+#include <SFML/Graphics.hpp>
+#include <UnitBlockGenerator.hpp>
 
 UnitBlockGenerator<UnitConfig> TownWindowController::setupUnitGenerator() {
   auto config = Config::getInstance()->getUnitConfig();
@@ -45,7 +41,7 @@ void TownWindowController::update(sf::Event& event, SessionState session_state,
                 game.getCurrentPlayer()->getCurrentHero()->getHeroCoords() +
                 FieldCoords{1, 0};
             game.getCurrentPlayer()->addHero(
-                Config::kDefaultHeroNames.at(Session::getTown()), spawn_coords,
+                Config::DEFAULT_HERO_NAMES.at(Session::getTown()), spawn_coords,
                 game.getCurrentPlayer()->getFaction());
           }
         }

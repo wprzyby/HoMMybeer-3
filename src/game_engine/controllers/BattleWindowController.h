@@ -1,18 +1,26 @@
-#ifndef SRC_GAME_ENGINE_BATTLE_WINDOW_CONTROLLER_H
-#define SRC_GAME_ENGINE_BATTLE_WINDOW_CONTROLLER_H
+/**
+ * @file BattleWindowController.h
+ * @author Wojciech Przybylski
+ * @brief Controller managing the window when the game is in battle state
+ * @copyright Copyright (c) 2024
+ */
 
+#ifndef SRC_GAME_ENGINE_CONTROLLERS_BATTLE_WINDOW_CONTROLLER_H
+#define SRC_GAME_ENGINE_CONTROLLERS_BATTLE_WINDOW_CONTROLLER_H
+
+#include <BattleManager.h>
+#include <BattlegroundView.h>
 #include <Hero.h>
+#include <ai/MiniMaxFighter.h>
 
-#include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics.hpp>
 #include <functional>
 
-#include "BattleManager.h"
-#include "BattlegroundView.h"
 #include "Controller.h"
-#include "ai/MiniMaxFighter.h"
 
 class BattleWindowController : public Controller, public sf::Drawable {
   constexpr static unsigned int MINI_MAX_DEPTH = 3;
+  constexpr static unsigned int AI_PLAYER_MOVE_DELAY = 500;  // ms
   const static std::function<float(const combat::BattleState&,
                                    combat::HeroRole)>
       MINI_MAX_STATE_EVAL;
@@ -37,4 +45,4 @@ class BattleWindowController : public Controller, public sf::Drawable {
               Game& game) override;
 };
 
-#endif  // SRC_GAME_ENGINE_BATTLE_WINDOW_CONTROLLER_H
+#endif  // SRC_GAME_ENGINE_CONTROLLERS_BATTLE_WINDOW_CONTROLLER_H

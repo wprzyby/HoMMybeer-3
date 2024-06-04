@@ -1,16 +1,12 @@
 /**
  * @file Controller.h
- * @author Piotr Kluba (you@domain.com)
+ * @author Piotr Kluba
  * @brief Base class for controllers
- * @version 0.1
- * @date 2024-06-03
- *
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef SRC_GAME_ENGINE_CONTROLLER_H_
-#define SRC_GAME_ENGINE_CONTROLLER_H_
+#ifndef SRC_GAME_ENGINE_CONTROLLERS_CONTROLLER_H
+#define SRC_GAME_ENGINE_CONTROLLERS_CONTROLLER_H
 
 #include <Session.h>
 
@@ -23,4 +19,4 @@ class Controller {
                       Game& game) = 0;
 };
 
-#endif
+#endif // SRC_GAME_ENGINE_CONTROLLERS_CONTROLLER_H

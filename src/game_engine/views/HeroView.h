@@ -1,15 +1,13 @@
 /**
  * @file HeroView.h
  * @author Piotr Kluba
- * @brief Drawable hero management class
+ * @brief View drawing the hero on the map
  * @date 2024-04-19
- *
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef SRC_GAME_ENGINE_VIEWS_HERO_VIEW_H_
-#define SRC_GAME_ENGINE_VIEWS_HERO_VIEW_H_
+#ifndef SRC_GAME_ENGINE_VIEWS_HERO_VIEW_H
+#define SRC_GAME_ENGINE_VIEWS_HERO_VIEW_H
 
 #include <Game.h>
 #include <Hero.h>
@@ -23,8 +21,11 @@
 class HeroView : public sf::Drawable, public sf::Transformable {
  private:
   inline static sf::Texture heroes_texture_;
-  static const int ICON_HEIGHT = 64;
-  static const int ICON_WIDTH = 96;
+  static constexpr int CASTLE_HERO_NUMBER = 1;
+  static constexpr int INFERNO_HERO_NUMBER = 16;
+  static constexpr int FORTRESS_HERO_NUMBER = 14;
+  static constexpr int ICON_HEIGHT = 64;
+  static constexpr int ICON_WIDTH = 96;
   static const sf::Vector2f HERO_POSITION_OFFSET;
   std::vector<sf::Sprite> sprites_;
   static bool visible(FieldCoords hero_coords, sf::Vector2u field_offset);
@@ -37,4 +38,4 @@ class HeroView : public sf::Drawable, public sf::Transformable {
                  sf::Vector2u tile_size);
 };
 
-#endif
+#endif  // SRC_GAME_ENGINE_VIEWS_HERO_VIEW_H

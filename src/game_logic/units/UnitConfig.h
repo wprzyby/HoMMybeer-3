@@ -4,8 +4,8 @@
  * @brief Class for storing information about how to create units
  * @copyright Copyright (c) 2024
  */
-#ifndef SRC_GAME_LOGIC_UNIT_CONFIG_H
-#define SRC_GAME_LOGIC_UNIT_CONFIG_H
+#ifndef SRC_GAME_LOGIC_UNITS_UNIT_CONFIG_H
+#define SRC_GAME_LOGIC_UNITS_UNIT_CONFIG_H
 
 #include <json.hpp>
 #include <map>
@@ -47,4 +47,4 @@ class UnitConfig {
   std::map<UnitOrigin, std::map<unsigned int, UnitAttributes>> config_;
 };
 
-#endif  // SRC_GAME_LOGIC_UNIT_CONFIG_H
+#endif  // SRC_GAME_LOGIC_UNITS_UNIT_CONFIG_H

@@ -1,10 +1,15 @@
+/**
+ * @file test_battlestate.cc
+ * @author Wojciech Przybylski
+ * @brief Unit tests for BattleState class
+ * @copyright Copyright (c) 2024
+ */
 #include <BattleState.h>
 #include <gtest/gtest.h>
 
 #include "Battleground.h"
 #include "UnitBlock.hpp"
-#include "combat_common.h"
-
+#include "combat_utils.h"
 
 using namespace combat;
 

@@ -1,24 +1,20 @@
 /**
- * @file ViewController.cc
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-01
- *
+ * @file MapWindowController.cc
+ * @author Piotr Kluba
+ * @brief Controller managing the window when the player is viewing the map
  * @copyright Copyright (c) 2024
- *
  */
 
-#include <MapUtils.h>
-#include <MapWindowController.h>
+#include "MapWindowController.h"
+
+#include <Hero.h>
+#include <MapView.h>
 #include <Session.h>
+#include <map_generation.h>
 
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics.hpp>
+#include <UnitBlockGenerator.hpp>
 #include <cmath>
-
-#include "Hero.h"
-#include "MapView.h"
-#include "UnitBlockGenerator.hpp"
 
 void MapWindowController::scrollGameView(const sf::Vector2i& translation,
                                          const Game& game) {
@@ -109,7 +105,7 @@ void MapWindowController::selfInit() {
   MapInfo map_info = generateLargeExampleMap();
   std::vector<Player> players{
       Player(false, Faction::CASTLE, map_info.starting_locations[0]),
-      Player(false, Faction::INFERNO, map_info.starting_locations[1])};
+      Player(true, Faction::INFERNO, map_info.starting_locations[1])};
   std::vector<std::shared_ptr<MapObject>> static_map_objects =
       generateExampleStaticObjects();
   std::vector<std::shared_ptr<MapObject>> pickable_map_objects =
@@ -135,7 +131,7 @@ void MapWindowController::selfInit() {
   changeMapContents(Session::getInstance()->game);
   repositionCamera(Session::getInstance()->game);
 
-  controlls_view_.setControls();
+  controls_view_.setControls();
 }
 
 void MapWindowController::update(sf::Event& event, SessionState session_state,
@@ -167,13 +163,13 @@ void MapWindowController::update(sf::Event& event, SessionState session_state,
   if (event.type == sf::Event::MouseButtonPressed) {
     if (event.mouseButton.button == sf::Mouse::Left) {
       sf::Vector2i where_clicked{event.mouseButton.x, event.mouseButton.y};
-      if (controlls_view_.nextHeroClicked(sf::Vector2f(where_clicked))) {
+      if (controls_view_.nextHeroClicked(sf::Vector2f(where_clicked))) {
         game.getCurrentPlayer()->nextHero();
         resources_view_.setUnitAmounts(
             game.getCurrentPlayer()->getCurrentHero());
         repositionCamera(game);
       }
-      if (controlls_view_.nextTurnClicked(sf::Vector2f(where_clicked))) {
+      if (controls_view_.nextTurnClicked(sf::Vector2f(where_clicked))) {
         game.nextPlayer();
         resources_view_.setResources(game.getCurrentPlayer(),
                                      game.getWeekday());
@@ -181,7 +177,7 @@ void MapWindowController::update(sf::Event& event, SessionState session_state,
             game.getCurrentPlayer()->getCurrentHero());
         repositionCamera(game);
       }
-      if (controlls_view_.exitClicked(sf::Vector2f(where_clicked))) {
+      if (controls_view_.exitClicked(sf::Vector2f(where_clicked))) {
         Session::getInstance()->setSessionState(SessionState::START_MENU);
         // TODO popup if sure to exit
       }
@@ -224,12 +220,12 @@ void MapWindowController::update(sf::Event& event, SessionState session_state,
 }
 
 void MapWindowController::draw(sf::RenderTarget& target,
-                               sf::RenderStates states) const {
+                               sf::RenderStates /*unused*/) const {
   target.draw(map_view_);
   target.draw(path_view_);
   target.draw(objects_view_);
   target.draw(hero_view_);
-  target.draw(controlls_view_);
+  target.draw(controls_view_);
   target.draw(resources_view_);
   target.draw(border_view_);
 }

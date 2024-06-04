@@ -1,40 +1,33 @@
 /**
  * @file Map.cc
  * @author Piotr Kluba
- * @brief Functionality generating and managing the gamemap
- * @version 0.1
- * @date 2024-04-16
- *
+ * @brief Functionality generating and managing the game map
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <Map.h>
 
-#include <memory>
 #include <set>
 
-using namespace std;
-
 std::optional<const Field*> Map::getField(FieldCoords coords) const {
-  int x = coords.first;
-  int y = coords.second;
-  if (x >= width_ || x < 0 || y >= width_ || y < 0) {
+  int x_coord = coords.first;
+  int y_coord = coords.second;
+  if (x_coord >= width_ || x_coord < 0 || y_coord >= width_ || y_coord < 0) {
     return {};
   }
-  return &field_array_[x][y];
+  return &field_array_[x_coord][y_coord];
 }
 
-Field* Map::fieldToModify(FieldCoords coords) const {
-  int x = coords.first;
-  int y = coords.second;
-  if (x >= width_ || x < 0 || y >= width_ || y < 0) {
+Field* Map::fieldToModify(FieldCoords coords) {
+  int x_coord = coords.first;
+  int y_coord = coords.second;
+  if (x_coord >= width_ || x_coord < 0 || y_coord >= width_ || y_coord < 0) {
     return {};
   }
-  return const_cast<Field*>(&(field_array_.data()[x][y]));
+  return (&(field_array_[x_coord][y_coord]));
 }
 
-std::set<FieldCoords> Map::getViableAdjacent_(FieldCoords coords) const {
+std::set<FieldCoords> Map::getViableAdjacent(FieldCoords coords) const {
   std::set<FieldCoords> adjacent = {
       coords + FieldCoords{1, 0},   coords + FieldCoords{1, 1},
       coords + FieldCoords{0, 1},   coords + FieldCoords{-1, 0},
@@ -55,7 +48,7 @@ std::set<FieldCoords> Map::constructGraph(FieldCoords seed_coords) const {
   std::set<FieldCoords> unvisited = {seed_coords};
   while (unvisited.size() > 0) {
     std::set<FieldCoords> viable_adjacent =
-        getViableAdjacent_(*unvisited.begin());
+        getViableAdjacent(*unvisited.begin());
     std::set<FieldCoords> to_visit = {};
     for (FieldCoords viable_coords : viable_adjacent) {
       if (!graph.contains(viable_coords) &&

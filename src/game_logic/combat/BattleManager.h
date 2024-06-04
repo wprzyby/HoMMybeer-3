@@ -10,7 +10,7 @@
 
 #include "BattleState.h"
 #include "Battleground.h"
-#include "combat_common.h"
+#include "combat_utils.h"
 
 namespace combat {
 class BattleManager {

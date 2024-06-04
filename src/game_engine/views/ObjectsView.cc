@@ -1,11 +1,8 @@
 /**
  * @file ObjectsView.cc
  * @author Piotr Kluba
- * @brief Entity for drawing visible objects
- * @date 2024-06-02
- *
+ * @brief View for drawing visible map objects
  * @copyright Copyright (c) 2024
- *
  */
 #include <ObjectsView.h>
 

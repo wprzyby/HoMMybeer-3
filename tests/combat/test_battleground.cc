@@ -1,7 +1,14 @@
+/**
+ * @file test_battleground.cc
+ * @author Wojciech Przybylski
+ * @brief Unit tests for Battleground class
+ * @copyright Copyright (c) 2024
+ */
+
 #include <Battleground.h>
 #include <gtest/gtest.h>
 
-#include "combat_common.h"
+#include "combat_utils.h"
 
 using namespace combat;
 

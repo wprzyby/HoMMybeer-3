@@ -1,19 +1,15 @@
 /**
  * @file test_map.cc
- * @author Piotr Kluba (you@domain.com)
+ * @author Piotr Kluba
  * @brief Tests of Map, its generators and Field
- * @version 0.1
- * @date 2024-06-01
- *
  * @copyright Copyright (c) 2024
- *
  */
 #include <Field.h>
 #include <Map.h>
-#include <MapUtils.h>
-#include <common.h>
+#include <game_logic_utils.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <map_generation.h>
 #include <testUtils.h>
 
 TEST(mapUtilsTest, generateGrassMapTest) {

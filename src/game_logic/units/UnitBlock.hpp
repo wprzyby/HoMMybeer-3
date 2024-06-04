@@ -6,8 +6,8 @@
  * @copyright Copyright (c) 2024
  */
 
-#ifndef SRC_GAME_LOGIC_UNIT_BLOCK_HPP
-#define SRC_GAME_LOGIC_UNIT_BLOCK_HPP
+#ifndef SRC_GAME_LOGIC_UNITS_UNIT_BLOCK_HPP
+#define SRC_GAME_LOGIC_UNITS_UNIT_BLOCK_HPP
 
 #include <cmath>
 #include <concepts>
@@ -22,8 +22,10 @@ enum class UnitOrigin {
 };
 
 template <typename T>
-concept RandomGenerator = requires(T rng, int from, int to) {
-  { rng.getRandIntInclusive(from, to) } -> std::convertible_to<int>;
+concept RandomGenerator = requires(T rng, int lower_bound, int upper_bound) {
+  {
+    rng.getRandIntInclusive(lower_bound, upper_bound)
+  } -> std::convertible_to<int>;
 };
 
 struct UnitBlock {
@@ -79,8 +81,8 @@ void strike(UnitBlock& attacker, UnitBlock& defender) {
   static RNG rng;
 
   unsigned int base_damage{0};
-  for ([[maybe_unused]] auto i :
-       std::ranges::views::iota(0U, attacker.unit_count)) {
+  for ([[maybe_unused]] unsigned int i :
+       std::views::iota(0U, attacker.unit_count)) {
     base_damage +=
         rng.getRandIntInclusive(attacker.min_damage, attacker.max_damage);
   }
@@ -88,7 +90,7 @@ void strike(UnitBlock& attacker, UnitBlock& defender) {
   auto damage_multiplier = attack_defense_diff > 0
                                ? ATTACK_DAMAGE_BONUS_MULTIPLIER
                                : DEFENSE_DAMAGE_BONUS_MULTIPLIER;
-  unsigned int damage = static_cast<unsigned int>(
+  auto damage = static_cast<unsigned int>(
       std::round(base_damage * (1 + damage_multiplier * attack_defense_diff)));
 
   defender.current_total_hitpoints =
@@ -103,4 +105,4 @@ void strike(UnitBlock& attacker, UnitBlock& defender) {
       (defender.current_total_hitpoints - 1) / defender.hitpoints_per_unit + 1;
 }
 
-#endif  // SRC_GAME_LOGIC_UNIT_BLOCK_HPP
+#endif  // SRC_GAME_LOGIC_UNITS_UNIT_BLOCK_HPP

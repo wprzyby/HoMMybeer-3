@@ -1,22 +1,18 @@
 /**
  * @file MainWindowController.h
- * @author Piotr Kluba (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-04
- *
+ * @author Piotr Kluba
+ * @brief Controller managing the window when the game is in the main menu
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef SRC_GAME_ENGINE_MAIN_WINDOW_CONTROLLER_H_
-#define SRC_GAME_ENGINE_MAIN_WINDOW_CONTROLLER_H_
+#ifndef SRC_GAME_ENGINE_CONTROLLERS_MAIN_WINDOW_CONTROLLER_H
+#define SRC_GAME_ENGINE_CONTROLLERS_MAIN_WINDOW_CONTROLLER_H
 
-#include <Controller.h>
 #include <MainView.h>
 
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics.hpp>
+
+#include "Controller.h"
 
 class MainWindowController : public Controller, public sf::Drawable {
  private:
@@ -32,4 +28,4 @@ class MainWindowController : public Controller, public sf::Drawable {
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
-#endif
+#endif  // SRC_GAME_ENGINE_CONTROLLERS_MAIN_WINDOW_CONTROLLER_H

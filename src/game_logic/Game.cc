@@ -2,11 +2,7 @@
  * @file Game.cc
  * @author Piotr Kluba
  * @brief Base game class responsible for managing the state of the current game
- * @version 0.1
- * @date 2024-04-15
- *
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <Game.h>
@@ -16,9 +12,7 @@
 #include <queue>
 #include <utility>
 
-using namespace std;
-
-Game::Game(std::vector<Player> players, Map map,
+Game::Game(std::vector<Player> players, const Map& map,
            const std::vector<std::shared_ptr<MapObject>>& starting_map_objects)
     : players_in_game_(std::move(players)),
       game_map_(map),
@@ -65,7 +59,7 @@ Player* Game::getPlayer(int idx) {
 }
 
 void Game::nextDay() {
-  if (day_of_week_ == 7) {
+  if (day_of_week_ == LAST_DAY_OF_WEEK) {
     for (auto& player : players_in_game_) {
       player.weeklyIncome();
     }
@@ -96,13 +90,14 @@ std::vector<const MapObject*> Game::objectsInGame() const {
   return objects_in_game;
 }
 
-bool Game::deleteMapObject(int id) {
+bool Game::deleteMapObject(int map_object_id) {
   int idx_to_delete = 0;
-  auto it = find_if(
-      map_objects_.begin(), map_objects_.end(),
-      [&id](const shared_ptr<MapObject> obj) { return obj->getId() == id; });
-  if (it != map_objects_.end()) {
-    idx_to_delete = distance(map_objects_.begin(), it);
+  auto iter = find_if(map_objects_.begin(), map_objects_.end(),
+                      [&map_object_id](const std::shared_ptr<MapObject>& obj) {
+                        return obj->getId() == map_object_id;
+                      });
+  if (iter != map_objects_.end()) {
+    idx_to_delete = distance(map_objects_.begin(), iter);
   } else {
     return false;
   }
@@ -116,7 +111,7 @@ bool Game::deleteMapObject(int id) {
   return true;
 }
 
-bool Game::addMapObject(const shared_ptr<MapObject>& obj_to_add) {
+bool Game::addMapObject(const std::shared_ptr<MapObject>& obj_to_add) {
   FieldCoords origin = obj_to_add->getOrigin();
   for (FieldCoords coord_to_check : obj_to_add->occupiedFields()) {
     if (!game_map_.getField(coord_to_check).has_value() ||
@@ -134,7 +129,7 @@ bool Game::addMapObject(const shared_ptr<MapObject>& obj_to_add) {
   return true;
 }
 
-std::optional<std::pair<Path, MoveCosts>> Game::findPath_(FieldCoords path_to) {
+std::optional<std::pair<Path, MoveCosts>> Game::findPath(FieldCoords path_to) {
   FieldCoords current_hero_location =
       players_in_game_[curr_player_idx].getCurrentHero()->getHeroCoords();
   Path retpath = {};
@@ -147,7 +142,7 @@ std::optional<std::pair<Path, MoveCosts>> Game::findPath_(FieldCoords path_to) {
   }
   std::map<FieldCoords, std::pair<int, FieldCoords>> nodes_w_costs_previous;
   for (FieldCoords coord : all_nodes) {
-    nodes_w_costs_previous[coord] = {0xFFFFFFF, {}};
+    nodes_w_costs_previous[coord] = {std::numeric_limits<int>::max(), {}};
   }
   auto get_adjacent = [&](FieldCoords coords) {
     std::vector<FieldCoords> adjacent = {
@@ -183,10 +178,10 @@ std::optional<std::pair<Path, MoveCosts>> Game::findPath_(FieldCoords path_to) {
             (std::abs(adjacent.first - queue.top().first.first) +
                  std::abs(adjacent.second - queue.top().first.second) ==
              1)
-                ? Field::resistance.at(
+                ? Field::RESISTANCE.at(
                       game_map_.getField(adjacent).value()->getTerrainType())
-                : static_cast<int>(1.41 *
-                                   static_cast<float>(Field::resistance.at(
+                : static_cast<int>(SQRT_2 *
+                                   static_cast<float>(Field::RESISTANCE.at(
                                        game_map_.getField(adjacent)
                                            .value()
                                            ->getTerrainType())));
@@ -203,14 +198,14 @@ std::optional<std::pair<Path, MoveCosts>> Game::findPath_(FieldCoords path_to) {
   }
 
   FieldCoords current = path_to;
-  int current_cost = Field::resistance.at(
+  int current_cost = Field::RESISTANCE.at(
       game_map_.getField(current).value()->getTerrainType());
 
   while (current != current_hero_location) {
     retpath.push(current);
     retcosts.push(current_cost);
     current = nodes_w_costs_previous[current].second;
-    current_cost = Field::resistance.at(
+    current_cost = Field::RESISTANCE.at(
         game_map_.getField(current).value()->getTerrainType());
   }
 
@@ -225,7 +220,7 @@ void Game::executeAction(FieldCoords coords) {
   }
 
   if (game_map_.getField(coords).value()->isWalkable()) {
-    auto found_shortest = findPath_(coords);
+    auto found_shortest = findPath(coords);
     if (!found_shortest.has_value()) {
       return;
     }

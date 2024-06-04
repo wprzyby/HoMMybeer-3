@@ -1,10 +1,17 @@
 /**
+ * @file test_unit_config.cc
+ * @author Wojciech Przybylski
+ * @brief Unit tests for UnitConfig class
+ * @copyright Copyright (c) 2024
+ */
+
+/**
  * THIS TEST IS RELIANT ON CONTENTS OF FILE test_unit_config.json
  * CHANGES TO THAT FILE WILL NEED TO BE REFLECTED IN THE TEST
  */
 
 #include <UnitConfig.h>
-#include <common.h>
+#include <game_logic_utils.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 

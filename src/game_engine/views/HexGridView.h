@@ -1,11 +1,19 @@
+/**
+ * @file HexGridView.h
+ * @author Wojciech Przybylski
+ * @brief View for drawing the hexagonal grid on top of the battleground
+ * background
+ * @copyright Copyright (c) 2024
+ */
+
 #ifndef SRC_GAME_ENGINE_VIEWS_HEX_GRID_VIEW_H
 #define SRC_GAME_ENGINE_VIEWS_HEX_GRID_VIEW_H
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System/Vector2.hpp>
+#include <Battleground.h>
 
-#include "Battleground.h"
-#include "combat_common.h"
+#include <SFML/Graphics.hpp>
+
+#include "combat_utils.h"
 
 constexpr static unsigned int HEX_NUMBER_OF_VERTICES = 6U;
 constexpr static unsigned int VERTICES_IN_TRIANGLE = 3U;
@@ -15,13 +23,14 @@ constexpr static unsigned int VERTICES_IN_HEXAGON =
 constexpr static double SIXTY_DEGREE_ANGLE_RADIANS =
     2. * std::numbers::pi_v<double> / 6.;
 const static double SQRT_3 = std::sqrt(3.);
+const static double SIN_60_DEGREES = SQRT_3 / 2.;
 
 class BattlegroundView;
 
 class HexGridView : public sf::Drawable, public sf::Transformable {
  public:
   HexGridView();
-  bool loadTexture(const std::string& tileset_path);
+  bool loadTexture(const std::string& hex_texture_path);
   bool loadGrid(combat::BattlegroundSize size,
                 const std::set<combat::HexFieldCoords>& selected_fields,
                 combat::HexFieldCoords current_unit_coords);
@@ -40,7 +49,7 @@ class HexGridView : public sf::Drawable, public sf::Transformable {
   std::array<sf::Vector2f, HEX_NUMBER_OF_VERTICES> texture_vertices_;
   double hex_outer_radius_;
   float tile_types_horizontal_pixel_distance_;
-  combat::BattlegroundSize battleground_size_;
+  combat::BattlegroundSize battleground_size_{};
   friend class BattlegroundView;
 };
 

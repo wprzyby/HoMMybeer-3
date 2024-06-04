@@ -1,10 +1,18 @@
+/**
+ * @file Battleground.cc
+ * @author Wojciech Przybylski
+ * @brief Class for unit placement, movement and removal within the context of
+ * the battlefield
+ * @copyright Copyright (c) 2024
+ */
+
 #include "Battleground.h"
 
 #include <algorithm>
 #include <queue>
 #include <set>
 
-#include "combat_common.h"
+#include "combat_utils.h"
 
 namespace combat {
 

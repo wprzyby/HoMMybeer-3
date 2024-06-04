@@ -3,11 +3,10 @@
  * @author Piotr Kluba
  * @brief Contains the functionality associated with all objects on the map
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef SRC_GAME_LOGIC_MAPOBJECT_H_
-#define SRC_GAME_LOGIC_MAPOBJECT_H_
+#ifndef SRC_GAME_LOGIC_MAPOBJECT_H
+#define SRC_GAME_LOGIC_MAPOBJECT_H
 
 #include <Config.h>
 #include <Player.h>
@@ -34,17 +33,17 @@ class MapObject {
  public:
   MapObject(FieldCoords origin, Game* parent,
             std::vector<FieldCoords> space_taken)
-      : origin_(origin),
+      : origin_(std::move(origin)),
         parent_(parent),
         space_taken_(std::move(space_taken)),
         id_(current_id_++) {}
-  ~MapObject() = default;
+  virtual ~MapObject() = default;
   virtual std::optional<bool>
   objectAction() = 0;  // will return true if has action and
                        // completes it, false if has no action
-  const std::vector<FieldCoords> occupiedFields() const;
+  std::vector<FieldCoords> occupiedFields() const;
   void setParent(Game* new_parent) { parent_ = new_parent; }
-  virtual int getOwner() const { return -1; }
+  [[nodiscard]] virtual int getOwner() const { return -1; }
   int getId() const { return id_; }
   FieldCoords getOrigin() const { return origin_; }
   virtual std::map<std::string, std::string> getSpecs() const = 0;
@@ -83,8 +82,8 @@ class ResourceGenerator : public MapObject {
   ResourceGenerator(FieldCoords origin, Game* parent,
                     ResourceType resource_type, int weekly_income);
   std::optional<bool> objectAction() override;
-  int getOwner() const override { return owner_id_; }
-  std::map<std::string, std::string> getSpecs() const override;
+  [[nodiscard]] int getOwner() const override { return owner_id_; }
+  [[nodiscard]] std::map<std::string, std::string> getSpecs() const override;
 };
 
 class City : public MapObject {
@@ -98,4 +97,5 @@ class City : public MapObject {
   std::map<std::string, std::string> getSpecs() const override;
   int getOwner() const override { return owner_id_; }
 };
-#endif
+
+#endif  // SRC_GAME_LOGIC_MAPOBJECT_H

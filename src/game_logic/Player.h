@@ -1,24 +1,18 @@
 /**
  * @file Player.h
- * @author Piotr Kluba
+ * @author Piotr Kluba, Wojciech Przybylski
  * @brief Structure used to store the properties of the players and for them to
  * take certain actions
- * @version 0.1
- * @date 2024-04-16
- *
  * @copyright Copyright (c) 2024
- *
  */
 
-#ifndef SRC_GAME_LOGIC_PLAYER_H_
-#define SRC_GAME_LOGIC_PLAYER_H_
+#ifndef SRC_GAME_LOGIC_PLAYER_H
+#define SRC_GAME_LOGIC_PLAYER_H
 
 #include <Config.h>
 #include <Hero.h>
 
 #include <map>
-#include <memory>
-#include <optional>
 #include <vector>
 
 using Inventory = std::map<ResourceType, int>;
@@ -39,7 +33,6 @@ class Player {
       Inventory starting_inventory =
           Config::getStartingInventory(Difficulty::NORMAL),
       Incomes starting_income = Config::getStartingIncomes(Difficulty::NORMAL));
-  ~Player();
   [[nodiscard]] const Hero* getHero(
       int idx) const;  // TODO: overload with ex name
   Hero* getHeroToModify(int idx);
@@ -47,9 +40,10 @@ class Player {
   [[nodiscard]] const Hero* getCurrentHero() const {
     return &players_heroes_[selected_hero_idx_];
   }
-  void addHero(std::string name, FieldCoords spawn_field_coords,
+  void addHero(const std::string& name, FieldCoords spawn_field_coords,
                Faction faction, int starting_energy);
-  void addHero(std::string name, FieldCoords spawn_field_coords, Faction faction);
+  void addHero(const std::string& name, FieldCoords spawn_field_coords,
+               Faction faction);
   void addHero(const Hero& hero) { players_heroes_.push_back(hero); };
   void weeklyIncome();
   bool updateResourceQuantity(ResourceType resource_type, int delta);
@@ -67,7 +61,7 @@ class Player {
   void setCurrentHeroUnits(const std::vector<UnitBlock>& units);
   void setHeroUnits(int hero_idx, const std::vector<UnitBlock>& units);
   bool isDead() const;
-  bool isAI() const {return is_ai_;}
+  bool isAI() const { return is_ai_; }
 };
 
-#endif
+#endif // SRC_GAME_LOGIC_PLAYER_H

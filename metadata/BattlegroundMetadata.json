@@ -1,16 +1,16 @@
 {
     "battleground_backgrounds": {
-        "dirt": "assets/battleground_backgrounds/BattleBackgroundDirt.png",
-        "grass": "assets/battleground_backgrounds/BattleBackgroundGrass.png",
-        "snow": "assets/battleground_backgrounds/BattleBackgroundSnow.png",
-        "stone": "assets/battleground_backgrounds/BattleBackgroundStone.png"
+        "dirt": "assets/battles/battleground_backgrounds/BattleBackgroundDirt.png",
+        "grass": "assets/battles/battleground_backgrounds/BattleBackgroundGrass.png",
+        "snow": "assets/battles/battleground_backgrounds/BattleBackgroundSnow.png",
+        "stone": "assets/battles/battleground_backgrounds/BattleBackgroundStone.png"
     },
     "background_texture_size": [
         800,
         512
     ],
     "hex_tile_texture": {
-        "file": "assets/HexTiles.png",
+        "file": "assets/battles/HexTiles.png",
         "outer_radius": 25.0,
         "origin": [
             32.0,
@@ -53,7 +53,7 @@
         60,
         100
     ],
-    "units_texture_file": "assets/Units.png",
+    "units_texture_file": "assets/battles/Units.png",
     "single_unit_texture_size": [
         100,
         100

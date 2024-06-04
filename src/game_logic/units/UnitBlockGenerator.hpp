@@ -6,8 +6,8 @@
  * @copyright Copyright (c) 2024
  */
 
-#ifndef SRC_GAME_LOGIC_UNIT_BLOCK_GENERATOR_HPP
-#define SRC_GAME_LOGIC_UNIT_BLOCK_GENERATOR_HPP
+#ifndef SRC_GAME_LOGIC_UNITS_UNIT_BLOCK_GENERATOR_HPP
+#define SRC_GAME_LOGIC_UNITS_UNIT_BLOCK_GENERATOR_HPP
 
 #include "UnitBlock.hpp"
 
@@ -47,4 +47,4 @@ class UnitBlockGenerator {
   Config units_config_;
 };
 
-#endif  // SRC_GAME_LOGIC_UNIT_BLOCK_GENERATOR_HPP
+#endif  // SRC_GAME_LOGIC_UNITS_UNIT_BLOCK_GENERATOR_HPP

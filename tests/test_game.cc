@@ -1,25 +1,22 @@
 /**
  * @file test_game.cc
- * @author your name (you@domain.com)
- * @brief
- * @version 0.1
- * @date 2024-06-01
- *
+ * @author Piotr Kluba
+ * @brief Unit tests for Game class
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <Game.h>
-#include <MapUtils.h>
-#include <common.h>
+#include <game_logic_utils.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <map_generation.h>
 #include <testUtils.h>
 
 #include "Config.h"
 
-
 TEST(gameInitTests, newGame) {
+  //   Config::getInstance()->loadUnitConfig(getProjectPath() +
+  //                                         "/metadata/UnitsConfig.json");
   Game game = createBasicGame();
   EXPECT_NE(game.getPlayer(0), nullptr);
   EXPECT_EQ(game.getPlayer(1), nullptr);
@@ -53,7 +50,8 @@ TEST(gameInitTests, playerInitTest) {
 TEST(gameInitTests, conflictingObjectsAtInit) {
   Config* conf = Config::getInstance();
   std::string path = getProjectPath();
-  conf->loadObjectsData(path + "/assets/ObjectsMetadata.json");
+  conf->loadObjectsData(path + "/metadata/ObjectsMetadata.json");
+  conf->loadUnitConfig(path + "/metadata/UnitConfig.json");
   MapInfo map_info = generateGrassMap(MapSize::L, 1);
   std::vector<Player> players{
       Player(false, Faction::CASTLE, map_info.starting_locations[0])};
@@ -69,7 +67,8 @@ TEST(gameInitTests, conflictingObjectsAtInit) {
 TEST(gameModificationsTests, conflictingObjectsAtAdding) {
   Config* conf = Config::getInstance();
   std::string path = getProjectPath();
-  conf->loadObjectsData(path + "/assets/ObjectsMetadata.json");
+  conf->loadObjectsData(path + "/metadata/ObjectsMetadata.json");
+  conf->loadUnitConfig(path + "/metadata/UnitConfig.json");
   MapInfo map_info = generateGrassMap(MapSize::L, 1);
   std::vector<Player> players{
       Player(false, Faction::CASTLE, map_info.starting_locations[0])};

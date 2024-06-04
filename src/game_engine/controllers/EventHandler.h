@@ -1,20 +1,20 @@
 /**
  * @file EventHandler.h
- * @author Piotr Kluba (you@domain.com)
+ * @author Piotr Kluba
  * @brief Observable to handle inputs of the user
- * @date 2024-06-03
- *
  * @copyright Copyright (c) 2024
- *
  */
 
-#include <Controller.h>
+#ifndef SRC_GAME_ENGINE_CONTROLLERS_EVENT_HANDLER_H
+#define SRC_GAME_ENGINE_CONTROLLERS_EVENT_HANDLER_H
+
 #include <Session.h>
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Window/Event.hpp>
 #include <utility>
 #include <vector>
+
+#include "Controller.h"
 
 class EventHandler {
  private:
@@ -25,3 +25,5 @@ class EventHandler {
       : controllers_(std::move(controllers)) {}
   void handle(sf::Event& event, SessionState session_state, Game& game);
 };
+
+#endif // SRC_GAME_ENGINE_CONTROLLERS_EVENT_HANDLER_H

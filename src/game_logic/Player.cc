@@ -1,13 +1,9 @@
 /**
  * @file Player.cc
- * @author Piotr Kluba
+ * @author Piotr Kluba, Wojciech Przybylski
  * @brief Structure used to store the properties of the players and for them to
  * take certain actions
- * @version 0.1
- * @date 2024-04-16
- *
  * @copyright Copyright (c) 2024
- *
  */
 
 #include <Config.h>
@@ -27,19 +23,17 @@ Player::Player(bool is_ai, Faction faction, FieldCoords starting_location,
       selected_hero_idx_(0),
       inventory_(std::move(starting_inventory)),
       income_(std::move(starting_income)) {
-  addHero(Config::kDefaultHeroNames.at(faction), starting_location, faction_);
+  addHero(Config::DEFAULT_HERO_NAMES.at(faction), starting_location, faction_);
 }
 
-Player::~Player() {}
-
-void Player::addHero(std::string name, FieldCoords spawn_field_coords,
+void Player::addHero(const std::string& name, FieldCoords spawn_field_coords,
                      Faction faction, int starting_energy) {
   Hero new_hero(name, spawn_field_coords, faction, starting_energy);
   new_hero.setUnits(Config::getInstance()->getStartingUnits(faction_));
   players_heroes_.push_back(new_hero);
 }
 
-void Player::addHero(std::string name, FieldCoords spawn_field_coords,
+void Player::addHero(const std::string& name, FieldCoords spawn_field_coords,
                      Faction faction) {
   Hero new_hero(name, spawn_field_coords, faction);
   new_hero.setUnits(Config::getInstance()->getStartingUnits(faction_));

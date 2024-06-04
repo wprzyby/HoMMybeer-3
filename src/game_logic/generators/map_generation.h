@@ -1,12 +1,12 @@
 /**
- * @file MapUtils.h
- * @author Wojciech Przybylski
- * @brief Utilities for map creation and manipulation
+ * @file map_generation.h
+ * @author Piotr Kluba, Wojciech Przybylski
+ * @brief Map generation functions
  * @copyright Copyright (c) 2024
  */
 
-#ifndef SRC_GAME_LOGIC_MAP_UTILS_H_
-#define SRC_GAME_LOGIC_MAP_UTILS_H_
+#ifndef SRC_GAME_LOGIC_GENERATORS_MAP_UTILS_H
+#define SRC_GAME_LOGIC_GENERATORS_MAP_UTILS_H
 
 #include <Map.h>
 #include <MapObject.h>
@@ -29,4 +29,4 @@ MapInfo generateLargeExampleMap();
 std::vector<std::shared_ptr<MapObject>> generateExampleStaticObjects();
 std::vector<std::shared_ptr<MapObject>> generateExamplePickableObjects();
 
-#endif  // SRC_GAME_LOGIC_MAP_UTILS_H_
+#endif  // SRC_GAME_LOGIC_GENERATORS_MAP_UTILS_H
